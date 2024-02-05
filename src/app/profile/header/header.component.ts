@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { InMemoryCache } from 'src/app/core/services/memory-cache';
 
 @Component({
   selector: 'app-header',
@@ -14,7 +15,7 @@ export class HeaderComponent {
   user : boolean = false;
 
 
-  constructor(private router : Router){}
+  constructor(private router : Router,private store : InMemoryCache){}
 
   
 
@@ -34,5 +35,10 @@ export class HeaderComponent {
     this.profile = true;
     this.feed = false;
     this.user = false;
+  }
+
+  logout(){
+    this.router.navigate(["login"]);
+    this.store.clear();
   }
 }

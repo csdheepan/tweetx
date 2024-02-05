@@ -6,8 +6,14 @@ import { HeaderComponent } from './profile/header/header.component';
 const routes: Routes = [
 
   {
-    path : '',
+    path : 'login',
     component : LoginComponent
+  }
+  ,
+  {
+    path : "",
+    redirectTo : "login",
+    pathMatch : 'full'
   }
 
   ,

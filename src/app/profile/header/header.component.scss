@@ -5,8 +5,11 @@
     z-index: 99;
 }
 
-mat-icon {
-    transform: scale(1.5);
+.material-symbols-outlined {
+    transform: scale(1.2);
+    position: relative;
+    top: 5px;
+    color: #3f3f3f
 }
 
 .text-links {
@@ -59,6 +62,10 @@ mat-icon {
             font-size: 14px;
             margin-inline: 10px;
         }
+        .material-symbols-outlined {
+            transform: scale(1);
+            top: 3px;
+        }
 
     }
 
@@ -67,6 +74,11 @@ mat-icon {
         .text-links {
             font-size: 16px;
             margin-inline: 15px;
+        }
+
+        .material-symbols-outlined {
+            transform: scale(1);
+            top: 3px;
         }
 
     }
