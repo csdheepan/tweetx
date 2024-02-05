@@ -36,7 +36,7 @@ Link: [https://tweet-x-18.web.app](https://tweet-x-18.web.app)
 - **Posting Feed:** Users can share posts with the community.
 - **Following Friends:** Users can follow and stay updated on posts from friends.
 - **Responsive Design:** The application is fully responsive for a seamless user experience.
-- **Preview the diagram for better understanding:** ![Application Functionality Diagram](assets/images/application-diagram.jpg)
+- **Preview the diagram for better understanding:** ![Application Functionality Diagram](src/assets/images/application-diagram.jpg)
 
 ## Future Improvements:
 - **Direct Messaging:** Allow users to send messages to each other.
@@ -47,7 +47,7 @@ Link: [https://tweet-x-18.web.app](https://tweet-x-18.web.app)
 The application utilizes Google Firestore Database for efficient data storage and retrieval.
 
 ## Database Design:
-![firestore database design diagram](assets/images/database-design.jpg)
+![firestore database design diagram](src/assets/images/database-design.jpg)
 
 
 ## Contact Information:
