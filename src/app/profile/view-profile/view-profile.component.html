@@ -1,0 +1,146 @@
+<div class="body">
+
+    <div fxLayout="column" fxLayoutAlign="center center">
+        <div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="30px" style="padding: 20px;">
+
+            <div fxLayout="row" fxLayoutAlign="center center" style="width: 30%;">
+                <img [src]="person">
+            </div>
+
+            <div fxLayout="column" fxLayoutAlign="space-between" style="width: 70%;">
+                <div>
+                    <h2 class="title">{{userDetails.name}}</h2>
+                </div>
+                <div fxLayout="row" fxLayoutGap="30px">
+                    <span class="value">Post <strong>{{userPost.length}}</strong></span>
+                    <span class="value">Follow <strong>{{followerData.length}}</strong></span>
+                    <span class="value">Following <strong>{{followingData.length}}</strong></span>
+
+                </div>
+            </div>
+
+
+        </div>
+        <mat-divider></mat-divider>
+
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="space-around center" style="margin: 20px 10px;">
+        <div fxLayout="row" fxLayoutGap="10px">
+            <span class="material-symbols-outlined">
+                chat
+            </span>
+            <p class="h-label" (click)="handleProfileView('POST')">Post</p>
+        </div>
+        <div fxLayout="row" fxLayoutGap="10px">
+            <span class="material-symbols-outlined">
+                person_add
+            </span>
+            <p class="h-label" (click)="handleProfileView('FOLLOW')">Follow</p>
+        </div>
+        <div fxLayout="row" fxLayoutGap="10px">
+            <span class="material-symbols-outlined">
+                group
+            </span>
+            <p class="h-label" (click)="handleProfileView('FOLLOWING')">Following</p>
+        </div>
+    </div>
+
+    <div *ngIf="showPost">
+
+
+        <div *ngFor="let user of userPost">
+
+            <mat-card class="mat-elevation-z8">
+
+                <div fxLayout="row" fxLayoutGap="30px">
+
+                    <div fxLayout="row" fxLayoutAlign="center center" style="width: 30%;">
+                        <img [src]="person" class="post-img">
+                    </div>
+
+                    <div fxLayout="column" fxLayoutAlign="space-between" style="width: 70%;">
+
+                        <div fxLayout="row" fxLayoutAlign="space-between center">
+                            <p class="title-1">{{user.name}}</p>
+                            <p class="date-value">{{user.time}}</p>
+                        </div>
+
+                        <p class="value-1">{{user.content}}</p>
+
+                    </div>
+
+                </div>
+
+            </mat-card>
+
+        </div>
+
+    </div>
+
+    <div *ngIf="showFollower">
+
+        <div *ngFor="let user of followerData , let i=index">
+
+            <mat-card class="mat-elevation-z8" class="card">
+
+                <div fxLayout="row" fxLayoutGap="30px">
+
+                    <div fxLayout="row" fxLayoutAlign="center center" style="width: 30%;">
+                        <img [src]="person" class="post-img">
+                    </div>
+
+                    <div fxLayout="column" fxLayoutAlign="center" style="width: 60%;">
+
+                        <div fxLayout="row" fxLayoutAlign="space-between center">
+
+                            <p class="title-1" (click)="loadFeed(user)">{{user.name}}</p>
+
+                            <div>
+                                <button mat-flat-button color="accent" class="follow-btn">Follow</button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </mat-card>
+
+        </div>
+    </div>
+
+    <div *ngIf="showFollowing">
+
+        <div *ngFor="let user of followingData , let i=index">
+
+            <mat-card class="mat-elevation-z8" class="card">
+
+                <div fxLayout="row" fxLayoutGap="30px">
+
+                    <div fxLayout="row" fxLayoutAlign="center center" style="width: 30%;">
+                        <img [src]="person" class="post-img">
+                    </div>
+
+                    <div fxLayout="column" fxLayoutAlign="center" style="width: 60%;">
+
+                        <div fxLayout="row" fxLayoutAlign="space-between center">
+
+                            <p class="title-1" (click)="loadFeed(user)">{{user.name}}</p>
+
+                            <div>
+                                <button mat-flat-button color="accent" class="following-btn">Following</button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </mat-card>
+
+        </div>
+    </div>
+
+
+</div>

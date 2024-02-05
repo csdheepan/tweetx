@@ -1,0 +1,114 @@
+.body {
+    position: relative;
+    top: 110px;
+    max-width: 680px;
+    display: flex;
+    place-content: center;
+    flex-direction: column;
+    margin: auto;
+}
+
+img {
+    width: 120px;
+}
+
+.title {
+    font-size: 26px;
+    line-height: 60px;
+    font-weight: 500;
+    font-family: system-ui;
+}
+
+.value {
+    font-size: 18px;
+    color: #787878;
+    line-height: 30px;
+    font-family: system-ui;
+    font-weight: 400;
+}
+
+
+mat-divider {
+
+    width: 100%;
+    margin: 20px;
+    border: 1px solid #dedede;
+}
+
+.h-label {
+    font-size: 20px;
+    font-family: system-ui;
+    color: #838383;
+    cursor: pointer;
+}
+.h-label:hover{
+    color: #ff4081;
+}
+
+
+
+.material-symbols-outlined {
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+}
+
+
+.card{
+    margin: 15px;
+    padding: 10px;
+    border-radius: 15px;
+}
+mat-card {
+    margin: 15px;
+    padding: 20px;
+    border-radius: 8px
+}
+
+.title-1 {
+    font-size: 18px;
+    line-height: 30px;
+    font-weight: 500;
+    font-family: system-ui
+}
+
+.value-1 {
+    font-size: 13px;
+    line-height: 22px;
+    font-family: system-ui;
+    color: #505050;
+}
+
+.date-value {
+    font-weight: 300;
+    color: #9d9d9d;
+    margin-top: 2px;
+}
+
+.post-img {
+    width: 80px;
+}
+
+.following-btn{
+    background-color : white !important;
+    border: 1px solid #ff4081 ;
+    color: #ff4081 !important;
+  }
+
+  .following-btn:hover{
+  cursor: not-allowed;
+  }
+
+  .follow-btn{
+    padding: 10px 30px;
+  }
+
+  .follow-btn:hover{
+    cursor: not-allowed;
+    }
+
+  strong{
+    color: black;
+  }

@@ -1,0 +1,88 @@
+<div class="body">
+
+
+    <div *ngIf="hideUser">
+
+        <div *ngFor="let user of userPost , let i=index">
+
+            <mat-card class="mat-elevation-z8">
+
+                <div fxLayout="row" fxLayoutGap="20px">
+
+                    <div fxLayout="row" fxLayoutAlign="center center" style="width: 30%;">
+                        <img [src]="person">
+                    </div>
+
+                    <div fxLayout="column" fxLayoutAlign="space-between" style="width: 70%;">
+
+                        <div fxLayout="row" fxLayoutAlign="space-between center" >
+
+                            <p class="title" style="cursor: pointer;" (click)="loadFeed(user)">{{user.name}}</p>
+
+                            <div *ngIf="user.status == 0">
+                                <button mat-flat-button color="accent" style="padding: 10px 30px;" (click)="followAction(user,i)" >Follow</button>
+                            </div>
+
+                            <div *ngIf="user.status == 1">
+                                <button mat-flat-button color="accent" class="following-btn" (click)="unFollowAction(user,i)" >Following</button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </mat-card>
+
+        </div>
+
+    </div>
+
+
+
+
+
+
+    <!-- show invidual user post -->
+
+    <div *ngIf="showPost">
+
+        <button mat-flat-button class="back-btn" (click)="handleView()">Back</button>
+
+        <div *ngFor="let user of individualFeed">
+
+            <mat-card class="mat-elevation-z8">
+
+                <div fxLayout="row" fxLayoutGap="30px">
+
+                    <div fxLayout="row" fxLayoutAlign="center center" style="width: 30%;">
+                        <img [src]="person">
+                    </div>
+
+                    <div fxLayout="column" fxLayoutAlign="space-between" style="width: 70%;">
+
+                        <div fxLayout="row" fxLayoutAlign="space-between center">
+                            <p class="title">{{user.name}}</p>
+                            <p class="date-value">{{user.time}}</p>
+                        </div>
+
+                        <p class="value">{{user.content}}</p>
+
+                    </div>
+
+                </div>
+
+            </mat-card>
+
+        </div>
+
+        <div *ngIf="individualFeed.length == 0" fxLayout="row" fxLayoutAlign="center center" style="height: 70vh;">
+
+            <h2 class="big-text">
+                No posts or feeds provided by the user.
+            </h2>
+        </div>
+
+    </div>
+
+</div>

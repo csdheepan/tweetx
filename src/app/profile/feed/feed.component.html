@@ -1,0 +1,59 @@
+<div class="body">
+
+
+    <div>
+        <button mat-raised-button class="write-btn" color="accent" (click)="handlePostView('post')">Write</button>
+    </div>
+
+
+    <div *ngIf="showPost">
+
+        <form [formGroup]="form">
+
+            <div class="note-input-container">
+
+                <textarea matInput [formControl]="form.controls['content']" class="add-note-input"
+                    wrap="hard"></textarea>
+
+                <button mat-flat-button (click)="handlePostView('cancel')">cancel</button>
+
+                <button mat-flat-button color="primary" [disabled]="!form.valid" (click)="post()">Post</button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    <div>
+
+        <div *ngFor="let user of userPost">
+
+            <mat-card class="mat-elevation-z8">
+
+                <div fxLayout="row" fxLayoutGap="30px">
+
+                    <div fxLayout="row" fxLayoutAlign="center center" style="width: 30%;">
+                        <img [src]="person">
+                    </div>
+
+                    <div fxLayout="column" fxLayoutAlign="space-between" style="width: 70%;">
+
+                        <div fxLayout="row" fxLayoutAlign="space-between center">
+                            <p class="title">{{user.name}}</p>
+                            <p class="date-value">{{user.time}}</p>
+                        </div>
+
+                        <p class="value">{{user.content}}</p>
+
+                    </div>
+
+                </div>
+
+            </mat-card>
+
+        </div>
+
+    </div>
+
+</div>

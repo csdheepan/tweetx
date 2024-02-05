@@ -1,0 +1,49 @@
+.body{
+    position: relative;
+    top: 110px;
+    max-width: 680px;
+    display: flex;
+    place-content: center;
+    flex-direction: column;
+    margin: auto;
+}
+
+.following-btn{
+  background-color : white !important;
+  border: 1px solid #ff4081 ;
+  color: #ff4081 !important;
+}
+
+.big-text{
+  font-size: 30px;
+  line-height: 5%;
+  font-weight: 300;
+  font-family: system-ui;
+  text-align: center;
+  margin: 30px;
+}
+
+  img{
+    width: 60px;
+  }
+
+  mat-card{
+    margin: 20px;
+    padding: 25px;
+    border-radius: 8px;
+  }
+
+  .title{
+    font-size: 20px;
+    line-height: 40px;
+    font-weight: 500;
+    font-family: system-ui;
+    margin-top: 6px;
+  }
+
+  .back-btn{
+    margin: 8px 20px;
+    border: 1px solid;
+    border-radius: 5px;
+  }
+  
