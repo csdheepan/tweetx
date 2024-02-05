@@ -16,7 +16,7 @@ The project is structured with the following modules:
     - Model: Data model files
 
 ## Setup and Installation:
-1. Clone the repository using the command 👉🏻 https://github.com/csdheepan/tweetx.git
+1. Clone the repository using the command 👉🏻 git clone https://github.com/csdheepan/tweetx.git
 
 2. Verify Node.js and npm installation using:
 - Node version: v18.19.0
