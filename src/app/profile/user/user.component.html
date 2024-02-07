@@ -7,15 +7,15 @@
 
             <mat-card class="mat-elevation-z8">
 
-                <div fxLayout="row" fxLayoutGap="20px">
+                <div fxLayout="row" fxLayoutAlign="space-evenly ">
 
-                    <div fxLayout="row" fxLayoutAlign="center center" style="width: 30%;">
-                        <img [src]="person">
+                    <div fxLayout="row" fxLayoutAlign="center center" style="width: 20%;">
+                        <img [src]="user.profileImg">
                     </div>
 
-                    <div fxLayout="column" fxLayoutAlign="space-between" style="width: 70%;">
+                    <div fxLayout="column" fxLayoutAlign="space-between" style="width: 65%;">
 
-                        <div fxLayout="row" fxLayoutAlign="space-between center" >
+                        <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px" class="wrap-container" >
 
                             <p class="title" style="cursor: pointer;" (click)="loadFeed(user)">{{user.name}}</p>
 

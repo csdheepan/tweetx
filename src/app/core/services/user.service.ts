@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { SignUp } from '../model/signup-model';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +37,16 @@ export class UserService {
   getUserStatus(loggedId: string){
 
    return this.afs.collection('/register/' + loggedId + "/profile/").doc(loggedId).valueChanges();
+
+  }
+
+
+  updateProfile(loggedId:string,updateObj:SignUp){
+    this.afs.collection('/register/').doc(loggedId).update(updateObj);
+  }
+
+  getIndividualUser(loggedId:string){
+    return this.afs.collection('/register/').doc(loggedId).valueChanges()
 
   }
 }

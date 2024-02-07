@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.signupForm = this.fb.group({
-      name: [null, [Validators.required,Validators.maxLength(20)]],
+      name: [null, [Validators.required,Validators.maxLength(20),Validators.pattern("^[a-zA-Z ]+$")]],
       email: [null, [Validators.required, Validators.email]],
       password: [null, [Validators.required, Validators.minLength(6)]],
       confirmPassword: [null, [Validators.required]]
@@ -72,6 +72,7 @@ export class LoginComponent implements OnInit {
     else if (value == "signup") {
       this.userLoggedIn = false;
     }
+    this.showAlert = false;
     this.signupForm.reset();
     this.loginForm.reset();
   }
@@ -116,11 +117,14 @@ export class LoginComponent implements OnInit {
 
   signup() {
 
+    let profileImg = "assets/images/person.jpg"  //by default we show this particular img
+
     this.signUpPayload = {
       id: "",
       name: this.signupForm.controls['name'].value,
       email: this.signupForm.controls['email'].value,
-      password: this.signupForm.controls['password'].value
+      password: this.signupForm.controls['password'].value,
+      profileImg : profileImg
     }
 
 

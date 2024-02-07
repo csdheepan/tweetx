@@ -1,0 +1,57 @@
+.edit-text{
+    font-size: 20px;
+    padding-bottom: 15px;
+    line-height: 30px;
+    font-family: math;
+    font-weight: 500;
+    text-align: left;
+}
+.name-text{
+    font-size: 20px;
+    font-family: system-ui;
+    font-weight: 600;
+    color: #565656;
+    line-height: 40px;
+}
+
+mat-form-field{
+    height: 65px;
+}
+.dialog-body{
+    margin: 10px;
+    padding: 15px;
+}
+.avatar-text{
+    text-align: center;
+    font-size: 24px;
+    line-height: 30px;
+    padding: 27px;
+    font-weight: 500;
+    font-family: system-ui;
+}
+
+.avatar-title-text{
+    font-size: 12px;
+    text-align: center;
+    font-family: system-ui;
+    font-weight: 600;
+    color: #9c9c9c;
+    line-height: 30px;
+}
+
+img{
+    width: 80px;
+}
+
+
+.selected {
+    border: 2px solid #ff4081;
+    border-radius: 50%;
+    padding: 3px;
+  }
+
+  button{
+    font-size: 12px !important;
+    height: 30px !important;
+  }
+  

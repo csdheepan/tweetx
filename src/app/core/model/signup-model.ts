@@ -4,6 +4,7 @@ export class SignUp {
     email !: string;
     password !: string;
     name !: string;
+    profileImg !: string
 }
 
 export class Login {

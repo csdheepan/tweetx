@@ -10,6 +10,7 @@ import { UserComponent } from './user/user.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ViewProfileComponent } from './view-profile/view-profile.component';
+import { EditProfileComponent } from './modal/edit-profile/edit-profile.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { ViewProfileComponent } from './view-profile/view-profile.component';
     HeaderComponent,
     FeedComponent,
     UserComponent,
-    ViewProfileComponent
+    ViewProfileComponent,
+    EditProfileComponent
   ],
   imports: [
     CommonModule,

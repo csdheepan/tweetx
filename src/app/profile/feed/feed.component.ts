@@ -32,6 +32,9 @@ export class FeedComponent implements OnInit {
     let obj = this.store.getItem("USER_DETAILS");
     this.userDetails = JSON.parse(obj);
 
+    this.person = this.userDetails.profileImg ? this.userDetails.profileImg : "assets/images/person.jpg" ;
+
+
     console.log(this.userDetails);
 
     this.loadFeedPost();

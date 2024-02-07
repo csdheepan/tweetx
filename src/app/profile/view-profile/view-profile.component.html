@@ -1,14 +1,20 @@
 <div class="body">
 
     <div fxLayout="column" fxLayoutAlign="center center">
-        <div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="30px" style="padding: 20px;">
+        <div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="30px" class="profile-container">
 
-            <div fxLayout="row" fxLayoutAlign="center center" style="width: 30%;">
+            <div fxLayout="column" fxLayoutAlign="center center" style="width: 30%;">
+
                 <img [src]="person">
+
+                <button mat-flat-button class="avatar-button" (click)="openModal()">Avatar
+                    <mat-icon>edit</mat-icon>
+                </button>
+
             </div>
 
-            <div fxLayout="column" fxLayoutAlign="space-between" style="width: 70%;">
-                <div>
+            <div fxLayout="column" fxLayoutAlign="space-between" class="right-container">
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="7px">
                     <h2 class="title">{{userDetails.name}}</h2>
                 </div>
                 <div fxLayout="row" fxLayoutGap="30px">
@@ -84,20 +90,21 @@
 
             <mat-card class="mat-elevation-z8" class="card">
 
-                <div fxLayout="row" fxLayoutGap="30px">
+                <div fxLayout="row" fxLayoutAlign="space-evenly">
 
                     <div fxLayout="row" fxLayoutAlign="center center" style="width: 30%;">
-                        <img [src]="person" class="post-img">
+                        <img [src]="user.profileImg" class="post-img">
                     </div>
 
-                    <div fxLayout="column" fxLayoutAlign="center" style="width: 60%;">
+                    <div fxLayout="column" fxLayoutAlign="center" style="width: 65%;">
 
                         <div fxLayout="row" fxLayoutAlign="space-between center">
 
                             <p class="title-1" (click)="loadFeed(user)">{{user.name}}</p>
 
                             <div>
-                                <button mat-flat-button color="accent" class="follow-btn">Follow</button>
+                                <button mat-flat-button color="accent" class="follow-btn"
+                                    (click)="followAction(user,i)">Follow</button>
                             </div>
 
                         </div>
@@ -116,20 +123,21 @@
 
             <mat-card class="mat-elevation-z8" class="card">
 
-                <div fxLayout="row" fxLayoutGap="30px">
+                <div fxLayout="row" fxLayoutAlign="space-evenly">
 
                     <div fxLayout="row" fxLayoutAlign="center center" style="width: 30%;">
-                        <img [src]="person" class="post-img">
+                        <img [src]="user.profileImg" class="post-img">
                     </div>
 
-                    <div fxLayout="column" fxLayoutAlign="center" style="width: 60%;">
+                    <div fxLayout="column" fxLayoutAlign="center" style="width: 65%;">
 
                         <div fxLayout="row" fxLayoutAlign="space-between center">
 
                             <p class="title-1" (click)="loadFeed(user)">{{user.name}}</p>
 
                             <div>
-                                <button mat-flat-button color="accent" class="following-btn">Following</button>
+                                <button mat-flat-button color="accent" class="following-btn"
+                                    (click)="unFollowAction(user,i)">Following</button>
                             </div>
 
                         </div>

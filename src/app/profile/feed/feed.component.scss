@@ -55,14 +55,29 @@
 
   .value{
     font-size: 15px;
-    line-height: 22px;
+    line-height: 30px;
     font-family: system-ui;
     color: #505050;
   }
+
+  
 
   .date-value{
     font-weight: 300;
     color: #9d9d9d;
     margin-top: 2px;
+  }
+
+
+  @media screen and (max-width:520px) {
+    
+    .value{
+      font-size: 12px;
+      line-height: 25px;
+    }
+    .title {
+      font-size: 20px;
+      line-height: 30px;
+    }
   }
   

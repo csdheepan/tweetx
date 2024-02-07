@@ -12,9 +12,36 @@ img {
     width: 120px;
 }
 
+mat-icon {
+    color: #ff4081;
+}
+
+.avatar-button {
+    padding: 10px 15px;
+    border: 1px solid #ff4081;
+    font-size: 12px;
+    font-family: system-ui;
+    border-radius: 5px;
+    color: #ff4081 !important;
+    cursor: pointer;
+    height: 32px !important;
+    position: relative;
+    top: 25px;
+}
+
+.avatar-button:hover {
+    background-color: #ff4081;
+    color: white !important;
+    border: 1px solid white;
+}
+
+mat-icon:hover {
+    color: white !important;
+}
+
 .title {
     font-size: 26px;
-    line-height: 60px;
+    line-height: 40px;
     font-weight: 500;
     font-family: system-ui;
 }
@@ -41,7 +68,8 @@ mat-divider {
     color: #838383;
     cursor: pointer;
 }
-.h-label:hover{
+
+.h-label:hover {
     color: #ff4081;
 }
 
@@ -56,11 +84,12 @@ mat-divider {
 }
 
 
-.card{
+.card {
     margin: 15px;
     padding: 10px;
     border-radius: 15px;
 }
+
 mat-card {
     margin: 15px;
     padding: 20px;
@@ -69,14 +98,15 @@ mat-card {
 
 .title-1 {
     font-size: 18px;
-    line-height: 30px;
-    font-weight: 500;
-    font-family: system-ui
+    line-height: 28px;
+    font-weight: 400;
+    margin-right: 15px;
+    font-family: system-ui;
 }
 
 .value-1 {
-    font-size: 13px;
-    line-height: 22px;
+    font-size: 16px;
+    line-height: 35px;
     font-family: system-ui;
     color: #505050;
 }
@@ -91,24 +121,82 @@ mat-card {
     width: 80px;
 }
 
-.following-btn{
-    background-color : white !important;
-    border: 1px solid #ff4081 ;
+.following-btn {
+    background-color: white !important;
+    border: 1px solid #ff4081;
     color: #ff4081 !important;
-  }
+}
 
-  .following-btn:hover{
-  cursor: not-allowed;
-  }
-
-  .follow-btn{
+.follow-btn {
     padding: 10px 30px;
-  }
+}
 
-  .follow-btn:hover{
-    cursor: not-allowed;
+.right-container {
+    width: 70%;
+    padding: 40px;
+}
+
+strong {
+    color: black;
+}
+
+.profile-container {
+    padding: 20px;
+}
+
+
+@media screen and (max-width:520px) {
+
+    .avatar-button {
+        padding: 8px 8px;
+        font-size: 10px;
+        height: 28px;
     }
 
-  strong{
-    color: black;
-  }
+    mat-icon {
+        position: relative;
+        left: 4px;
+        transform: scale(0.8);
+    }
+
+    .h-label {
+        font-size: 16px;
+    }
+
+    .value {
+        font-size: 16px;
+    }
+
+    button {
+        font-size: 12px;
+    }
+
+    .title-1 {
+        font-size: 16px;
+    }
+
+    .value-1 {
+        font-size: 12px;
+        line-height: 22px;
+    }
+}
+
+@media screen and (max-width:420px) {
+    .profile-container {
+        flex-wrap: wrap;
+        position: relative;
+        top: 15px;
+    }
+
+    .title {
+        white-space: nowrap;
+        line-height: 75px;
+        margin: auto;
+    }
+
+    .right-container {
+        width: 80%;
+        padding: 40px 20px;
+        margin: -10px;
+    }
+}

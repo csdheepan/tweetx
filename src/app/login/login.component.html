@@ -86,6 +86,8 @@
                         && signupForm.controls['name'].touched">Name is required</mat-error>
                         <mat-error *ngIf="signupForm.controls['name'].hasError('maxlength')
                        ">Max 20 characters</mat-error>
+                       <mat-error *ngIf="signupForm.controls['name'].hasError('pattern')
+                       ">only alphabets</mat-error>
                       </mat-form-field>
                     </div>
                   

@@ -12,6 +12,7 @@
   background-color : white !important;
   border: 1px solid #ff4081 ;
   color: #ff4081 !important;
+  padding: 10px 20px;
 }
 
 .big-text{
@@ -35,8 +36,8 @@
 
   .title{
     font-size: 20px;
-    line-height: 40px;
-    font-weight: 500;
+    line-height: 30px;
+    font-weight: 400;
     font-family: system-ui;
     margin-top: 6px;
   }
@@ -46,4 +47,24 @@
     border: 1px solid;
     border-radius: 5px;
   }
+
+  @media screen and (max-width:520px) {
+    
+    button{
+      font-size: 11px;
+    }
+
+    .title{
+      font-size: 14px;
+    }
+  }
+
+  @media screen and (max-width:380px) {
+
+    .wrap-container{
+      flex-wrap: wrap;
+      padding: 0px 20px;
+    }
+  }
+  
   

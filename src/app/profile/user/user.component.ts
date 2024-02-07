@@ -21,6 +21,7 @@ export class UserComponent implements OnInit {
   loggedUser !: any;
 
   individualFeed: any[] = [];
+  userData : any
 
 
   constructor(private userService: UserService, private postServices: PostServices, private store: InMemoryCache) { }
@@ -32,6 +33,7 @@ export class UserComponent implements OnInit {
     let obj = this.store.getItem("USER_DETAILS");
     this.loggedUser = JSON.parse(obj);
 
+
     this.loadUser();
 
   }
@@ -42,7 +44,8 @@ export class UserComponent implements OnInit {
       this.showPost = true;
       this.hideUser = false;
 
-      this.individualFeed = data
+      this.individualFeed = data;
+      this.person = userDetails.profileImg
 
     })
   }
@@ -79,30 +82,32 @@ export class UserComponent implements OnInit {
 
 
   loadUser() {
-    
-    this.userService.getUserStatus(this.loggedUser.id).subscribe((data: any) => {
-
-      if (data != undefined) {
-        this.userPost = data.users;
-      }
-      else if (data == undefined) {
-
-        this.userService.getAllUser().subscribe((data: any) => {
-
-          const indexToRemove = data.findIndex((user:any) => user.id === this.loggedUser.id);
-
-          if (indexToRemove !== -1) {
-            data.splice(indexToRemove, 1);
-          }
-          this.userPost = data.map(({ id, name }: { id: string, name: string }) => ({ id, name }));
-          this.userPost = this.userPost.map(user => ({ ...user, status: 0 }));
-
-          this.userService.allUserStatus(this.loggedUser.id,this.userPost)
-
-        })
-      }
 
 
-    })
+    this.userService.getAllUser().subscribe((datas: any) => {
+      this.userData = datas.map(({ id, profileImg }: { id: string, profileImg: string }) => ({ id, profileImg }));
+
+      this.mapFunction();
+    });
+
+
   }
+  
+
+  mapFunction(){
+    
+     // Load user statuses
+     this.userService.getUserStatus(this.loggedUser.id).subscribe((data: any) => {
+      this.userPost = data.users;
+  
+      // Map profileImg into userPost based on ids
+      this.userPost.forEach((obj: any) => {
+        let userDataMatch = this.userData.find((user: any) => user.id === obj.id);
+        if (userDataMatch) {
+          obj.profileImg = userDataMatch.profileImg;
+        }
+      });
+    });
+  }
+  
 }
