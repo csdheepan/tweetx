@@ -50,10 +50,33 @@ export class EditProfileComponent implements OnInit {
       image: "assets/images/person-8.jpg",
       title: "Avatar 8"
 
-    }, {
+    }
+    ,{
       image: "assets/images/person-9.jpg",
       title: "Avatar 9"
-
+    }
+    ,{
+      image: "assets/images/person-10.jpg",
+      title: "Avatar 10"
+    },
+    {
+      image: "assets/images/person-11.jpg",
+      title: "Avatar 11"
+    },{
+      image: "assets/images/person-12.jpg",
+      title: "Avatar 12"
+    },
+    {
+      image: "assets/images/person-13.jpg",
+      title: "Avatar 13"
+    },
+    {
+      image: "assets/images/person-14.jpg",
+      title: "Avatar 14"
+    },
+    {
+      image: "assets/images/person-15.jpg",
+      title: "Avatar 15"
     },
 
   ]

@@ -3,6 +3,15 @@
 
     <div *ngIf="hideUser">
 
+        <div fxLayout="column" fxLayoutAlign="center" style="margin: 0px 25px;">
+            <mat-form-field appearance="outline">
+                <mat-label>Search</mat-label>
+                <input matInput (keyup)="filterUsers($event)">
+                <mat-icon matSuffix>search</mat-icon>
+              </mat-form-field>
+        </div>
+       
+
         <div *ngFor="let user of userPost , let i=index">
 
             <mat-card class="mat-elevation-z8">

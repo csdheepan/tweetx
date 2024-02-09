@@ -49,4 +49,10 @@ export class UserService {
     return this.afs.collection('/register/').doc(loggedId).valueChanges()
 
   }
+
+
+  getStatusPost(userDetails:string){
+
+    return this.afs.collection('/register/' + userDetails + '/feed post').valueChanges()
+  }
 }

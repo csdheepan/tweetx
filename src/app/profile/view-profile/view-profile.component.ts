@@ -25,93 +25,126 @@ export class ViewProfileComponent implements OnInit {
   userPost: any[] = [];
   userDetails: any;
 
+  private serviceFlag: boolean = false;
+
   private getUserStatusSubscription: Subscription | undefined;
 
   constructor(private store: InMemoryCache, private postServices: PostServices,
     private dialog: MatDialog, private userService: UserService) { }
 
+
+
+
   ngOnInit(): void {
+    // Retrieve user details from localStorage
+    const userDetailsJson = this.store.getItem("USER_DETAILS");
+    this.userDetails = userDetailsJson ? JSON.parse(userDetailsJson) : null;
 
-    let obj = this.store.getItem("USER_DETAILS");
-    this.userDetails = JSON.parse(obj);
+    // Set profile image or default image if not provided
+    this.person = this.userDetails && this.userDetails.profileImg ? this.userDetails.profileImg : "assets/images/person.jpg";
 
-    this.person = this.userDetails.profileImg ? this.userDetails.profileImg : "assets/images/person.jpg";
+    // Retrieve user's posts
+    if (this.userDetails) {
+      this.getAndDisplayUserPosts();
+      this.retrieveUserStatus();
+    };
+  }
 
+  getAndDisplayUserPosts(): void {
+    if (this.userDetails) {
+      this.postServices.getUserPost(this.userDetails).subscribe((data: any) => {
+        console.log(data);
+        this.userPost = data;
+      });
+    }
+  }
 
-    //retrive post services
-    this.postServices.getUserPost(this.userDetails).subscribe((data: any) => {
-      console.log(data);
+  retrieveUserStatus(): void {
+    if (this.userDetails && this.userDetails.id) {
+      this.userService.getAllUser().subscribe((res: any) => {
+        // Retrieve all users and separate the id, profileImg
+        this.userData = res.map(({ id, profileImg, name }: { id: string, profileImg: string, name: string }) => ({ id, profileImg, name }));
 
-      this.userPost = data
+        // Call function to get user status
+        this.getUserStatus();
+      });
+    }
+  }
 
-    });
+  getUserStatus(): void {
+    // Check if there's an existing subscription, unsubscribe to avoid multiple calls
+    if (this.getUserStatusSubscription) {
+      this.getUserStatusSubscription.unsubscribe();
+    }
 
-    //Retrieve user status data based on follow and following
-    this.userService.getAllUser().subscribe((res: any) => {
+    // Service call to get user status
+    this.getUserStatusSubscription = this.userService.getUserStatus(this.userDetails.id).subscribe((datas: any) => {
+      if (datas != undefined) {
+        console.log("View-profile service call gets continuously");
 
-    //retrive all user and segerate the  id , profileImg
-      this.userData = res.map(({ id, profileImg, name }: { id: string, profileImg: string, name: string }) => ({ id, profileImg, name }));
+        this.allUserstatus = datas.users;
 
-      //service get trigger unecsssary , want to fix 
-      this.getUserStatusSubscription =  this.userService.getUserStatus(this.userDetails.id).subscribe((datas: any) => {
+        // Update user status based on retrieved data
+        this.updateUserStatus();
+      }
+      else if (datas == undefined) {
 
-        if (datas != undefined) {
+        const indexToRemove = this.userData.findIndex((user: any) => user.id === this.userDetails.id);
 
-          this.allUserstatus = datas.users;
-
-          // Iterate over userData
-          this.userData.forEach((user: any) => {
-            // Check if the user's id exists in getUserStatus
-            const foundUser = this.allUserstatus.find((item: any) => item.id === user.id);
-            // If the user's id does not exist in getUserStatus, add it with status 0
-            if (!foundUser) {
-              this.allUserstatus.push({ ...user, status: 0 });
-            }
-          });
-
-          this.userService.allUserStatus(this.userDetails.id, this.allUserstatus);
-
-
-          this.followerData = this.allUserstatus.filter((v: any) => {
-            return v.status === 0;
-          });
-
-          this.followingData = this.allUserstatus.filter((v: any) => {
-            return v.status === 1;
-          });
-
-
+        if (indexToRemove !== -1) {
+          this.userData.splice(indexToRemove, 1);
         }
+        this.followerData = this.userData.map((user: any) => ({ ...user, status: 0 }));
 
-        else if (datas == undefined) {
+        this.userService.allUserStatus(this.userDetails.id, this.followerData);
 
-
-          const indexToRemove = this.userData.findIndex((user: any) => user.id === this.userDetails.id);
-
-          if (indexToRemove !== -1) {
-            this.userData.splice(indexToRemove, 1);
+        // Map profileImg into userPost based on ids
+        this.followerData.forEach((obj: any) => {
+          let userDataMatch = this.userData.find((user: any) => user.id === obj.id);
+          if (userDataMatch) {
+            obj.profileImg = userDataMatch.profileImg;
           }
-          this.followerData = this.userData.map((user: any) => ({ ...user, status: 0 }));
-
-          this.userService.allUserStatus(this.userDetails.id, this.followerData);
-
-          // Map profileImg into userPost based on ids
-          this.followerData.forEach((obj: any) => {
-            let userDataMatch = this.userData.find((user: any) => user.id === obj.id);
-            if (userDataMatch) {
-              obj.profileImg = userDataMatch.profileImg;
-            }
-          });
-        }
-      })
-
-    // Unsubscribe after a 5 seconds
-    timer(5000).pipe(take(1)).subscribe(() => {
-      if (this.getUserStatusSubscription && !this.getUserStatusSubscription.closed) {
-        this.getUserStatusSubscription.unsubscribe();
+        });
       }
     });
+  }
+
+  updateUserStatus(): void {
+
+    // Iterate over userData
+    this.userData.forEach((user: any) => {
+      const foundUser = this.allUserstatus.find((item: any) => item.id === user.id);
+      // If the user's id does not exist in getUserStatus, add it with status 0
+      if (!foundUser) {
+        this.allUserstatus.push({ ...user, status: 0 });
+      }
     });
+    
+
+    // Remove current user from allUserstatus
+    const indexToRemove = this.allUserstatus.findIndex((user: any) => user.id === this.userDetails.id);
+    if (indexToRemove !== -1) {
+      this.allUserstatus.splice(indexToRemove, 1);
+    }
+
+    // Set followerData and followingData based on status
+    this.followerData = this.allUserstatus.filter((v: any) => v.status === 0);
+    this.followingData = this.allUserstatus.filter((v: any) => v.status === 1);
+
+    //flag services - to avoid call service multiple times.
+    if (!this.serviceFlag) {
+      this.userService.allUserStatus(this.userDetails.id, this.allUserstatus);
+      this.serviceFlag = true;
+    }
+  }
+
+
+
+  ngOnDestroy() {
+    // Unsubscribe from getUserStatusSubscription when component is destroyed
+    if (this.getUserStatusSubscription) {
+      this.getUserStatusSubscription.unsubscribe();
+    }
   }
 
 
@@ -181,6 +214,10 @@ export class ViewProfileComponent implements OnInit {
       return v.status === 0;
     });
 
+    this.followingData = this.allUserstatus.filter((v: any) => {
+      return v.status === 1;
+
+    });
   }
 
 
@@ -192,6 +229,11 @@ export class ViewProfileComponent implements OnInit {
 
     this.followingData = this.allUserstatus.filter((v: any) => {
       return v.status === 1;
+
+    });
+
+    this.followerData = this.allUserstatus.filter((v: any) => {
+      return v.status === 0;
     });
 
   }

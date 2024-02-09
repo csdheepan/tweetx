@@ -109,5 +109,17 @@ export class UserComponent implements OnInit {
       });
     });
   }
+
+  filterUsers(event:any) {
+
+    const searchText = event.target.value.toLowerCase();
+    
+    if ( event.key === 'Backspace' || searchText == "") {
+      this.mapFunction();
+    }
+     else {
+      this.userPost = this.userPost.filter(user =>  user.name.toLowerCase().includes(searchText));
+    }
+  }
   
 }

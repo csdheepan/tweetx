@@ -15,6 +15,8 @@ export class PostServices {
 
     const generateId = this.afs.createId(); // Generate a ID
 
+    //map id in postObj
+    postObj.id = userDetails.id;
 
     const id = userDetails.id; // mapping  ID
 
