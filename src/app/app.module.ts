@@ -11,6 +11,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { environment } from 'src/environment/environment';
 import { AngularFireModule} from '@angular/fire/compat'
 import { CORE_SERVICES_PROVIDERS } from './core/core-services';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { CORE_SERVICES_PROVIDERS } from './core/core-services';
     FlexLayoutModule,
     ProfileModule,
     ReactiveFormsModule,
+    SharedModule,
     AngularFireModule.initializeApp(environment.firebase)
   ],
   providers: [CORE_SERVICES_PROVIDERS],

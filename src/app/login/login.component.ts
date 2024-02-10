@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Login, SignUp } from '../core/model/signup-model';
 import { AuthenticationServices } from '../core/services/login.service';
 import { Router } from '@angular/router';
-import { InMemoryCache } from '../core/services/memory-cache';
 import { UserService } from '../core/services/user.service';
+import { InMemoryCache } from '../shared/service/memory-cache.service';
 
 @Component({
   selector: 'app-login',
@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
     this.signupForm = this.fb.group({
       name: [null, [Validators.required,Validators.maxLength(20),Validators.pattern("^[a-zA-Z ]+$")]],
       email: [null, [Validators.required, Validators.email]],
-      password: [null, [Validators.required, Validators.minLength(6)]],
+      password: [null, [Validators.required,Validators.pattern(/^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])(?=.*[0-9]).{8,}$/)]],
       confirmPassword: [null, [Validators.required]]
     });
 

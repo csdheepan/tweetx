@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { InMemoryCache } from 'src/app/core/services/memory-cache';
 import { UserService } from 'src/app/core/services/user.service';
 import { ViewProfileComponent } from '../../view-profile/view-profile.component';
+import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
 
 @Component({
   selector: 'app-edit-profile',

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { InMemoryCache } from 'src/app/core/services/memory-cache';
 import { PostServices } from 'src/app/core/services/post.services';
 import { UserService } from 'src/app/core/services/user.service';
 import { EditProfileComponent } from '../modal/edit-profile/edit-profile.component';
 import { Subscription } from 'rxjs';
+import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
 
 @Component({
   selector: 'app-view-profile',

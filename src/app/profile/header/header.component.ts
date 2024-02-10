@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { InMemoryCache } from 'src/app/core/services/memory-cache';
+import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
 
 @Component({
   selector: 'app-header',

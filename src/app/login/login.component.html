@@ -112,7 +112,8 @@
                             {{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
                         <mat-error *ngIf="signupForm.controls['password'].hasError('required') 
                         && signupForm.controls['password'].touched">Password is required</mat-error>
-                        <mat-error *ngIf="signupForm.controls['password'].hasError('minlength')">Password must be at least 6 characters long</mat-error>
+                        <mat-error style="line-height: 16px;" *ngIf="signupForm.controls['password'].hasError('pattern')">Password must have atleast 8 chars with 1 uppercase, 1 special char, and 1 number.
+                        </mat-error>
                       </mat-form-field>
                     </div>
                   

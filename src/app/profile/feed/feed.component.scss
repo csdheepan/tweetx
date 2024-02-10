@@ -80,6 +80,15 @@ mat-card {
   margin: 20px;
   font-size: 14px;
   font-family: system-ui;
+  background-color: #ff4081 !important;
+  color: white !important;
+  border: 1px solid #ff4081;
+}
+
+.write-btn-1:hover{
+  background-color: white !important;
+  color: #ff4081 !important;
+  border: 1px solid #ff4081;
 }
 
 
