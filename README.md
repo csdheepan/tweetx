@@ -6,19 +6,40 @@ This Angular 16 application uses Google Firebase on the backend and is like a so
 ## Tech Stack:
 - Frontend: Angular 16
 - Backend: Google Firebase (Firestore Database)
+- Hosting : Google Firebase
+
 
 ## Project Structure:
 The project is structured with the following modules:
-- Root Module
-- Profile Module (contains all components required for the application, excluding the login component)
+
+- Root Module : This is the main module of the Angular application, serving as the entry point and orchestrating the loading of other modules.
+
+-Angular Material Module : This module likely contains imports and configurations related to Angular Material, a UI component library for Angular applications.
+
 - Core
-    - Service: All service files
-    - Model: Data model files
+    - Service: : It contains service files. Services typically handle data access, business logic, and other non-UI related tasks
+    - Model: It contains data model files. These are classes or interfaces that represent the structure of data used within the application.
+
+-login
+  --login component : login component responsible for rendering the login interface and handling user authentication
+
+- Profile Module (contains all components required for the application) :  This module is dedicated to functionalities related to profile,user and feed post. It includes components and services required for managing and displaying user profiles.
+
+
+-shared Module
+  --components: It contains shared components that can be reused throughout the application.
+  --service : It contains shared services that provide common functionality needed across different parts of the application.
+
+-assets
+  --Images :  Stores all images used in the application.
+
+-environment
+  --environment.ts- It contains Firebase authentication details
 
 ## Setup and Installation:
 1. Clone the repository using the command 👉🏻 git clone https://github.com/csdheepan/tweetx.git
 
-2. Verify Node.js and npm installation using:
+2. Verify Node.js and npm installation using the command node -v , npm -v :
 - Node version: v18.19.0
 - Npm version: 10.2.3
 3. Navigate to the project directory.
@@ -35,12 +56,12 @@ Link: [https://tweet-x-18.web.app](https://tweet-x-18.web.app)
 - **Sign Up and Login:** Users can create accounts and log in.
 - **Posting Feed:** Users can share posts with the community.
 - **Following Friends:** Users can follow and stay updated on posts from friends.
+- **Avatar Customization:** Provide users the ability to change their avatars.
 - **Responsive Design:** The application is fully responsive for a seamless user experience.
 - **Preview the diagram for better understanding:** ![Application Functionality Diagram](src/assets/images/application-diagram.jpg)
 
 ## Future Improvements:
 - **Direct Messaging:** Allow users to send messages to each other.
-- **Avatar Customization:** Provide users the ability to change their avatars.
 - **Additional features and enhancements for an enriched user experience.
 
 ## Database:
@@ -56,4 +77,3 @@ For any questions or further information, feel free to contact:
 - **Name:** Dheepan S
 - **Email:** csdheepan18@gmail.com
 - **Website:** [dheepanportfolio.in](https://dheepanportfolio.in)
-
