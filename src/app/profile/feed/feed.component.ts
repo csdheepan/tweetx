@@ -22,6 +22,7 @@ export class FeedComponent implements OnInit {
   showButton: boolean = false;
   loader: boolean = true;
   private getUserPostSubscription !: Subscription;
+  showWriteButton : boolean = false;
 
 
 
@@ -50,6 +51,14 @@ export class FeedComponent implements OnInit {
 
       // Filter users with status 1 (Following)
       this.followingStatus = data.users.filter((v: any) => v.status == 1);
+
+      
+      if(this.followingStatus.length == 0){
+        this.showWriteButton = true
+      }
+      else{
+        this.showWriteButton = false;
+      }
 
       if (this.getUserPostSubscription) {
         this.getUserPostSubscription.unsubscribe();

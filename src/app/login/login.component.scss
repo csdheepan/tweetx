@@ -13,8 +13,6 @@
     font-family: system-ui;
 }
 
-
-
 .login-text{
     font-size: 35px;
     line-height: 55px;
@@ -43,21 +41,28 @@ mat-form-field{
 .login-btn{
     padding: 10px 25px;
     font-weight: 300;
+    background: #ff4081 !important;
+    color:  white !important;
+}
+
+.account-btn{
+    background: #ff4081 !important;
+    color:  white !important;
 }
 
 .login-btn:hover{
-   background: transparent;
-   color: #ff4081;
-   border:  1px solid #ff4081 ;
+    background: transparent !important;
+    color:  #ff4081 !important;
+    border:  1px solid #ff4081 ;
 }
 
 .account-btn:hover{
-    background: #ff4081;
-    color: white;
-    border:  1px solid white ;
+    background: transparent !important;
+    color:  #ff4081 !important;
+    border:  1px solid #ff4081 ;
  }
 
-@media screen and (max-width:980px){
+@media screen and (max-width:1080px){
  
     .whole-container{
         flex-direction: column;
@@ -74,54 +79,34 @@ mat-form-field{
     }
 }
 
-@media screen and (min-width:981px){
+@media screen and (min-width:1081px){
  
     .whole-container{
-        // height: 100%;
         flex-direction: row;
         box-sizing: border-box;
         display: flex;
-        place-content: stretch space-around;
         align-items: center;
-        max-width: 2400px;
+        gap: 150px;
+        max-width: 1800px;
         margin: auto;
-    }
-    .login-container{
-        width: 25%;
+        padding: 25px;
     }
 }
 
-@media screen and (min-width:1080px){
+@media screen and (min-width:1200px){
  
-    .whole-container{
+    .w-h-container{
         height: 100%;
     }
 }
 
-
-
 .alert {
     padding: 15px;
-    background-color: rgba(255, 60, 45, 0.7294117647);
+    background-color: rgb(255 32 15 / 80%);
     color: white;
     margin: 25px 0px;
     width: 270px;
-    font-size: 14px;
+    font-size: 16px;
     font-family: system-ui;
     border-radius: 8px;
-  }
-  
-  .closebtn {
-    margin-left: 15px;
-    color: white;
-    font-weight: bold;
-    float: right;
-    font-size: 22px;
-    line-height: 17px;
-    cursor: pointer;
-    transition: 0.3s;
-  }
-  
-  .closebtn:hover {
-    color: black;
-  }
+  } 

@@ -1,5 +1,9 @@
 <div class="body">
 
+    <div *ngIf="showWriteButton">
+        <button mat-raised-button class="write-btn-1" color="accent" (click)="handlePostView('post')">Add Post</button>
+    </div>
+
     <div *ngIf="showPost">
 
         <form [formGroup]="form">

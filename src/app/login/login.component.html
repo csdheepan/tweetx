@@ -1,3 +1,4 @@
+<div fxLayout="row" fxLayoutAlign="center center" class="w-h-container">
 <div class="whole-container">
 
 
@@ -30,8 +31,7 @@
 
 
                 <div class="alert" *ngIf="showAlert">
-                    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-                    Invalid Login Credentials.
+                    Invalid Login Credentials
                   </div>
 
                 <div>
@@ -58,7 +58,7 @@
                   </div>
 
                 <div>
-                    <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+                    <div fxLayout="row wrap" fxLayoutAlign="space-between center" style="width:300px;">
                         <p class="forgot-text">Forgot Password ?</p>
 
                         <button mat-raised-button class="login-btn" (click)="login()" color="accent"
@@ -148,4 +148,5 @@
         <img [src]="banner" class="banner-img">
     </div>
 
+</div>
 </div>
