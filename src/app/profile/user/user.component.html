@@ -8,32 +8,46 @@
                 <mat-label>Search</mat-label>
                 <input matInput (keyup)="filterUsers($event)">
                 <mat-icon matSuffix>search</mat-icon>
-              </mat-form-field>
+            </mat-form-field>
         </div>
-       
+
 
         <div *ngFor="let user of userPost , let i=index">
 
             <mat-card class="mat-elevation-z8">
 
-                <div fxLayout="row" fxLayoutAlign="space-evenly ">
+                <div fxLayout="row" fxLayoutAlign="space-between ">
 
                     <div fxLayout="row" fxLayoutAlign="center center" style="width: 20%;">
-                        <img [src]="user.profileImg">
+
+                        <ngx-skeleton-loader *ngIf="loader" appearance="circle" animation="pulse"
+                            [theme]="{ width: '80px', height: '80px' }"></ngx-skeleton-loader>
+
+                        <img [src]="!loader ? user.profileImg : ''" *ngIf="!loader">
                     </div>
 
                     <div fxLayout="column" fxLayoutAlign="space-between" style="width: 65%;">
 
-                        <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px" class="wrap-container" >
+                        <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px"
+                            class="wrap-container">
 
-                            <p class="title" style="cursor: pointer;" (click)="loadFeed(user)">{{user.name}}</p>
+                            <!--  ngx-skeleton-loader -->
+                            <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
+                                [theme]="{ width: '85px',height: '30px', position: relative, top: '8px' }"></ngx-skeleton-loader>
+
+                            <p class="title" style="cursor: pointer;" (click)="loadFeed(user)" *ngIf="!loader">
+                                {{user.name}}</p>
+
+
 
                             <div *ngIf="user.status == 0">
-                                <button mat-flat-button color="accent" style="padding: 10px 30px;" (click)="followAction(user,i)" >Follow</button>
+                                <button mat-flat-button color="accent" class="follow-btn" [disabled]="loader"
+                                    (click)="followAction(user,i)">Follow</button>
                             </div>
 
                             <div *ngIf="user.status == 1">
-                                <button mat-flat-button color="accent" class="following-btn" (click)="unFollowAction(user,i)" >Following</button>
+                                <button mat-flat-button color="accent" class="following-btn" [disabled]="loader"
+                                    (click)="unFollowAction(user,i)">Following</button>
                             </div>
 
                         </div>
@@ -46,11 +60,6 @@
         </div>
 
     </div>
-
-
-
-
-
 
     <!-- show invidual user post -->
 

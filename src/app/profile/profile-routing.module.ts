@@ -4,8 +4,6 @@ import { HeaderComponent } from './header/header.component';
 import { ViewProfileComponent } from './view-profile/view-profile.component';
 
 const routes: Routes = [
-
-
   {
     path: "user-profile",
     component : ViewProfileComponent

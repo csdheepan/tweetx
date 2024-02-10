@@ -17,10 +17,33 @@
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="7px">
                     <h2 class="title">{{userDetails.name}}</h2>
                 </div>
-                <div fxLayout="row" fxLayoutGap="30px">
-                    <span class="value">Post <strong>{{userPost.length}}</strong></span>
-                    <span class="value">Follow <strong>{{followerData.length}}</strong></span>
-                    <span class="value">Following <strong>{{followingData.length}}</strong></span>
+                <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
+
+
+
+                    <span class="value" fxLayout="column" style="gap: 10px;">Post
+
+                        <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
+                            [theme]="{ width: '40px', height: '20px' }"></ngx-skeleton-loader>
+
+                        <strong *ngIf="!loader">{{userPost.length}}</strong>
+
+                    </span>
+
+                    <span class="value" fxLayout="column" style="gap: 10px;">Follow
+
+                        <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
+                            [theme]="{ width: '40px', height: '20px' }"></ngx-skeleton-loader>
+
+                        <strong *ngIf="!loader">{{followerData.length}}</strong></span>
+
+
+                    <span class="value" fxLayout="column" style="gap: 10px;">Following
+
+                        <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
+                            [theme]="{ width: '40px', height: '20px' }"></ngx-skeleton-loader>
+
+                        <strong *ngIf="!loader">{{followingData.length}}</strong></span>
 
                 </div>
             </div>
@@ -62,17 +85,38 @@
                 <div fxLayout="row" fxLayoutGap="30px">
 
                     <div fxLayout="row" fxLayoutAlign="center center" style="width: 30%;">
-                        <img [src]="person" class="post-img">
+
+                        <ngx-skeleton-loader *ngIf="loader" appearance="circle" animation="pulse"
+                            [theme]="{ width: '85px', height: '85px' }"></ngx-skeleton-loader>
+
+                        <img [src]="!loader ? person : ''" *ngIf="!loader" class="post-img">
+
                     </div>
 
                     <div fxLayout="column" fxLayoutAlign="space-between" style="width: 70%;">
 
                         <div fxLayout="row" fxLayoutAlign="space-between center">
-                            <p class="title-1">{{user.name}}</p>
-                            <p class="date-value">{{user.time}}</p>
+
+                            <!--  ngx-skeleton-loader -->
+                            <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
+                                [theme]="{ width: '100px', height: '20px' }"></ngx-skeleton-loader>
+
+
+                            <p class="title-1" *ngIf="!loader">{{user.name}}</p>
+
+                            <!--  ngx-skeleton-loader -->
+                            <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
+                                [theme]="{ width: '80px', height: '20px' }"></ngx-skeleton-loader>
+
+                            <p class="date-value" *ngIf="!loader">{{user.time}}</p>
                         </div>
 
-                        <p class="value-1">{{user.content}}</p>
+                        <!--  ngx-skeleton-loader -->
+                        <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
+                            [theme]="{ width: '100%', height: '10vh' }"></ngx-skeleton-loader>
+
+
+                        <p class="value-1" *ngIf="!loader">{{user.content}}</p>
 
                     </div>
 
@@ -93,17 +137,26 @@
                 <div fxLayout="row" fxLayoutAlign="space-evenly">
 
                     <div fxLayout="row" fxLayoutAlign="center center" style="width: 30%;">
-                        <img [src]="user.profileImg" class="post-img">
+
+                        <ngx-skeleton-loader *ngIf="loader" appearance="circle" animation="pulse"
+                            [theme]="{ width: '80px', height: '80px' }"></ngx-skeleton-loader>
+
+                        <img [src]="!loader ? user.profileImg : ''" *ngIf="!loader" class="post-img">
+
                     </div>
 
                     <div fxLayout="column" fxLayoutAlign="center" style="width: 65%;">
 
                         <div fxLayout="row" fxLayoutAlign="space-between center">
 
-                            <p class="title-1">{{user.name}}</p>
+                            <!--  ngx-skeleton-loader -->
+                            <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
+                                [theme]="{ width: '120px',height: '30px', position: relative, top: '6px' }"></ngx-skeleton-loader>
+
+                            <p class="title-1" *ngIf="!loader">{{user.name}}</p>
 
                             <div>
-                                <button mat-flat-button color="accent" class="follow-btn"
+                                <button mat-flat-button color="accent" class="follow-btn" [disabled]="loader"
                                     (click)="followAction(user,i)">Follow</button>
                             </div>
 
@@ -126,17 +179,26 @@
                 <div fxLayout="row" fxLayoutAlign="space-evenly">
 
                     <div fxLayout="row" fxLayoutAlign="center center" style="width: 30%;">
-                        <img [src]="user.profileImg" class="post-img">
+
+                        <ngx-skeleton-loader *ngIf="loader" appearance="circle" animation="pulse"
+                            [theme]="{ width: '80px', height: '80px' }"></ngx-skeleton-loader>
+
+                        <img [src]="!loader ? user.profileImg : ''" *ngIf="!loader" class="post-img">
+
                     </div>
 
                     <div fxLayout="column" fxLayoutAlign="center" style="width: 65%;">
 
                         <div fxLayout="row" fxLayoutAlign="space-between center">
 
-                            <p class="title-1">{{user.name}}</p>
+                            <!--  ngx-skeleton-loader -->
+                            <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
+                                [theme]="{ width: '120px',height: '30px', position: relative, top: '6px' }"></ngx-skeleton-loader>
+
+                            <p class="title-1" *ngIf="!loader">{{user.name}}</p>
 
                             <div>
-                                <button mat-flat-button color="accent" class="following-btn"
+                                <button mat-flat-button color="accent" class="following-btn" [disabled]="loader"
                                     (click)="unFollowAction(user,i)">Following</button>
                             </div>
 

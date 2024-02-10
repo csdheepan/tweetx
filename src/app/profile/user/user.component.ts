@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Login, SignUp } from 'src/app/core/model/signup-model';
+import { Login, SignUp, UserStatus } from 'src/app/core/model/signup-model';
 import { InMemoryCache } from 'src/app/core/services/memory-cache';
 import { PostServices } from 'src/app/core/services/post.services';
 import { UserService } from 'src/app/core/services/user.service';
@@ -14,14 +14,12 @@ export class UserComponent implements OnInit {
 
   showPost: boolean = false;
   hideUser: boolean = true;
-
-  userPost: any[] = [];
-
+  userPost : UserStatus[] = [];
   person = "assets/images/person.jpg";
   loggedUser !: any;
-
   individualFeed: any[] = [];
-  userData : any
+  userData : any [] = [];
+  loader : boolean = true;
 
 
   constructor(private userService: UserService, private postServices: PostServices, private store: InMemoryCache) { }
@@ -32,7 +30,6 @@ export class UserComponent implements OnInit {
 
     let obj = this.store.getItem("USER_DETAILS");
     this.loggedUser = JSON.parse(obj);
-
 
     this.loadUser();
 
@@ -108,6 +105,10 @@ export class UserComponent implements OnInit {
         }
       });
     });
+
+    setTimeout(() => {
+      this.loader = false;
+    }, 1500);
   }
 
   filterUsers(event:any) {

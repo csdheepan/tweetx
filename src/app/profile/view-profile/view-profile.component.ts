@@ -4,7 +4,7 @@ import { InMemoryCache } from 'src/app/core/services/memory-cache';
 import { PostServices } from 'src/app/core/services/post.services';
 import { UserService } from 'src/app/core/services/user.service';
 import { EditProfileComponent } from '../modal/edit-profile/edit-profile.component';
-import { Subscription, take, timer } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-view-profile',
@@ -24,15 +24,13 @@ export class ViewProfileComponent implements OnInit {
   userData: any;
   userPost: any[] = [];
   userDetails: any;
+  loader: boolean = true;
 
   private serviceFlag: boolean = false;
-
   private getUserStatusSubscription: Subscription | undefined;
 
   constructor(private store: InMemoryCache, private postServices: PostServices,
     private dialog: MatDialog, private userService: UserService) { }
-
-
 
 
   ngOnInit(): void {
@@ -61,17 +59,21 @@ export class ViewProfileComponent implements OnInit {
 
   retrieveUserStatus(): void {
     if (this.userDetails && this.userDetails.id) {
+
       this.userService.getAllUser().subscribe((res: any) => {
+
         // Retrieve all users and separate the id, profileImg
         this.userData = res.map(({ id, profileImg, name }: { id: string, profileImg: string, name: string }) => ({ id, profileImg, name }));
 
         // Call function to get user status
         this.getUserStatus();
+
       });
     }
   }
 
   getUserStatus(): void {
+
     // Check if there's an existing subscription, unsubscribe to avoid multiple calls
     if (this.getUserStatusSubscription) {
       this.getUserStatusSubscription.unsubscribe();
@@ -80,7 +82,6 @@ export class ViewProfileComponent implements OnInit {
     // Service call to get user status
     this.getUserStatusSubscription = this.userService.getUserStatus(this.userDetails.id).subscribe((datas: any) => {
       if (datas != undefined) {
-        console.log("View-profile service call gets continuously");
 
         this.allUserstatus = datas.users;
 
@@ -98,6 +99,9 @@ export class ViewProfileComponent implements OnInit {
 
         this.userService.allUserStatus(this.userDetails.id, this.followerData);
 
+        let i=0;
+        console.log("User status service called" + i++ + "times");
+
         // Map profileImg into userPost based on ids
         this.followerData.forEach((obj: any) => {
           let userDataMatch = this.userData.find((user: any) => user.id === obj.id);
@@ -114,12 +118,13 @@ export class ViewProfileComponent implements OnInit {
     // Iterate over userData
     this.userData.forEach((user: any) => {
       const foundUser = this.allUserstatus.find((item: any) => item.id === user.id);
+
       // If the user's id does not exist in getUserStatus, add it with status 0
       if (!foundUser) {
         this.allUserstatus.push({ ...user, status: 0 });
       }
+
     });
-    
 
     // Remove current user from allUserstatus
     const indexToRemove = this.allUserstatus.findIndex((user: any) => user.id === this.userDetails.id);
@@ -131,9 +136,16 @@ export class ViewProfileComponent implements OnInit {
     this.followerData = this.allUserstatus.filter((v: any) => v.status === 0);
     this.followingData = this.allUserstatus.filter((v: any) => v.status === 1);
 
+    //to set loader false.
+    setTimeout(() => {
+      this.loader = false;
+    }, 1500);
+
     //flag services - to avoid call service multiple times.
     if (!this.serviceFlag) {
+      let i = 0;
       this.userService.allUserStatus(this.userDetails.id, this.allUserstatus);
+      console.log("User status service called" + i++ + "times");
       this.serviceFlag = true;
     }
   }
@@ -141,6 +153,7 @@ export class ViewProfileComponent implements OnInit {
 
 
   ngOnDestroy() {
+
     // Unsubscribe from getUserStatusSubscription when component is destroyed
     if (this.getUserStatusSubscription) {
       this.getUserStatusSubscription.unsubscribe();
@@ -192,7 +205,7 @@ export class ViewProfileComponent implements OnInit {
           let obj = this.store.getItem("USER_DETAILS");
           this.userDetails = JSON.parse(obj);
 
-          this.person = this.userDetails.profileImg
+          this.person = this.userDetails.profileImg;
         })
 
 
@@ -205,15 +218,17 @@ export class ViewProfileComponent implements OnInit {
 
   followAction(value: any, index: any) {
 
-    //update directly drom retrieve obj
+    //update value in obj
     value.status = 1;
 
     this.userService.followReqAction(this.allUserstatus, this.userDetails.id);
 
+    //fliter status 1 (followingUser)
     this.followerData = this.allUserstatus.filter((v: any) => {
       return v.status === 0;
     });
 
+    //fliter status 0 (followUser)
     this.followingData = this.allUserstatus.filter((v: any) => {
       return v.status === 1;
 
@@ -223,15 +238,18 @@ export class ViewProfileComponent implements OnInit {
 
   unFollowAction(value: any, index: any) {
 
+    //update value in obj
     value.status = 0;
 
     this.userService.followReqAction(this.allUserstatus, this.userDetails.id);
 
+    //fliter status 1 (followingUser)
     this.followingData = this.allUserstatus.filter((v: any) => {
       return v.status === 1;
 
     });
 
+    //fliter status 0 (followUser)
     this.followerData = this.allUserstatus.filter((v: any) => {
       return v.status === 0;
     });

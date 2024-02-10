@@ -5,8 +5,6 @@ import { Injectable } from '@angular/core';
 })
 export class InMemoryCache {
 
-    
-
     constructor() { }
 
     setItem(key: string, value: string) {

@@ -1,5 +1,4 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { InMemoryCache } from 'src/app/core/services/memory-cache';
 import { UserService } from 'src/app/core/services/user.service';
@@ -12,7 +11,6 @@ import { ViewProfileComponent } from '../../view-profile/view-profile.component'
 })
 export class EditProfileComponent implements OnInit {
 
-
   images = [
     {
       image: "assets/images/person-1.jpg",
@@ -23,15 +21,18 @@ export class EditProfileComponent implements OnInit {
       image: "assets/images/person-2.jpg",
       title: "Avatar 2"
 
-    }, {
+    }, 
+    {
       image: "assets/images/person-3.jpg",
       title: "Avatar 3"
 
-    }, {
+    },
+    {
       image: "assets/images/person-4.jpg",
       title: "Avatar 4"
 
-    }, {
+    }, 
+    {
       image: "assets/images/person-5.jpg",
       title: "Avatar 5"
 
@@ -62,7 +63,8 @@ export class EditProfileComponent implements OnInit {
     {
       image: "assets/images/person-11.jpg",
       title: "Avatar 11"
-    },{
+    },
+    {
       image: "assets/images/person-12.jpg",
       title: "Avatar 12"
     },
@@ -78,28 +80,20 @@ export class EditProfileComponent implements OnInit {
       image: "assets/images/person-15.jpg",
       title: "Avatar 15"
     },
-
-  ]
+  ];
   loggedUser: any;
-  form: FormGroup = Object.create(null);
   profileImg: string = "assets/images/person.jpg";
   selectedImageIndex !: number;
 
+  constructor(private store: InMemoryCache,private userService : UserService,public dialogRef: MatDialogRef<ViewProfileComponent>,
+   @Inject(MAT_DIALOG_DATA) public data : any) { }
 
 
-  constructor(private fb: FormBuilder, private store: InMemoryCache,private userService : UserService
-    ,public dialogRef: MatDialogRef<ViewProfileComponent>, @Inject(MAT_DIALOG_DATA) public data : any) { }
   ngOnInit(): void {
-
-    this.form = this.fb.group({
-      name: [null,[Validators.maxLength(20)]],
-    });
-
 
     let obj = this.store.getItem("USER_DETAILS");
     this.loggedUser = JSON.parse(obj);
 
-    this.form.controls['name'].patchValue(this.loggedUser.name);
   }
 
   onSave() {
@@ -107,26 +101,20 @@ export class EditProfileComponent implements OnInit {
     let obj = this.loggedUser;
 
     obj.profileImg = this.profileImg;
-    // obj.name = this.form.controls['name'].value;
 
-    console.log("Payload" + obj);
+    console.log("Update Profile Image Payload" + obj);
 
    //update profile image in register
     this.userService.updateProfile(this.loggedUser.id,obj);
 
+    //pass data while dialog box closed.
     this.dialogRef.close("data saved");
     
-
   }
 
   selectedImage(value: any) {
-    console.log(value);
     this.profileImg = value.image;
     this.selectedImageIndex = value;
-
   }
-
-
-
 
 }

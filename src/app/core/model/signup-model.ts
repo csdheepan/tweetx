@@ -11,3 +11,10 @@ export class Login {
     passcode !: string;
     userName !: string;
 }
+
+export class UserStatus{
+    name !: string;
+    profileImg !: string
+    id !: string;
+    status !: string;
+}

@@ -18,8 +18,10 @@ export class FeedComponent implements OnInit {
   form: FormGroup = Object.create(null);
   person = "assets/images/person.jpg";
   userPost: any[] = [];
-  followingStatus : any[]=[];
-  private getUserPostSubscription !: Subscription ;
+  followingStatus: any[] = [];
+  showButton: boolean = false;
+  loader: boolean = true;
+  private getUserPostSubscription !: Subscription;
 
 
 
@@ -46,17 +48,16 @@ export class FeedComponent implements OnInit {
     this.getUserPostSubscription = this.userService.getUserStatus(this.userDetails.id).subscribe((data: any) => {
       console.log("User Status:" + data);
 
-      // Filter users with status 1
+      // Filter users with status 1 (Following)
       this.followingStatus = data.users.filter((v: any) => v.status == 1);
 
       if (this.getUserPostSubscription) {
         this.getUserPostSubscription.unsubscribe();
       }
 
-      // Call the service for each user one by one
       this.callServiceForUsers(this.followingStatus);
     });
-  
+
   }
 
   //load post content for loggedUser 
@@ -71,10 +72,14 @@ export class FeedComponent implements OnInit {
   handlePostView(value: any) {
     if (value == 'post') {
       this.showPost = true;
+      //to scroll to the top of the page
+      window.scrollTo(0, 0);
     }
     else if (value == 'cancel') {
       this.showPost = false;
     }
+
+
   }
 
 
@@ -107,43 +112,52 @@ export class FeedComponent implements OnInit {
 
   }
 
+ // Call the service for each user one by one for reterive the feedpost content.
   callServiceForUsers(users: any[]) {
 
-    // Array to store user posts
     let userPosts: any[] = [];
 
     // Iterate through each user
     users.forEach((user: any) => {
 
-      // Call the service for the user
+      // Call the service for Invidual User
       this.userService.getStatusPost(user.id).subscribe((postData: any) => {
 
         // Push user post to the array
         userPosts.push(postData);
 
-        // Check if all users have been processed
         if (userPosts.length === users.length) {
-          
+
           // change the array of arrays into a single array
           this.userPost = userPosts.reduce((acc, val) => acc.concat(val), []);
 
 
           this.userPost.forEach((post: any) => {
 
-            //note currently fliter based on name we have to change it to  "id" 
+            //map profileImg here.
             const follower = this.followingStatus.find((follower: any) => follower.id === post.id);
+
             if (follower) {
               post.profileImg = follower.profileImg;
             }
-            else{
+            //by default Image
+            else {
               post.profileImg = "assets/images/person.jpg";
             }
           });
 
           console.log(this.userPost); // Log user posts
+
+          this.showButton = true; // show add button
         }
       });
     });
+
+    //loader => false
+    setTimeout(() => {
+
+      this.loader = false;
+    }, 1500);
   }
 
   ngOnDestroy(): void {

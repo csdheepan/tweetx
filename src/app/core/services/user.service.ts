@@ -15,6 +15,7 @@ export class UserService {
   }
 
   allUserStatus(loggedId: any, allUser: any) {
+    
     const id = loggedId; // Generate a ID
 
     // Wrap the array in an object
@@ -40,19 +41,21 @@ export class UserService {
 
   }
 
-
   updateProfile(loggedId:string,updateObj:SignUp){
+
     this.afs.collection('/register/').doc(loggedId).update(updateObj);
+
   }
 
   getIndividualUser(loggedId:string){
-    return this.afs.collection('/register/').doc(loggedId).valueChanges()
+
+    return this.afs.collection('/register/').doc(loggedId).valueChanges();
 
   }
 
-
   getStatusPost(userDetails:string){
 
-    return this.afs.collection('/register/' + userDetails + '/feed post').valueChanges()
+    return this.afs.collection('/register/' + userDetails + '/feed post').valueChanges();
+
   }
 }

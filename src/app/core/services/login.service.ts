@@ -6,19 +6,19 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 @Injectable({
   providedIn: 'root'
 })
+
 export class AuthenticationServices {
 
-  constructor(private afs : AngularFirestore) { }
+  constructor(private afs: AngularFirestore) { }
 
-  userSignUp(signUp:SignUp){
+  userSignUp(signUp: SignUp) {
 
     const id = this.afs.createId(); // Generate a ID
     signUp.id = id;
 
-    // Use set to store the document with the  ID
+    // Use set to store the data with the  document ID
     this.afs.collection('/register').doc(id).set(signUp);
   }
-
 
   getRegisterUser() {
     return this.afs.collection('/register').valueChanges()

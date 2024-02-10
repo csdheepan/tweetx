@@ -1,11 +1,5 @@
 <div class="body">
 
-
-    <div>
-        <button mat-raised-button class="write-btn" color="accent" (click)="handlePostView('post')">Write</button>
-    </div>
-
-
     <div *ngIf="showPost">
 
         <form [formGroup]="form">
@@ -34,17 +28,34 @@
                 <div fxLayout="row" fxLayoutGap="30px">
 
                     <div fxLayout="row" fxLayoutAlign="center center" style="width: 30%;">
-                        <img [src]="user.profileImg">
+
+                        <ngx-skeleton-loader *ngIf="loader" appearance="circle" animation="pulse"
+                            [theme]="{ width: '105px', height: '105px' }"></ngx-skeleton-loader>
+
+                        <img [src]="!loader ? user.profileImg : ''" *ngIf="!loader">
                     </div>
 
                     <div fxLayout="column" fxLayoutAlign="space-between" style="width: 70%;">
 
                         <div fxLayout="row wrap" fxLayoutAlign="space-between center">
-                            <p class="title">{{user.name}}</p>
-                            <p class="date-value">{{user.time}}</p>
+
+                            <!--  ngx-skeleton-loader -->
+                            <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
+                                [theme]="{ width: '80px', height: '20px' }"></ngx-skeleton-loader>
+
+                            <p class="title" *ngIf="!loader">{{user.name}}</p>
+
+                            <!--  ngx-skeleton-loader -->
+                            <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
+                                [theme]="{ width: '60px', height: '20px' }"></ngx-skeleton-loader>
+                            <p class="date-value" *ngIf="!loader">{{user.time}}</p>
                         </div>
 
-                        <p class="value">{{user.content}}</p>
+                        <!--  ngx-skeleton-loader -->
+                        <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
+                            [theme]="{ width: '100%', height: '13vh' }"></ngx-skeleton-loader>
+
+                        <p class="value" *ngIf="!loader">{{user.content}}</p>
 
                     </div>
 
@@ -52,6 +63,12 @@
 
             </mat-card>
 
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="end end" *ngIf="showButton">
+            <button mat-raised-button class="write-btn" color="accent" (click)="handlePostView('post')"><mat-icon>
+                    add
+                </mat-icon></button>
         </div>
 
     </div>
