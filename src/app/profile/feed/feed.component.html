@@ -1,8 +1,5 @@
 <div class="body">
 
-    <div *ngIf="showWriteButton">
-        <button mat-raised-button class="write-btn-1" color="accent" (click)="handlePostView('post')">Add Post</button>
-    </div>
 
     <div *ngIf="showPost">
 
@@ -67,6 +64,27 @@
 
             </mat-card>
 
+        </div>
+
+
+        <div *ngIf="showNoFeedPost" fxLayout="row" fxLayoutAlign="center center" style="height: 60vh;">
+
+            <div *ngIf="loader" fxLayout="column" fxLayoutAlign="space-around center">
+
+                 <!--  ngx-skeleton-loader -->
+              <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
+              [theme]="{ width: '450px', height: '7vh' }"></ngx-skeleton-loader>
+
+               <!--  ngx-skeleton-loader -->
+               <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
+               [theme]="{ width: '225px', height: '7vh' }"></ngx-skeleton-loader>
+
+            </div>
+            
+
+            <h2 class="big-text" *ngIf="!loader">
+                Please follow some friends who have posted feed content.
+            </h2>
         </div>
 
         <div fxLayout="row" fxLayoutAlign="end end" *ngIf="showButton">

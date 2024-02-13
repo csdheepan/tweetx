@@ -22,7 +22,7 @@ export class FeedComponent implements OnInit {
   showButton: boolean = false;
   loader: boolean = true;
   private getUserPostSubscription !: Subscription;
-  showWriteButton : boolean = false;
+  showNoFeedPost : boolean = false;
 
 
 
@@ -54,10 +54,12 @@ export class FeedComponent implements OnInit {
 
       
       if(this.followingStatus.length == 0){
-        this.showWriteButton = true
+        this.showButton = true; // show add button
+        this.showNoFeedPost = true;
       }
       else{
-        this.showWriteButton = false;
+        this.showButton = false; // show add button
+        this.showNoFeedPost = false;
       }
 
       if (this.getUserPostSubscription) {
@@ -158,11 +160,16 @@ export class FeedComponent implements OnInit {
           console.log(this.userPost); // Log user posts
 
           this.showButton = true; // show add button
+
+
+          if(this.userPost.length == 0){
+            this.showNoFeedPost = true;
+          }
         }
       });
     });
 
-    //loader => false
+    //to set a loader false.
     setTimeout(() => {
 
       this.loader = false;
