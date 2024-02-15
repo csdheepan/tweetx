@@ -2,7 +2,7 @@
 
 
 # firebase
-/.firebase/
+/.firebase
 
 # Compiled output
 /dist
