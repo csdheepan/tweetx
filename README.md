@@ -27,7 +27,10 @@ The project is structured with the following modules:
 
 
 -shared Module
+
   --components: It contains shared components that can be reused throughout the application.
+      ---page-not-found : This component is responsible for displaying a "Page Not Found" message when a user navigates to a URL that does not exist within the application. It ensures a user-friendly experience by informing users about invalid routes.
+      
   --service : It contains shared services that provide common functionality needed across different parts of the application.
 
 -assets
