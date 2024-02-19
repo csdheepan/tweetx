@@ -26,7 +26,6 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
     FlexLayoutModule,
     ReactiveFormsModule,
     NgxSkeletonLoaderModule
-  ], 
-
+  ] 
 })
 export class ProfileModule { }

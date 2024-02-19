@@ -5,6 +5,7 @@ import { UserService } from 'src/app/core/services/user.service';
 import { EditProfileComponent } from '../modal/edit-profile/edit-profile.component';
 import { Subscription } from 'rxjs';
 import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-view-profile',
@@ -25,44 +26,58 @@ export class ViewProfileComponent implements OnInit {
   userPost: any[] = [];
   userDetails: any;
   loader: boolean = true;
-
   private serviceFlag: boolean = false;
-  private getUserStatusSubscription: Subscription | undefined;
+  private getUserStatusSubscription !: Subscription;
 
-  constructor(private store: InMemoryCache, private postServices: PostServices,
-    private dialog: MatDialog, private userService: UserService) { }
+  //constructor : Utilize Dependency Injection here.
+  constructor(private store: InMemoryCache, private postServices: PostServices,private dialog: MatDialog, private userService: UserService,private router : Router) { }
 
 
+  //onload method
   ngOnInit(): void {
+
     // Retrieve user details from localStorage
     const userDetailsJson = this.store.getItem("USER_DETAILS");
     this.userDetails = userDetailsJson ? JSON.parse(userDetailsJson) : null;
 
     // Set profile image or default image if not provided
-    this.person = this.userDetails && this.userDetails.profileImg ? this.userDetails.profileImg : "assets/images/person.jpg";
+    this.person = this.userDetails.profileImg ? this.userDetails.profileImg : "assets/images/person.jpg";
 
     // Retrieve user's posts
     if (this.userDetails) {
-      this.getAndDisplayUserPosts();
-      this.retrieveUserStatus();
-    };
-  }
+      this.getDisplayUserPosts();
+      this.getDisplayUserStatus();
+    }
+    else{
 
-  getAndDisplayUserPosts(): void {
-    if (this.userDetails) {
-      this.postServices.getUserPost(this.userDetails).subscribe((data: any) => {
-        console.log(data);
-        this.userPost = data;
-      });
+      //navigate to login page when user details is null or undefined.
+      this.router.navigate(["login"]);
+
+      //safer side we clear the store also
+      this.store.clear();
     }
   }
 
-  retrieveUserStatus(): void {
+  //method for retrieve the user post 
+  getDisplayUserPosts(): void {
+
+    if (this.userDetails) {
+      //service call - user post
+      this.postServices.getUserPost(this.userDetails).subscribe((data: any) => {
+        this.userPost = data;
+      });
+
+    }
+  }
+
+  getDisplayUserStatus(): void {
+
     if (this.userDetails && this.userDetails.id) {
 
+      //service call - retrieve all user
       this.userService.getAllUser().subscribe((res: any) => {
 
-        // Retrieve all users and separate the id, profileImg
+        // Retrieve all users and segregate the id, profileImg
         this.userData = res.map(({ id, profileImg, name }: { id: string, profileImg: string, name: string }) => ({ id, profileImg, name }));
 
         // Call function to get user status
@@ -100,7 +115,7 @@ export class ViewProfileComponent implements OnInit {
         this.userService.allUserStatus(this.userDetails.id, this.followerData);
 
         let i=0;
-        console.log("User status service called" + i++ + "times");
+        console.log("User status service called " + i++ + " times");
 
         // Map profileImg into userPost based on ids
         this.followerData.forEach((obj: any) => {
@@ -124,6 +139,14 @@ export class ViewProfileComponent implements OnInit {
         this.allUserstatus.push({ ...user, status: 0 });
       }
 
+       // Map profileImg into userData based on ids
+       this.allUserstatus.forEach((obj: any) => {
+        let userDataMatch = this.userData.find((user: any) => user.id === obj.id);
+        if (userDataMatch) {
+          obj.profileImg = userDataMatch.profileImg;
+        }
+      });
+
     });
 
     // Remove current user from allUserstatus
@@ -145,7 +168,7 @@ export class ViewProfileComponent implements OnInit {
     if (!this.serviceFlag) {
       let i = 0;
       this.userService.allUserStatus(this.userDetails.id, this.allUserstatus);
-      console.log("User status service called" + i++ + "times");
+      console.log("User status service called " + i++ + " times");
       this.serviceFlag = true;
     }
   }
@@ -153,7 +176,6 @@ export class ViewProfileComponent implements OnInit {
 
 
   ngOnDestroy() {
-
     // Unsubscribe from getUserStatusSubscription when component is destroyed
     if (this.getUserStatusSubscription) {
       this.getUserStatusSubscription.unsubscribe();
@@ -161,7 +183,7 @@ export class ViewProfileComponent implements OnInit {
   }
 
 
-
+//method to handle view of post , followers,following.
   handleProfileView(value: any) {
     if (value == "POST") {
       this.showPost = true;
@@ -181,46 +203,52 @@ export class ViewProfileComponent implements OnInit {
   }
 
   openModal() {
+
+    //open mat-dialog
     const dialogRef = this.dialog.open(EditProfileComponent, {
       width: "580px",
       height: '80%',
       autoFocus: false
     })
 
+    //method will trigger once dialog box will closed.
     dialogRef.afterClosed().subscribe(result => {
 
       // result contains the data passed when closing the dialog
       console.log('Dialog closed with result:', result);
+
       if (result == "data saved") {
 
+        //retrive the details from local storage.
         let obj = this.store.getItem("USER_DETAILS");
         let userDetails = JSON.parse(obj);
 
+        //service call - 
         this.userService.getIndividualUser(userDetails.id).subscribe((data: any) => {
 
+          //remove the item in local storage.
           this.store.removeItem("USER_DETAILS");
 
+          //to store a new  value in local storage.
           this.store.setItem("USER_DETAILS", JSON.stringify(data));
 
+          //retrieve value in local storage.
           let obj = this.store.getItem("USER_DETAILS");
           this.userDetails = JSON.parse(obj);
 
           this.person = this.userDetails.profileImg;
-        })
 
-
+        });
       }
     });
   }
-
-
-
 
   followAction(value: any, index: any) {
 
     //update value in obj
     value.status = 1;
 
+    //service call - update following action.
     this.userService.followReqAction(this.allUserstatus, this.userDetails.id);
 
     //fliter status 1 (followingUser)
@@ -241,6 +269,7 @@ export class ViewProfileComponent implements OnInit {
     //update value in obj
     value.status = 0;
 
+    //service call - update unfollowing action.
     this.userService.followReqAction(this.allUserstatus, this.userDetails.id);
 
     //fliter status 1 (followingUser)

@@ -18,7 +18,6 @@ export class InMemoryCache {
     getItem(key: string) : any {
         const data = sessionStorage.getItem(key);
         return data ? data : null;
-       // return  ? key : null;
       
     }
     clear() {

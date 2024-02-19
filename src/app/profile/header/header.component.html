@@ -22,16 +22,14 @@
 
 </mat-toolbar>
 
+<div *ngIf="profile">
+  <app-view-profile></app-view-profile>
+</div>
 
+<div *ngIf="feed">
+  <app-feed></app-feed>
+</div>
 
-  <div *ngIf="profile">
-    <app-view-profile></app-view-profile>
-  </div>
-
-  <div *ngIf="feed">
-    <app-feed></app-feed>
-  </div>
-
-  <div *ngIf="user">
-    <app-user></app-user>
-  </div>
+<div *ngIf="user">
+  <app-user></app-user>
+</div>

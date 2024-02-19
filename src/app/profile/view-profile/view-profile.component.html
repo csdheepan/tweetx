@@ -1,12 +1,15 @@
 <div class="body">
 
     <div fxLayout="column" fxLayoutAlign="center center">
+
         <div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="30px" class="profile-container">
 
             <div fxLayout="column" fxLayoutAlign="center center" style="width: 30%;">
 
+                <!-- profile image -->
                 <img [src]="person">
 
+                <!-- edit button -->
                 <button mat-flat-button class="avatar-button" (click)="openModal()">Avatar
                     <mat-icon>edit</mat-icon>
                 </button>
@@ -14,13 +17,14 @@
             </div>
 
             <div fxLayout="column" fxLayoutAlign="space-between" class="right-container">
+
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="7px">
                     <h2 class="title">{{userDetails.name}}</h2>
                 </div>
+
                 <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="space-evenly center" class="adjust-container">
 
-
-
+                 <!-- post count -->
                     <span class="value" fxLayout="column" style="gap: 10px;">Post
 
                         <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
@@ -30,6 +34,7 @@
 
                     </span>
 
+                  <!-- Followers count -->
                     <span class="value" fxLayout="column" style="gap: 10px;">Followers
 
                         <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
@@ -38,6 +43,7 @@
                         <strong *ngIf="!loader">{{followerData.length}}</strong></span>
 
 
+                 <!-- Following count -->
                     <span class="value" fxLayout="column" style="gap: 10px;">Following
 
                         <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
@@ -54,7 +60,7 @@
 
     </div>
 
-    <div fxLayout="row" fxLayoutAlign="space-around center" style="margin: 20px 10px;">
+    <div fxLayout="row" fxLayoutAlign="space-around center" class="mat-container">
         <div fxLayout="row" fxLayoutGap="10px">
             <span class="material-symbols-outlined">
                 chat
@@ -75,8 +81,9 @@
         </div>
     </div>
 
-    <div *ngIf="showPost">
 
+  <!-- show post details -->
+    <div *ngIf="showPost">
 
         <div *ngFor="let user of userPost">
 
@@ -128,6 +135,7 @@
 
     </div>
 
+      <!-- show Follower details -->
     <div *ngIf="showFollower">
 
         <div *ngFor="let user of followerData , let i=index">
@@ -170,6 +178,7 @@
         </div>
     </div>
 
+  <!-- show Following details -->
     <div *ngIf="showFollowing">
 
         <div *ngFor="let user of followingData , let i=index">

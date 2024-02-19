@@ -15,7 +15,7 @@ import { InMemoryCache } from '../shared/service/memory-cache.service';
 
 export class LoginComponent implements OnInit {
 
-  // Variable Decleration
+  // Variable declaration
   banner = "assets/images/login-banner.png";
   hide = true;
   userLoggedIn: boolean = true;

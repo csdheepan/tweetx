@@ -1,8 +1,9 @@
 <div class="body">
 
+    <!-- show all user with user status -->
+    <div *ngIf="showUser">
 
-    <div *ngIf="hideUser">
-
+        <!-- serach field -->
         <div fxLayout="column" fxLayoutAlign="center" style="margin: 0px 25px;">
             <mat-form-field appearance="outline">
                 <mat-label>Search</mat-label>
@@ -12,6 +13,7 @@
         </div>
 
 
+        <!-- iterate all user with status -->
         <div *ngFor="let user of userPost , let i=index">
 
             <mat-card class="mat-elevation-z8">
@@ -20,10 +22,12 @@
 
                     <div fxLayout="row" fxLayoutAlign="center center" style="width: 20%;">
 
+                        <!--  ngx-skeleton-loader -->
                         <ngx-skeleton-loader *ngIf="loader" appearance="circle" animation="pulse"
                             [theme]="{ width: '80px', height: '80px' }"></ngx-skeleton-loader>
 
                         <img [src]="!loader ? user.profileImg : ''" *ngIf="!loader">
+
                     </div>
 
                     <div fxLayout="column" fxLayoutAlign="space-between" style="width: 65%;">
@@ -34,7 +38,7 @@
                             <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
                                 [theme]="{ width: '85px',height: '30px', position: relative, top: '8px' }"></ngx-skeleton-loader>
 
-                            <p class="title" style="cursor: pointer;"  *ngIf="!loader">
+                            <p class="title" *ngIf="!loader">
                                 {{user.name}}</p>
 
 

@@ -30,7 +30,6 @@ img {
     cursor: pointer;
 }
 
-
 .selected {
     border: 2px solid #ff4081;
     border-radius: 50%;
@@ -40,4 +39,7 @@ img {
 button {
     font-size: 12px !important;
     height: 30px !important;
+}
+.button-container{
+    padding: 25px 0px 0px;
 }

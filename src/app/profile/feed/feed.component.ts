@@ -12,56 +12,51 @@ import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
 })
 export class FeedComponent implements OnInit {
 
-
+  // Variable declaration
   userDetails !: any;
   showPost: boolean = false;
   form: FormGroup = Object.create(null);
-  person = "assets/images/person.jpg";
   userPost: any[] = [];
   followingStatus: any[] = [];
   showButton: boolean = false;
   loader: boolean = true;
   private getUserPostSubscription !: Subscription;
-  showNoFeedPost : boolean = false;
+  showNoFeedPost: boolean = false;
 
 
+  //Constructor : Utilize Dependency Injection here.
+  constructor(private store: InMemoryCache, private postServices: PostServices, private fb: FormBuilder, private userService: UserService) { }
 
-  constructor(private store: InMemoryCache, private postServices: PostServices
-    , private fb: FormBuilder, private userService: UserService) { }
 
-
+  //onload method
   ngOnInit(): void {
 
-
+    //form validation
     this.form = this.fb.group({
       "content": [null, Validators.required]
     })
 
+    //retrieve the details from local storage
     let obj = this.store.getItem("USER_DETAILS");
     this.userDetails = JSON.parse(obj);
 
-    this.person = this.userDetails.profileImg ? this.userDetails.profileImg : "assets/images/person.jpg";
-
-
-    console.log(this.userDetails);
-
-
+    //service call - retrieve all the user of our application.
     this.getUserPostSubscription = this.userService.getUserStatus(this.userDetails.id).subscribe((data: any) => {
-      console.log("User Status:" + data);
 
-      // Filter users with status 1 (Following)
+      // segregate the following user status 
       this.followingStatus = data.users.filter((v: any) => v.status == 1);
 
-      
-      if(this.followingStatus.length == 0){
-        this.showButton = true; // show add button
+
+      if (this.followingStatus.length == 0) {
+        this.showButton = true;
         this.showNoFeedPost = true;
       }
-      else{
-        this.showButton = false; // show add button
+      else {
+        this.showButton = false;
         this.showNoFeedPost = false;
       }
 
+      //unsubscribe the user status service.
       if (this.getUserPostSubscription) {
         this.getUserPostSubscription.unsubscribe();
       }
@@ -71,15 +66,7 @@ export class FeedComponent implements OnInit {
 
   }
 
-  //load post content for loggedUser 
-  loadFeedPost() {
-    this.postServices.getUserPost(this.userDetails).subscribe((data: any) => {
-      console.log(data);
-
-      this.userPost = data
-
-    })
-  }
+  //method for handle show post field and hide field.
   handlePostView(value: any) {
     if (value == 'post') {
       this.showPost = true;
@@ -89,12 +76,10 @@ export class FeedComponent implements OnInit {
     else if (value == 'cancel') {
       this.showPost = false;
     }
-
-
   }
 
 
-
+  //method for post the content
   post() {
 
     // Get the current date
@@ -108,22 +93,23 @@ export class FeedComponent implements OnInit {
     // Create the formatted date string
     const formattedDate = `${day}/${month}/${year}`;
 
-    console.log(formattedDate);
-
+    //payload for feed post
     let postObj = {
       content: this.form.controls['content'].value,
       time: formattedDate,
       name: this.userDetails.name
     }
 
+    //service call for post content
     this.postServices.postContent(postObj, this.userDetails);
     this.showPost = false;
 
+    //reset the form
     this.form.reset();
 
   }
 
- // Call the service for each user one by one for reterive the feedpost content.
+  // method used for retrive post content for user following status.
   callServiceForUsers(users: any[]) {
 
     let userPosts: any[] = [];
@@ -157,12 +143,9 @@ export class FeedComponent implements OnInit {
             }
           });
 
-          console.log(this.userPost); // Log user posts
-
           this.showButton = true; // show add button
 
-
-          if(this.userPost.length == 0){
+          if (this.userPost.length == 0) {
             this.showNoFeedPost = true;
           }
         }
@@ -176,11 +159,10 @@ export class FeedComponent implements OnInit {
     }, 1500);
   }
 
+  //unsubscribe the user status service when component is destoryed.
   ngOnDestroy(): void {
-
     if (this.getUserPostSubscription) {
       this.getUserPostSubscription.unsubscribe();
     }
   }
-
 }
