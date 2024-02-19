@@ -26,8 +26,11 @@ The project is structured with the following modules:
 - Profile Module (contains all components required for the application) :  This module is dedicated to functionalities related to profile,user and feed post. It includes components and services required for managing and displaying user profiles.
 
 
--shared Module
+- shared Module
+
   --components: It contains shared components that can be reused throughout the application.
+     ---page-not-found : This component is responsible for displaying a "Page Not Found" message when a user navigates to a URL that does not exist within the application. It ensures a user-friendly experience by informing users about invalid routes.
+      
   --service : It contains shared services that provide common functionality needed across different parts of the application.
 
 -assets
