@@ -1,11 +1,11 @@
-.tweet-word{
+.tweet-word {
     font-size: 26px;
     color: #ff4081;
     font-family: system-ui;
     font-weight: 600;
 }
 
-.account-btn{
+.account-btn {
     border: 1px solid;
     border-radius: 10px;
     padding: 20px;
@@ -13,75 +13,79 @@
     font-family: system-ui;
 }
 
-.login-text{
+.login-text {
     font-size: 35px;
     line-height: 55px;
     font-family: serif;
     font-weight: 500;
 }
 
-.forgot-text{
+.forgot-text {
     font-size: 16px;
     font-family: system-ui;
     font-weight: 600;
     margin-top: 10px;
 }
-mat-form-field{
+
+mat-form-field {
     width: 300px;
 }
-.signup-form div{
+
+.signup-form div {
     margin-bottom: 20px;
 }
 
-.login-form mat-form-field{
+.login-form mat-form-field {
     margin-bottom: 10px;
 
 }
 
-.login-btn{
+.login-btn {
     padding: 10px 25px;
     font-weight: 300;
     background: #ff4081 !important;
-    color:  white !important;
+    color: white !important;
 }
 
-.account-btn{
+.account-btn {
     background: #ff4081 !important;
-    color:  white !important;
+    color: white !important;
 }
 
-.login-btn:hover{
+.login-btn:hover {
     background: transparent !important;
-    color:  #ff4081 !important;
-    border:  1px solid #ff4081 ;
+    color: #ff4081 !important;
+    border: 1px solid #ff4081;
 }
 
-.account-btn:hover{
+.account-btn:hover {
     background: transparent !important;
-    color:  #ff4081 !important;
-    border:  1px solid #ff4081 ;
- }
+    color: #ff4081 !important;
+    border: 1px solid #ff4081;
+}
 
-@media screen and (max-width:1080px){
- 
-    .whole-container{
+@media screen and (max-width:1080px) {
+
+    .inner-container {
         flex-direction: column;
         box-sizing: border-box;
         display: flex;
         place-content: center;
         align-items: center;
     }
-    .login-container{
+
+    .login-container {
         padding: 35px;
     }
-    .banner-img{
+
+    .banner-img {
         max-height: 300px;
     }
 }
 
-@media screen and (min-width:1081px){
- 
-    .whole-container{
+@media screen and (min-width:1081px) {
+
+    .inner-container {
         flex-direction: row;
         box-sizing: border-box;
         display: flex;
@@ -93,9 +97,9 @@ mat-form-field{
     }
 }
 
-@media screen and (min-width:1200px){
- 
-    .w-h-container{
+@media screen and (min-width:1200px) {
+
+    .whole-container {
         height: 100%;
     }
 }
@@ -109,4 +113,4 @@ mat-form-field{
     font-size: 16px;
     font-family: system-ui;
     border-radius: 8px;
-  } 
+}
