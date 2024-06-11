@@ -15,6 +15,10 @@
   width: 20%;
 }
 
+.user-details-container {
+  width: 80%;
+}
+
 .user-info {
   width: 65%;
 }
@@ -133,5 +137,21 @@ mat-card {
     flex-direction: column !important;
     align-items: flex-start !important;
     gap: 15px !important;
+  }
+}
+
+@media screen and (max-width: 330px) {
+
+  .following-btn,
+  .follow-btn {
+    margin: 20px 0px;
+  }
+
+  .wrap-container {
+    margin-left: 20px;
+  }
+
+  .wrap-container div {
+    flex-wrap: wrap;
   }
 }

@@ -35,7 +35,8 @@
               <div fxLayout="row wrap" fxLayoutAlign="space-between center" style="width:300px;">
                 <p class="forgot-text">Forgot Password ?</p>
                  <!-- login button -->
-                <button mat-flat-button class="login-btn" (click)="login()" color="accent" [disabled]="!loginForm.valid">Login</button>
+                <button mat-flat-button class="login-btn" *ngIf="showButton" (click)="login()" color="accent" [disabled]="!loginForm.valid">Login</button>
+                <mat-spinner *ngIf="loader" class="loader" style="position: relative;right: 25px;"></mat-spinner>
               </div>
             </div>
           </form>
@@ -85,7 +86,8 @@
             </div>
             <div>
             <!-- signup button -->
-              <button mat-flat-button class="login-btn" (click)="signup()" color="accent" [disabled]="!signupForm.valid">Sign Up</button>
+              <button mat-flat-button class="login-btn" (click)="signup()" *ngIf="showButton" color="accent" [disabled]="!signupForm.valid">Sign Up</button>
+              <mat-spinner *ngIf="loader" class="loader" style="position: relative;left: 15px;"></mat-spinner>
             </div>
           </form>
         </div>

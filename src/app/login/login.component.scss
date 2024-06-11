@@ -18,6 +18,7 @@
     font-family: system-ui;
     font-weight: 600;
     margin-top: 10px;
+    cursor: not-allowed;
 }
 
 /* Form Styles */
@@ -41,7 +42,6 @@ mat-error {
 /* Button Styles */
 .login-btn,
 .account-btn {
-    padding: 10px 25px;
     font-weight: 300;
     background: #ff4081 !important;
     color: white !important;
@@ -49,6 +49,19 @@ mat-error {
     cursor: pointer;
     border-radius: 5px;
     font-size: 12px;
+}
+
+.login-btn{
+    padding: 10px 30px;
+}
+
+.account-btn{
+    padding: 20px;
+}
+
+.loader{
+    width: 30px !important;
+    height: 30px !important;
 }
 
 .login-btn:hover,
@@ -97,7 +110,7 @@ mat-error {
     color: white;
     margin: 20px 0 35px;
     width: 270px;
-    font-size: 16px;
+    font-size: 14px;
     font-family: system-ui;
     border-radius: 8px;
 }

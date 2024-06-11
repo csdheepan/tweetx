@@ -19,6 +19,8 @@ import { Subscription } from 'rxjs';
 export class LoginComponent implements OnInit {
 
   banner = "assets/images/login-banner.png";
+  loader: boolean = false;
+  showButton: boolean = true;
   hide: boolean = true;
   isLoggedIn: boolean = true; // Indicates whether a user is currently authenticated.
   loginError: boolean = false; // Show alert if login attempt was unsuccessful.
@@ -110,6 +112,9 @@ export class LoginComponent implements OnInit {
  * Otherwise, an error message is displayed indicating invalid login credentials.
  */
   login(): void {
+    this.loader = true;
+    this.showButton = false;
+   setTimeout(() => {
     const loginDetails: Login = {
       userName: this.loginForm.controls['userName'].value,
       passcode: this.loginForm.controls['passcode'].value
@@ -123,13 +128,20 @@ export class LoginComponent implements OnInit {
         this.store.setItem("USER_DETAILS", JSON.stringify(user));
         this.resetForms();
         this.router.navigate(["profile/full/user-profile"]);
+        this.loader = false;
+        this.showButton = true;
       } else {
         console.log('Invalid login credentials');
         this.loginError = true;
+        this.loader = false;
+        this.showButton = true;
       }
     }, (error:any) => {
       console.error('Error retrieving user details:', error);
+      this.loader = false;
+      this.showButton = true;
     });
+   }, 1000);
   }
   
 /**
@@ -138,6 +150,9 @@ export class LoginComponent implements OnInit {
  * and upon successful creation of the account, the user is redirected to the login page.
  */
   signup(): void {
+    this.loader = true;
+    this.showButton = false;
+  setTimeout(() => {
     const profileImg = "assets/images/person.jpg";
     this.signupDetails = {
       id: "",
@@ -147,8 +162,12 @@ export class LoginComponent implements OnInit {
       profileImg: profileImg
     };
     this.authenticationService.signup(this.signupDetails);
+    this.loader = false;
+    this.showButton = true;
     this.resetForms();
     this.isLoggedIn = true;
+  }, 1500);
+  
   }
 
   ngOnDestroy(): void {
