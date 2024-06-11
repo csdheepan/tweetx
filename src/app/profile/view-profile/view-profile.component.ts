@@ -49,6 +49,11 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     }
   }
 
+  // Create a centralized error handling function
+  private handleErrors(error: any, context: string): void {
+    console.error(`Error fetching ${context}:`, error);
+  }
+
   // Initialize user details from local storage
   private initializeUserDetails(): void {
     const userDetailsJson = this.store.getItem("USER_DETAILS");
@@ -56,9 +61,10 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     this.person = this.userDetails?.profileImg || this.person;
   }
 
-  // Load user profile including posts and user status
+  // Load user profile including posts, followers, and following status
   private loadUserProfile(): void {
     this.loadUserPosts();
+     // Load all users with their followers and following status
     this.loadAllUser();
   }
 
@@ -68,7 +74,7 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
       this.postServices.getUserPost(this.userDetails).subscribe((data: any) => {
         this.userPost = data;
       }, (err: any) => {
-        console.error('Error fetching user posts:', err)
+        this.handleErrors(err, 'user posts');
       });
     }
   }
@@ -80,17 +86,18 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
         this.userData = res.map(({ id, profileImg, name }: { id: string, profileImg: string, name: string }) => ({ id, profileImg, name }));
         this.loadUserStatus();
       }, (err: any) => {
-        console.error('Error fetching all users:', err)
+        this.handleErrors(err, 'all users');
       });
     }
   }
 
   // Load user status including followers and following users
   private loadUserStatus(): void {
+    // Unsubscribe from any existing subscriptions
     if (this.getUserStatusSubscription) {
       this.getUserStatusSubscription.unsubscribe();
     }
-
+    // Fetch user status data from the service
     this.getUserStatusSubscription = this.userService.getUserStatus(this.userDetails.id).subscribe((datas: any) => {
       if (datas) {
         this.allUserstatus = datas.users;
@@ -99,19 +106,23 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
         this.initializeUserStatus();
       }
     }, (err: any) => {
-      console.error('Error fetching/updating user status:', err)
+      this.handleErrors(err, 'updating user status');
     });
   }
 
   // Initialize user status if not available
   private initializeUserStatus(): void {
+    // Find index of the current user in the user data
     const indexToRemove = this.userData.findIndex((user: any) => user.id === this.userDetails.id);
+     // Remove the current user from the user data
     if (indexToRemove !== -1) {
       this.userData.splice(indexToRemove, 1);
     }
+     // Initialize follower data with all users and status as 0 (not following)
     this.followerData = this.userData.map((user: any) => ({ ...user, status: 0 }));
     this.userService.allUserStatus(this.userDetails.id, this.followerData);
 
+    // Map profile image for each follower
     this.followerData.forEach((obj: any) => {
       const userDataMatch = this.userData.find((user: any) => user.id === obj.id);
       if (userDataMatch) {
@@ -123,11 +134,13 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
   // Update user status based on fetched data
   private updateUserStatus(): void {
     this.userData.forEach((user: any) => {
+      // Find the user in the fetched user status data
       const foundUser = this.allUserstatus.find((item: any) => item.id === user.id);
+      // If user not found, add with status 0 (not following)
       if (!foundUser) {
         this.allUserstatus.push({ ...user, status: 0 });
       }
-
+     // Map profile image for each user
       this.allUserstatus.forEach((obj: any) => {
         const userDataMatch = this.userData.find((user: any) => user.id === obj.id);
         if (userDataMatch) {
@@ -136,16 +149,19 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
       });
     });
 
+     // Remove the current user from the user status data
     const indexToRemove = this.allUserstatus.findIndex((user: any) => user.id === this.userDetails.id);
     if (indexToRemove !== -1) {
       this.allUserstatus.splice(indexToRemove, 1);
     }
 
+     // Filter follower and following data based on status
     this.followerData = this.allUserstatus.filter((v: any) => v.status === 0);
     this.followingData = this.allUserstatus.filter((v: any) => v.status === 1);
 
     setTimeout(() => this.loader = false, 1500);
 
+     // Update user status in the service if not already updated
     if (!this.serviceFlag) {
       this.userService.allUserStatus(this.userDetails.id, this.allUserstatus);
       this.serviceFlag = true;
@@ -182,7 +198,7 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
       this.userDetails = data;
       this.person = this.userDetails.profileImg;
     }, (err: any) => {
-      console.error('Error refreshing user profile:', err)
+      this.handleErrors(err, 'user profile');
     });
   }
 

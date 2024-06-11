@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.initializeForms();
 
-     // Add keyup event listener to confirmPassword field
+     // Subscribe to changes in the 'confirmPassword' form control's value to dynamically check password match.
      this.signupForm.get('confirmPassword')?.valueChanges.subscribe(() => {
       this.checkPasswordMatch();
     });
@@ -89,10 +89,12 @@ export class LoginComponent implements OnInit {
     this.signupForm.controls['confirmPassword']?.setErrors(passwordMatch ? null : { 'passwordMismatch': true });
   }
 
-  /**
-   * Check if email already exists in the database.
-   * @param email The email to validate.
-   */
+ /**
+ * Check if the provided email already exists in the database.
+ * This method is used to prevent conflicts and ensure uniqueness of email addresses.
+ * If the email exists, an error is displayed to the user indicating that the email is already registered.
+ * @param email The email to be checked for existence in the database.
+ */
   checkValidation(email: string): void {
     if (!email || !this.signupForm.controls['email'].valid) return;
     this.userService.getAllUsers().subscribe((users: any[]) => {
@@ -101,9 +103,12 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  /**
-   * Attempt login using entered credentials.
-   */
+ /**
+ * Attempt to log in the user.
+ * If the provided email and password match an existing registered user's credentials,
+ * the user is authenticated and redirected to their profile page.
+ * Otherwise, an error message is displayed indicating invalid login credentials.
+ */
   login(): void {
     const loginDetails: Login = {
       userName: this.loginForm.controls['userName'].value,
@@ -127,9 +132,11 @@ export class LoginComponent implements OnInit {
     });
   }
   
-  /**
-   * Create a new user account.
-   */
+/**
+ * Create a new user account and store the details in the database.
+ * The user's name, email, and password are obtained from the signup form,
+ * and upon successful creation of the account, the user is redirected to the login page.
+ */
   signup(): void {
     const profileImg = "assets/images/person.jpg";
     this.signupDetails = {

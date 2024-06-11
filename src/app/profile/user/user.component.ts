@@ -79,7 +79,11 @@ export class UserComponent implements OnInit {
     this.userService.followReqAction(this.allUserStatus, this.loggedUser.id);
   }
 
-  // Method to retrieve all users
+    /**
+   * Method to retrieve all users in our appliaction.
+   * This method fetches all users from the database.
+   * As userData initially do not contain user status,profile images, we subsequently call loadUserStatus() to load the user statuses and map them to profile images.
+   */
   private loadUser(): void {
     this.userService.getAllUsers().subscribe((users: any) => {
       this.userData = users.map(({ id, profileImg }: { id: string, profileImg: string }) => ({ id, profileImg }));
@@ -94,6 +98,7 @@ export class UserComponent implements OnInit {
       this.mapProfileImages();
     });
 
+     // Set loader flag to false after a delay of 1.5 seconds (1500 milliseconds)
     setTimeout(() => {
       this.loader = false;
     }, 1500);
