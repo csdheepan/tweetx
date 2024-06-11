@@ -1,6 +1,4 @@
 .body {
-    position: relative;
-    top: 110px;
     max-width: 680px;
     display: flex;
     place-content: center;
@@ -10,13 +8,10 @@
 
 img {
     width: 120px;
+    border-radius: 50%;
 }
 
-mat-icon {
-    color: #ff4081;
-}
-
-.mat-container{
+.mat-container {
     margin: 20px 10px;
 }
 
@@ -31,6 +26,7 @@ mat-icon {
     height: 32px !important;
     position: relative;
     top: 25px;
+    white-space: nowrap;
 }
 
 .avatar-button:hover {
@@ -39,9 +35,6 @@ mat-icon {
     border: 1px solid white;
 }
 
-mat-icon:hover {
-    color: white !important;
-}
 
 .title {
     font-size: 26px;
@@ -58,9 +51,7 @@ mat-icon:hover {
     font-weight: 400;
 }
 
-
 mat-divider {
-
     width: 100%;
     margin: 20px;
     border: 1px solid #dedede;
@@ -77,8 +68,6 @@ mat-divider {
     color: #ff4081;
 }
 
-
-
 .material-symbols-outlined {
     font-variation-settings:
         'FILL' 0,
@@ -86,7 +75,6 @@ mat-divider {
         'GRAD' 0,
         'opsz' 24
 }
-
 
 .card {
     margin: 25px 15px;
@@ -97,7 +85,7 @@ mat-divider {
 mat-card {
     margin: 15px;
     padding: 20px;
-    border-radius: 8px
+    border-radius: 8px;
 }
 
 .title-1 {
@@ -151,19 +139,12 @@ strong {
     padding: 20px;
 }
 
-
-@media screen and (max-width:520px) {
+@media screen and (max-width: 520px) {
 
     .avatar-button {
         padding: 8px 8px;
         font-size: 10px;
         height: 28px;
-    }
-
-    mat-icon {
-        position: relative;
-        left: 4px;
-        transform: scale(0.8);
     }
 
     .h-label {
@@ -192,7 +173,7 @@ strong {
     }
 }
 
-@media screen and (max-width:480px) {
+@media screen and (max-width: 480px) {
     .profile-container {
         flex-wrap: wrap;
         position: relative;

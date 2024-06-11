@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { UserService } from 'src/app/core/services/user.service';
 import { ViewProfileComponent } from '../../view-profile/view-profile.component';
 import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
+import { UserService } from 'src/app/core/services/user-service';
 
 @Component({
   selector: 'app-edit-profile',
@@ -80,7 +80,12 @@ export class EditProfileComponent implements OnInit {
   selectedImageIndex !: number;
 
  //constructor : Utilize Dependency Injection here.
-  constructor(private store: InMemoryCache,private userService : UserService,public dialogRef: MatDialogRef<ViewProfileComponent>,@Inject(MAT_DIALOG_DATA) public data : any) { }
+  constructor(
+    private store: InMemoryCache,
+    private userService : UserService,
+    public dialogRef: MatDialogRef<ViewProfileComponent>,
+    @Inject(MAT_DIALOG_DATA) public data : any
+  ) { }
 
 
   //onload method

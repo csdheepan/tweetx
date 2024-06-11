@@ -1,225 +1,143 @@
 <div class="body">
-
+    <!-- Profile Header -->
     <div fxLayout="column" fxLayoutAlign="center center">
-
         <div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="30px" class="profile-container">
-
+            <!-- Profile Image and Avatar Button -->
             <div fxLayout="column" fxLayoutAlign="center center" style="width: 30%;">
-
-                <!-- profile image -->
-                <img [src]="person">
-
-                <!-- edit button -->
-                <button mat-flat-button class="avatar-button" (click)="openModal()">Avatar
-                    <mat-icon>edit</mat-icon>
+                <img [src]="person" alt="Profile Image" />
+                <button mat-flat-button class="avatar-button" (click)="openModal()">Edit Avatar
                 </button>
-
             </div>
 
+            <!-- User Information -->
             <div fxLayout="column" fxLayoutAlign="space-between" class="right-container">
-
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="7px">
-                    <h2 class="title">{{userDetails.name}}</h2>
+                    <h2 class="title">{{ userDetails.name }}</h2>
                 </div>
-
                 <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="space-evenly center" class="adjust-container">
-
-                 <!-- post count -->
-                    <span class="value" fxLayout="column" style="gap: 10px;">Post
-
-                        <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
-                            [theme]="{ width: '40px', height: '20px' }"></ngx-skeleton-loader>
-
-                        <strong *ngIf="!loader">{{userPost.length}}</strong>
-
+                    <!-- Number of Posts -->
+                    <span class="value" fxLayout="column" style="gap: 10px;">
+                        Post
+                        <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse" [theme]="{ width: '40px', height: '20px' }"></ngx-skeleton-loader>
+                        <strong *ngIf="!loader">{{ userPost.length }}</strong>
                     </span>
-
-                  <!-- Followers count -->
-                    <span class="value" fxLayout="column" style="gap: 10px;">Followers
-
-                        <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
-                            [theme]="{ width: '40px', height: '20px' }"></ngx-skeleton-loader>
-
-                        <strong *ngIf="!loader">{{followerData.length}}</strong></span>
-
-
-                 <!-- Following count -->
-                    <span class="value" fxLayout="column" style="gap: 10px;">Following
-
-                        <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
-                            [theme]="{ width: '40px', height: '20px' }"></ngx-skeleton-loader>
-
-                        <strong *ngIf="!loader">{{followingData.length}}</strong></span>
-
+                    <!-- Number of Followers -->
+                    <span class="value" fxLayout="column" style="gap: 10px;">
+                        Follow
+                        <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse" [theme]="{ width: '40px', height: '20px' }"></ngx-skeleton-loader>
+                        <strong *ngIf="!loader">{{ followerData.length }}</strong>
+                    </span>
+                    <!-- Number of Following -->
+                    <span class="value" fxLayout="column" style="gap: 10px;">
+                        Following
+                        <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse" [theme]="{ width: '40px', height: '20px' }"></ngx-skeleton-loader>
+                        <strong *ngIf="!loader">{{ followingData.length }}</strong>
+                    </span>
                 </div>
             </div>
-
-
         </div>
         <mat-divider></mat-divider>
-
     </div>
 
+    <!-- Profile Navigation -->
     <div fxLayout="row" fxLayoutAlign="space-around center" class="mat-container">
-        <div fxLayout="row" fxLayoutGap="10px">
-            <span class="material-symbols-outlined">
-                chat
-            </span>
-            <p class="h-label" (click)="handleProfileView('POST')">Post</p>
+        <!-- Post Section -->
+        <div fxLayout="row" fxLayoutGap="10px" (click)="handleProfileView('POST')">
+            <span class="material-symbols-outlined">chat</span>
+            <p class="h-label">Post</p>
         </div>
-        <div fxLayout="row" fxLayoutGap="10px">
-            <span class="material-symbols-outlined">
-                person_add
-            </span>
-            <p class="h-label" (click)="handleProfileView('FOLLOW')">Followers</p>
+        <!-- Follow Section -->
+        <div fxLayout="row" fxLayoutGap="10px" (click)="handleProfileView('FOLLOW')">
+            <span class="material-symbols-outlined">person_add</span>
+            <p class="h-label">Follow</p>
         </div>
-        <div fxLayout="row" fxLayoutGap="10px">
-            <span class="material-symbols-outlined">
-                group
-            </span>
-            <p class="h-label" (click)="handleProfileView('FOLLOWING')">Following</p>
+        <!-- Following Section -->
+        <div fxLayout="row" fxLayoutGap="10px" (click)="handleProfileView('FOLLOWING')">
+            <span class="material-symbols-outlined">group</span>
+            <p class="h-label">Following</p>
         </div>
     </div>
 
-
-  <!-- show post details -->
+    <!-- User Posts -->
     <div *ngIf="showPost">
-
         <div *ngFor="let user of userPost">
-
             <mat-card class="mat-elevation-z8">
-
                 <div fxLayout="row" fxLayoutGap="30px">
-
+                    <!-- User Profile Image -->
                     <div fxLayout="row" fxLayoutAlign="center center" style="width: 30%;">
-
-                        <ngx-skeleton-loader *ngIf="loader" appearance="circle" animation="pulse"
-                            [theme]="{ width: '85px', height: '85px' }"></ngx-skeleton-loader>
-
-                        <img [src]="!loader ? person : ''" *ngIf="!loader" class="post-img">
-
+                        <ngx-skeleton-loader *ngIf="loader" appearance="circle" animation="pulse" [theme]="{ width: '85px', height: '85px' }"></ngx-skeleton-loader>
+                        <img [src]="!loader ? person : ''" *ngIf="!loader" class="post-img" alt="Post Image" />
                     </div>
-
+                    <!-- Post Details -->
                     <div fxLayout="column" fxLayoutAlign="space-between" style="width: 70%;">
-
                         <div fxLayout="row" fxLayoutAlign="space-between center">
-
-                            <!--  ngx-skeleton-loader -->
-                            <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
-                                [theme]="{ width: '100px', height: '20px' }"></ngx-skeleton-loader>
-
-
-                            <p class="title-1" *ngIf="!loader">{{user.name}}</p>
-
-                            <!--  ngx-skeleton-loader -->
-                            <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
-                                [theme]="{ width: '80px', height: '20px' }"></ngx-skeleton-loader>
-
-                            <p class="date-value" *ngIf="!loader">{{user.time}}</p>
+                            <!-- User Name -->
+                            <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse" [theme]="{ width: '100px', height: '20px' }"></ngx-skeleton-loader>
+                            <p class="title-1" *ngIf="!loader">{{ user.name }}</p>
+                            <!-- Post Time -->
+                            <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse" [theme]="{ width: '80px', height: '20px' }"></ngx-skeleton-loader>
+                            <p class="date-value" *ngIf="!loader">{{ user.time }}</p>
                         </div>
-
-                        <!--  ngx-skeleton-loader -->
-                        <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
-                            [theme]="{ width: '100%', height: '10vh' }"></ngx-skeleton-loader>
-
-
-                        <p class="value-1" *ngIf="!loader">{{user.content}}</p>
-
+                        <!-- Post Content -->
+                        <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse" [theme]="{ width: '100%', height: '10vh' }"></ngx-skeleton-loader>
+                        <p class="value-1" *ngIf="!loader">{{ user.content }}</p>
                     </div>
-
                 </div>
-
             </mat-card>
-
         </div>
-
     </div>
 
-      <!-- show Follower details -->
+    <!-- Followers -->
     <div *ngIf="showFollower">
-
-        <div *ngFor="let user of followerData , let i=index">
-
-            <mat-card class="mat-elevation-z8" class="card">
-
+        <div *ngFor="let user of followerData; let i = index">
+            <mat-card class="mat-elevation-z8 card">
                 <div fxLayout="row" fxLayoutAlign="space-evenly">
-
+                    <!-- Follower Profile Image -->
                     <div fxLayout="row" fxLayoutAlign="center center" style="width: 30%;">
-
-                        <ngx-skeleton-loader *ngIf="loader" appearance="circle" animation="pulse"
-                            [theme]="{ width: '80px', height: '80px' }"></ngx-skeleton-loader>
-
-                        <img [src]="!loader ? user.profileImg : ''" *ngIf="!loader" class="post-img">
-
+                        <ngx-skeleton-loader *ngIf="loader" appearance="circle" animation="pulse" [theme]="{ width: '80px', height: '80px' }"></ngx-skeleton-loader>
+                        <img [src]="!loader ? user.profileImg : ''" *ngIf="!loader" class="post-img" alt="Follower Image" />
                     </div>
-
+                    <!-- Follower Information -->
                     <div fxLayout="column" fxLayoutAlign="center" style="width: 65%;">
-
                         <div fxLayout="row" fxLayoutAlign="space-between center">
-
-                            <!--  ngx-skeleton-loader -->
-                            <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
-                                [theme]="{ width: '120px',height: '30px', position: relative, top: '6px' }"></ngx-skeleton-loader>
-
-                            <p class="title-1" *ngIf="!loader">{{user.name}}</p>
-
+                            <!-- Follower Name -->
+                            <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse" [theme]="{ width: '120px', height: '30px', position: 'relative', top: '6px' }"></ngx-skeleton-loader>
+                            <p class="title-1" *ngIf="!loader">{{ user.name }}</p>
+                            <!-- Follow Button -->
                             <div>
-                                <button mat-flat-button color="accent" class="follow-btn" [disabled]="loader"
-                                    (click)="followAction(user,i)">Follow</button>
+                                <button mat-flat-button color="accent" class="follow-btn" [disabled]="loader" (click)="followAction(user, i)">Follow</button>
                             </div>
-
                         </div>
                     </div>
-
                 </div>
-
             </mat-card>
-
         </div>
     </div>
 
-  <!-- show Following details -->
+    <!-- Following -->
     <div *ngIf="showFollowing">
-
-        <div *ngFor="let user of followingData , let i=index">
-
-            <mat-card class="mat-elevation-z8" class="card">
-
+        <div *ngFor="let user of followingData; let i = index">
+            <mat-card class="mat-elevation-z8 card">
                 <div fxLayout="row" fxLayoutAlign="space-evenly">
-
+                    <!-- Following Profile Image -->
                     <div fxLayout="row" fxLayoutAlign="center center" style="width: 30%;">
-
-                        <ngx-skeleton-loader *ngIf="loader" appearance="circle" animation="pulse"
-                            [theme]="{ width: '80px', height: '80px' }"></ngx-skeleton-loader>
-
-                        <img [src]="!loader ? user.profileImg : ''" *ngIf="!loader" class="post-img">
-
+                        <ngx-skeleton-loader *ngIf="loader" appearance="circle" animation="pulse" [theme]="{ width: '80px', height: '80px' }"></ngx-skeleton-loader>
+                        <img [src]="!loader ? user.profileImg : ''" *ngIf="!loader" class="post-img" alt="Following Image" />
                     </div>
-
+                    <!-- Following Information -->
                     <div fxLayout="column" fxLayoutAlign="center" style="width: 65%;">
-
                         <div fxLayout="row" fxLayoutAlign="space-between center">
-
-                            <!--  ngx-skeleton-loader -->
-                            <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
-                                [theme]="{ width: '120px',height: '30px', position: relative, top: '6px' }"></ngx-skeleton-loader>
-
-                            <p class="title-1" *ngIf="!loader">{{user.name}}</p>
-
+                            <!-- Following Name -->
+                            <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse" [theme]="{ width: '120px', height: '30px', position: 'relative', top: '6px' }"></ngx-skeleton-loader>
+                            <p class="title-1" *ngIf="!loader">{{ user.name }}</p>
+                            <!-- Following Button -->
                             <div>
-                                <button mat-flat-button color="accent" class="following-btn" [disabled]="loader"
-                                    (click)="unFollowAction(user,i)">Following</button>
+                                <button mat-flat-button color="accent" class="following-btn" [disabled]="loader" (click)="unFollowAction(user, i)">Following</button>
                             </div>
-
                         </div>
                     </div>
-
                 </div>
-
             </mat-card>
-
         </div>
     </div>
-
-
 </div>

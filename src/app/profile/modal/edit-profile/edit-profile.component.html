@@ -1,28 +1,20 @@
 <div class="dialog-body">
-
     <div>
         <p class="edit-text">Change Avatar</p>
     </div>
-
-        <div>
-
-            <!-- Iterate all avatar image -->
-            <div fxLayout="row wrap" fxLayoutAlign="center center" fxLayoutGap="20px">
-                <div *ngFor="let img of images; let i">
-                    <img [src]="img.image" (click)="selectedImage(i)" [class.selected]="selectedImageIndex === i">
-                    <p class="avatar-title-text">{{img.title}}</p>
-                </div>
+    <div>
+        <!-- Iterate all avatar image -->
+        <div fxLayout="row wrap" fxLayoutAlign="center center" fxLayoutGap="20px">
+            <div *ngFor="let img of images; let i">
+                <img [src]="img.image" (click)="selectedImage(i)" [class.selected]="selectedImageIndex === i">
+                <p class="avatar-title-text">{{img.title}}</p>
             </div>
-
         </div>
-
-        <div fxLayout="row" fxLayoutAlign="space-evenly center" class="button-container">
-
-            <!-- close button -->
-            <button mat-flat-button [mat-dialog-close]="true">Close</button>
-
-            <!-- save button -->
-            <button mat-flat-button color="accent" (click)="onSave()">Save</button>
-        </div>
-
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-evenly center" class="button-container">
+        <!-- close button -->
+        <button mat-flat-button [mat-dialog-close]="true">Close</button>
+        <!-- save button -->
+        <button mat-flat-button color="accent" (click)="onSave()">Save</button>
+    </div>
 </div>

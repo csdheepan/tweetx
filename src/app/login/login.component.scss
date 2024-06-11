@@ -1,16 +1,9 @@
+/* Font Styles */
 .tweet-word {
     font-size: 26px;
     color: #ff4081;
     font-family: system-ui;
     font-weight: 600;
-}
-
-.account-btn {
-    border: 1px solid;
-    border-radius: 10px;
-    padding: 20px;
-    font-weight: 500;
-    font-family: system-ui;
 }
 
 .login-text {
@@ -27,8 +20,14 @@
     margin-top: 10px;
 }
 
+/* Form Styles */
 mat-form-field {
     width: 300px;
+}
+
+mat-error {
+    margin: 4px -8px;
+    font-size: 12px;
 }
 
 .signup-form div {
@@ -37,44 +36,34 @@ mat-form-field {
 
 .login-form mat-form-field {
     margin-bottom: 10px;
-
 }
 
-.login-btn {
+/* Button Styles */
+.login-btn,
+.account-btn {
     padding: 10px 25px;
     font-weight: 300;
     background: #ff4081 !important;
     color: white !important;
+    border: 1px solid #ff4081 !important;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 12px;
 }
 
-.account-btn {
-    background: #ff4081 !important;
-    color: white !important;
-}
-
-.login-btn:hover {
-    background: transparent !important;
-    color: #ff4081 !important;
-    border: 1px solid #ff4081;
-}
-
+.login-btn:hover,
 .account-btn:hover {
     background: transparent !important;
     color: #ff4081 !important;
-    border: 1px solid #ff4081;
 }
 
-@media screen and (max-width:1080px) {
-
+/* Media Queries */
+@media screen and (max-width: 1080px) {
     .inner-container {
         flex-direction: column;
-        box-sizing: border-box;
         display: flex;
-        place-content: center;
+        justify-content: center;
         align-items: center;
-    }
-
-    .login-container {
         padding: 35px;
     }
 
@@ -83,11 +72,9 @@ mat-form-field {
     }
 }
 
-@media screen and (min-width:1081px) {
-
+@media screen and (min-width: 1081px) {
     .inner-container {
         flex-direction: row;
-        box-sizing: border-box;
         display: flex;
         align-items: center;
         gap: 150px;
@@ -97,18 +84,18 @@ mat-form-field {
     }
 }
 
-@media screen and (min-width:1200px) {
-
+@media screen and (min-width: 1200px) {
     .whole-container {
         height: 100%;
     }
 }
 
+/* Alert Styles */
 .alert {
     padding: 15px;
-    background-color: rgb(255 32 15 / 80%);
+    background-color:rgb(255 89 145);
     color: white;
-    margin: 25px 0px;
+    margin: 20px 0 35px;
     width: 270px;
     font-size: 16px;
     font-family: system-ui;

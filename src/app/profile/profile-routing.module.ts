@@ -1,12 +1,32 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HeaderComponent } from './header/header.component';
+import { FullComponent } from './full/full.component';
+import { ViewProfileComponent } from './view-profile/view-profile.component';
+import { UserComponent } from './user/user.component';
+import { FeedComponent } from './feed/feed.component';
+import { AuthGuard } from '../shared/service/auth.guard';
 
 const routes: Routes = [
   {
-    path: "feed",
-    component : HeaderComponent
-  }
+    path: 'full',
+    component: FullComponent,
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: 'user-profile',
+        component: ViewProfileComponent
+      },
+      {
+        path: 'users',
+        component: UserComponent
+      },
+      {
+        path: 'feed',
+        component: FeedComponent
+      },
+      
+    ]
+  },
 ];
 
 @NgModule({

@@ -1,97 +1,63 @@
+<div  #scrollUp>
 <div class="body">
-
-    <!-- add post field -->
+    <!-- Add post field -->
     <div *ngIf="showPost">
-
         <form [formGroup]="form">
-
             <div class="note-input-container">
-
-                <!-- Input field for feed post  -->
-                <textarea matInput [formControl]="form.controls['content']" class="add-note-input"
-                    wrap="hard"></textarea>
-
-                <!-- cancel button for feed post -->
-                <button mat-flat-button (click)="handlePostView('cancel')">cancel</button>
-
-                <!-- post button for feed post -->
+                <!-- Input field for feed post -->
+                <textarea matInput [formControl]="form.controls['content']" class="add-note-input" wrap="hard"></textarea>
+                <!-- Cancel button for feed post -->
+                <button mat-flat-button (click)="handlePostView('cancel')">Cancel</button>
+                <!-- Post button for feed post -->
                 <button mat-flat-button color="primary" [disabled]="!form.valid" (click)="post()">Post</button>
-
             </div>
-
         </form>
-
     </div>
 
     <div>
-
         <!-- Show list of user post (only following status) -->
         <div *ngFor="let user of userPost">
-
             <mat-card class="mat-elevation-z8">
-
                 <div fxLayout="row" fxLayoutGap="30px">
-
                     <div fxLayout="row" fxLayoutAlign="center center" style="width: 30%;">
-
                         <ngx-skeleton-loader *ngIf="loader" appearance="circle" animation="pulse"
                             [theme]="{ width: '105px', height: '105px' }"></ngx-skeleton-loader>
-
                         <img [src]="!loader ? user.profileImg : ''" *ngIf="!loader">
                     </div>
-
                     <div fxLayout="column" fxLayoutAlign="space-between" style="width: 70%;">
-
                         <div fxLayout="row wrap" fxLayoutAlign="space-between center">
-
-                            <!--  ngx-skeleton-loader -->
+                            <!-- Ngx-skeleton-loader -->
                             <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
                                 [theme]="{ width: '80px', height: '20px' }"></ngx-skeleton-loader>
-
                             <p class="title" *ngIf="!loader">{{user.name}}</p>
-
-                            <!--  ngx-skeleton-loader -->
+                            <!-- Ngx-skeleton-loader -->
                             <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
                                 [theme]="{ width: '60px', height: '20px' }"></ngx-skeleton-loader>
                             <p class="date-value" *ngIf="!loader">{{user.time}}</p>
                         </div>
-
-                        <!--  ngx-skeleton-loader -->
+                        <!-- Ngx-skeleton-loader -->
                         <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
                             [theme]="{ width: '100%', height: '13vh' }"></ngx-skeleton-loader>
-
                         <p class="value" *ngIf="!loader">{{user.content}}</p>
-
                     </div>
-
                 </div>
-
             </mat-card>
-
         </div>
-
 
         <!-- Show no feed post content -->
         <div *ngIf="showNoFeedPost" fxLayout="row" fxLayoutAlign="center center" style="height: 60vh;">
-
             <div *ngIf="loader" fxLayout="column" fxLayoutAlign="space-around center">
-
-                <!--  ngx-skeleton-loader -->
+                <!-- Ngx-skeleton-loader -->
                 <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
                     [theme]="{ width: '450px', height: '5vh'}"></ngx-skeleton-loader>
-
-                <!--  ngx-skeleton-loader -->
+                <!-- Ngx-skeleton-loader -->
                 <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
                     [theme]="{ width: '225px', height: '5vh' }"></ngx-skeleton-loader>
-
             </div>
-
-
             <h2 class="big-text" *ngIf="!loader">
                 Please follow some friends who have posted feed content.
             </h2>
         </div>
-
 
         <!-- Add post button -->
         <div fxLayout="row" fxLayoutAlign="end end" *ngIf="showButton">
@@ -99,7 +65,6 @@
                 <mat-icon>add</mat-icon>
             </button>
         </div>
-
     </div>
-
+</div>
 </div>

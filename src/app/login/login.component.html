@@ -1,164 +1,98 @@
-<!-- Note : The login and signup pages are reused. -->
-
-<!-- FlexLayout -->
-<div fxLayout="row" fxLayoutAlign="center center" class="whole-container">
-
+<div class="whole-container" fxLayout="row" fxLayoutAlign="center center">
   <div class="inner-container">
-
-    <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="40px" class="login-container">
-
-      <div fxLayout="column" fxLayoutAlign="space-around" fxLayoutGap="30px">
-
-        <!-- Title -->
+    <div class="login-container" fxLayout="column" fxLayoutAlign="center" fxLayoutGap="30px">
+      <div class="login-actions" fxLayout="column" fxLayoutAlign="space-around" fxLayoutGap="30px">
         <h2 class="tweet-word">TweetX</h2>
-
-        <!-- Create Account button -->
-        <div *ngIf="userLoggedIn">
-          <button mat-flat-button class="account-btn" (click)="handleView('signup')">Create Account</button>
-        </div>
-
-        <!-- Login Button  -->
-        <div *ngIf="!userLoggedIn">
-          <button mat-flat-button class="account-btn" (click)="handleView('login')">Login</button>
-        </div>
-
+        <button mat-flat-button *ngIf="isLoggedIn" class="account-btn" (click)="handleView('signup')">Create Account</button>
+        <button mat-flat-button *ngIf="!isLoggedIn" class="account-btn" (click)="handleView('login')">Login</button>
       </div>
 
-      <div fxLayout="column" fxLayoutAlign="space-around" fxLayoutGap="30px">
-
-        <div fxLayout="column" fxLayoutAlign="space-evenly" fxLayoutGap="20px" *ngIf="userLoggedIn">
-
-
-          <!-- Login Form -->
+      <div class="login-form-container" fxLayout="column" fxLayoutAlign="space-around" fxLayoutGap="30px">
+        <div *ngIf="isLoggedIn">
           <form [formGroup]="loginForm" class="login-form">
-
             <h2 class="login-text">Login</h2>
-
-
-            <!-- show alert for Invalid Login Credentials  -->
-            <div class="alert" *ngIf="showAlert">Invalid Login Credentials</div>
-
-            <!-- login - Email Id field -->
+            <div class="alert" *ngIf="loginError">Invalid Login Credentials</div>
             <div>
+              <!-- email id field -->
               <mat-form-field appearance="outline">
                 <mat-label>Email</mat-label>
                 <input matInput placeholder="Enter Your Email" formControlName="userName">
-                <mat-error *ngIf="loginForm.controls['userName'].hasError('required')
-                      && loginForm.controls['userName'].touched">Email is required</mat-error>
+                <mat-error *ngIf="loginForm.controls['userName'].hasError('required') && loginForm.controls['userName'].touched">Email is required</mat-error>
                 <mat-error *ngIf="loginForm.controls['userName'].hasError('email')">Invalid email format</mat-error>
               </mat-form-field>
             </div>
-
-            <!-- login - password field -->
             <div>
+              <!-- password field -->
               <mat-form-field appearance="outline">
                 <mat-label>Password</mat-label>
-                <input matInput type="password" placeholder="Enter Your Password" formControlName="passcode"
-                  [type]="hide ? 'password' : 'text'">
-                <mat-icon matSuffix style="cursor: pointer;" (click)="hide = !hide">
-                  {{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
-                <mat-error *ngIf="loginForm.controls['passcode'].hasError('required') 
-                      && loginForm.controls['passcode'].touched">Password is required</mat-error>
-                <mat-error *ngIf="loginForm.controls['passcode'].hasError('minlength')">Password must be at least 6
-                  characters long</mat-error>
+                <input matInput type="password" placeholder="Enter Your Password" formControlName="passcode" [type]="hide ? 'password' : 'text'">
+                <mat-icon matSuffix style="cursor: pointer;" (click)="hide = !hide">{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+                <mat-error *ngIf="loginForm.controls['passcode'].hasError('required') && loginForm.controls['passcode'].touched">Password is required</mat-error>
+                <mat-error *ngIf="loginForm.controls['passcode'].hasError('minlength')">Password must be at least 6 characters long</mat-error>
               </mat-form-field>
             </div>
-
             <div>
               <div fxLayout="row wrap" fxLayoutAlign="space-between center" style="width:300px;">
                 <p class="forgot-text">Forgot Password ?</p>
-
-                <!-- Login button -->
-                <button mat-raised-button class="login-btn" (click)="login()" color="accent"
-                  [disabled]="!loginForm.valid">Login</button>
-
+                 <!-- login button -->
+                <button mat-flat-button class="login-btn" (click)="login()" color="accent" [disabled]="!loginForm.valid">Login</button>
               </div>
             </div>
-
           </form>
-
         </div>
 
-
-        <div fxLayout="column" fxLayoutAlign="space-evenly" fxLayoutGap="20px" *ngIf="!userLoggedIn">
-
+        <div *ngIf="!isLoggedIn">
           <h2 class="login-text">Create Account</h2>
-
-          <!-- SignUp Form -->
           <form [formGroup]="signupForm" class="signup-form">
-
-            <!-- SignUp - Name field -->
             <div>
+              <!-- name field -->
               <mat-form-field appearance="outline">
                 <mat-label>Name</mat-label>
                 <input matInput placeholder="Enter Your Name" maxlength="20" formControlName="name">
-                <mat-error *ngIf="signupForm.controls['name'].hasError('required')
-                        && signupForm.controls['name'].touched">Name is required</mat-error>
-                <mat-error *ngIf="signupForm.controls['name'].hasError('maxlength')
-                       ">Max 20 characters</mat-error>
-                <mat-error *ngIf="signupForm.controls['name'].hasError('pattern')
-                       ">only alphabets</mat-error>
+                <mat-error *ngIf="signupForm.controls['name'].hasError('required') && signupForm.controls['name'].touched">Name is required</mat-error>
+                <mat-error *ngIf="signupForm.controls['name'].hasError('maxlength')">Max 20 characters</mat-error>
+                <mat-error *ngIf="signupForm.controls['name'].hasError('pattern')">Only alphabets</mat-error>
               </mat-form-field>
             </div>
-
-            <!-- SignUp - Email field -->
             <div>
+              <!-- email field -->
               <mat-form-field appearance="outline">
                 <mat-label>Email</mat-label>
-                <input matInput placeholder="Enter Your Email" [formControl]="signupForm.controls['email']"
-                  formControlName="email" (blur)="checkValidation(signupForm.controls['email'].value)">
-                <mat-error *ngIf="signupForm.controls['email'].hasError('required')
-                        && signupForm.controls['email'].touched ">Email is required</mat-error>
+                <input matInput placeholder="Enter Your Email" formControlName="email" (blur)="checkValidation(signupForm.controls['email'].value)">
+                <mat-error *ngIf="signupForm.controls['email'].hasError('required') && signupForm.controls['email'].touched">Email is required</mat-error>
                 <mat-error *ngIf="signupForm.controls['email'].hasError('email')">Invalid email format</mat-error>
                 <mat-error *ngIf="signupForm.controls['email'].hasError('emailExists')">Email already exists</mat-error>
               </mat-form-field>
             </div>
-
-            <!-- SignUp - Password field -->
             <div>
+              <!-- create password field -->
               <mat-form-field appearance="outline">
                 <mat-label>Password</mat-label>
-                <input matInput type="password" placeholder="Enter Your Password" formControlName="password"
-                  [type]="hide ? 'password' : 'text'">
-                <mat-icon matSuffix style="cursor: pointer;" (click)="hide = !hide">
-                  {{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
-                <mat-error *ngIf="signupForm.controls['password'].hasError('required') 
-                        && signupForm.controls['password'].touched">Password is required</mat-error>
-                <mat-error style="line-height: 16px;"
-                  *ngIf="signupForm.controls['password'].hasError('pattern')">Password must have atleast 8 chars with 1
-                  uppercase, 1 special char, and 1 number.
-                </mat-error>
+                <input matInput type="password" placeholder="Enter Your Password" formControlName="password" [type]="hide ? 'password' : 'text'">
+                <mat-icon matSuffix style="cursor: pointer;" (click)="hide = !hide">{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+                <mat-error *ngIf="signupForm.controls['password'].hasError('required') && signupForm.controls['password'].touched">Password is required</mat-error>
+                <mat-error style="line-height: 16px;" *ngIf="signupForm.controls['password'].hasError('pattern')">Password must have at least 8 characters with 1 uppercase, 1 special char, and 1 number.</mat-error>
               </mat-form-field>
             </div>
-
-            <!-- SignUp - Confirm Password field -->
             <div>
+             <!-- confirm password field -->
               <mat-form-field appearance="outline">
                 <mat-label>Confirm Password</mat-label>
                 <input matInput type="password" placeholder="Confirm Your Password" formControlName="confirmPassword">
-                <mat-error *ngIf="signupForm.controls['confirmPassword'].hasError('required')
-                        && signupForm.controls['confirmPassword'].touched ">Confirm Password is required</mat-error>
-                <mat-error *ngIf="signupForm.controls['confirmPassword'].hasError('passwordMismatch')">Passwords do not
-                  match</mat-error>
+                <mat-error *ngIf="signupForm.controls['confirmPassword'].hasError('required') && signupForm.controls['confirmPassword'].touched">Confirm Password is required</mat-error>
+                <mat-error *ngIf="signupForm.controls['confirmPassword'].hasError('passwordMismatch')">Passwords do not match</mat-error>
               </mat-form-field>
             </div>
-
-            <!-- SignUp button -->
             <div>
-              <button mat-raised-button class="login-btn" (click)="signup()" color="accent"
-                [disabled]="!signupForm.valid">SignUp</button>
+            <!-- signup button -->
+              <button mat-flat-button class="login-btn" (click)="signup()" color="accent" [disabled]="!signupForm.valid">Sign Up</button>
             </div>
-
           </form>
         </div>
       </div>
     </div>
-
-    <!-- Image for login banner -->
     <div>
       <img [src]="banner" class="banner-img">
     </div>
-
   </div>
-
 </div>

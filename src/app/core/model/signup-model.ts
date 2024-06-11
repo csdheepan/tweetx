@@ -1,5 +1,4 @@
 export class SignUp {
-
     id !: string;
     email !: string;
     password !: string;

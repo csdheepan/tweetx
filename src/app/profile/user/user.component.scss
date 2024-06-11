@@ -1,11 +1,22 @@
 .body {
-  position: relative;
-  top: 110px;
   max-width: 680px;
   display: flex;
   place-content: center;
   flex-direction: column;
   margin: auto;
+  padding: 30px 0px;
+}
+
+.search-field {
+  margin: 0 25px;
+}
+
+.profile-img-container {
+  width: 20%;
+}
+
+.user-info {
+  width: 65%;
 }
 
 .following-btn {
@@ -21,7 +32,7 @@
   color: white !important;
 }
 
-.feed-view-icon{
+.feed-view-icon {
   color: #ff4081;
   border: 2px solid #ff4081;
   border-radius: 10px;
@@ -32,18 +43,17 @@
   cursor: pointer;
 }
 
-.feed-view-icon:hover{
+.feed-view-icon:hover {
   color: white;
   border: 2px solid white;
   background: #ff4081 !important;
 }
 
 .wrap-container {
-  flex-direction: row;
   display: flex;
   place-content: space-between;
   align-items: center;
-  margin: 25px 0px;
+  margin: 25px 0;
   gap: 20px;
 }
 
@@ -70,7 +80,7 @@ mat-card {
   font-size: 23px;
   line-height: 40px;
   font-weight: 400;
-  font-family: system-ui
+  font-family: system-ui;
 }
 
 .value {
@@ -86,7 +96,6 @@ mat-card {
   border-radius: 5px;
 }
 
-
 .date-value {
   font-weight: 300;
   color: #6e6e6e;
@@ -94,8 +103,11 @@ mat-card {
   font-size: 14px;
 }
 
-@media screen and (max-width:520px) {
+.no-posts {
+  height: 70vh;
+}
 
+@media screen and (max-width: 520px) {
   button {
     font-size: 11px;
   }
@@ -116,7 +128,7 @@ mat-card {
   }
 }
 
-@media screen and (max-width:580px) {
+@media screen and (max-width: 580px) {
   .wrap-container {
     flex-direction: column !important;
     align-items: flex-start !important;
