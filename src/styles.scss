@@ -7,9 +7,16 @@ body {
 
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: system-ui;
 }
 
+.body {
+  max-width: 680px;
+  display: flex;
+  place-content: center;
+  flex-direction: column;
+  margin: auto;
+}
 
 /* scrollbar */
 

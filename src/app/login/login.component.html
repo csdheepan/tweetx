@@ -1,13 +1,13 @@
 <div class="whole-container" fxLayout="row" fxLayoutAlign="center center">
   <div class="inner-container">
-    <div class="login-container" fxLayout="column" fxLayoutAlign="center" fxLayoutGap="30px">
-      <div class="login-actions" fxLayout="column" fxLayoutAlign="space-around" fxLayoutGap="30px">
+    <div  fxLayout="column" fxLayoutAlign="center" fxLayoutGap="30px">
+      <div  fxLayout="column" fxLayoutAlign="space-around" fxLayoutGap="30px">
         <h2 class="tweet-word">TweetX</h2>
         <button mat-flat-button *ngIf="isLoggedIn" class="account-btn" (click)="handleView('signup')">Create Account</button>
         <button mat-flat-button *ngIf="!isLoggedIn" class="account-btn" (click)="handleView('login')">Login</button>
       </div>
 
-      <div class="login-form-container" fxLayout="column" fxLayoutAlign="space-around" fxLayoutGap="30px">
+      <div  fxLayout="column" fxLayoutAlign="space-around" fxLayoutGap="30px">
         <div *ngIf="isLoggedIn">
           <form [formGroup]="loginForm" class="login-form">
             <h2 class="login-text">Login</h2>
@@ -35,8 +35,8 @@
               <div fxLayout="row wrap" fxLayoutAlign="space-between center" style="width:300px;">
                 <p class="forgot-text">Forgot Password ?</p>
                  <!-- login button -->
-                <button mat-flat-button class="login-btn" *ngIf="showButton" (click)="login()" color="accent" [disabled]="!loginForm.valid">Login</button>
-                <mat-spinner *ngIf="loader" class="loader" style="position: relative;right: 25px;"></mat-spinner>
+                <button mat-flat-button class="auth-btn" *ngIf="showButton" (click)="login()" color="accent" [disabled]="!loginForm.valid">Login</button>
+                <mat-spinner *ngIf="loader" diameter="30" class="login-loader"></mat-spinner>
               </div>
             </div>
           </form>
@@ -79,15 +79,15 @@
              <!-- confirm password field -->
               <mat-form-field appearance="outline">
                 <mat-label>Confirm Password</mat-label>
-                <input matInput type="password" placeholder="Confirm Your Password" formControlName="confirmPassword">
+                <input matInput type="password" placeholder="Confirm Your Password" formControlName="confirmPassword" (keyup)="checkPasswordMatch()">
                 <mat-error *ngIf="signupForm.controls['confirmPassword'].hasError('required') && signupForm.controls['confirmPassword'].touched">Confirm Password is required</mat-error>
                 <mat-error *ngIf="signupForm.controls['confirmPassword'].hasError('passwordMismatch')">Passwords do not match</mat-error>
               </mat-form-field>
             </div>
             <div>
             <!-- signup button -->
-              <button mat-flat-button class="login-btn" (click)="signup()" *ngIf="showButton" color="accent" [disabled]="!signupForm.valid">Sign Up</button>
-              <mat-spinner *ngIf="loader" class="loader" style="position: relative;left: 15px;"></mat-spinner>
+              <button mat-flat-button class="auth-btn" (click)="signup()" *ngIf="showButton" color="accent" [disabled]="!signupForm.valid">Sign Up</button>
+              <mat-spinner *ngIf="loader" diameter="30" class="signup-loader"></mat-spinner>
             </div>
           </form>
         </div>

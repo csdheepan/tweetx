@@ -40,7 +40,7 @@ mat-error {
 }
 
 /* Button Styles */
-.login-btn,
+.auth-btn,
 .account-btn {
     font-weight: 300;
     background: #ff4081 !important;
@@ -51,20 +51,33 @@ mat-error {
     font-size: 12px;
 }
 
-.login-btn{
+.auth-btn {
     padding: 10px 30px;
 }
 
-.account-btn{
+.account-btn {
     padding: 20px;
 }
 
-.loader{
-    width: 30px !important;
-    height: 30px !important;
+.login-loader {
+    position: relative;
+    right: 25px;
 }
 
-.login-btn:hover,
+.login-loader::ng-deep circle {
+    stroke: #ff4081 !important;
+}
+
+.signup-loader::ng-deep circle {
+    stroke: #ff4081 !important;
+}
+
+.signup-loader {
+    position: relative;
+    left: 15px;
+}
+
+.auth-btn:hover,
 .account-btn:hover {
     background: transparent !important;
     color: #ff4081 !important;
@@ -106,7 +119,7 @@ mat-error {
 /* Alert Styles */
 .alert {
     padding: 15px;
-    background-color:rgb(255 89 145);
+    background-color: rgb(255 89 145);
     color: white;
     margin: 20px 0 35px;
     width: 270px;
