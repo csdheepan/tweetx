@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/co
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
+import { PostContent } from 'src/app/core/model/signup-model';
 import { PostServices } from 'src/app/core/services/post-service';
 import { UserService } from 'src/app/core/services/user-service';
 import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
@@ -17,6 +18,7 @@ import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
 })
 export class FeedComponent implements OnInit, OnDestroy {
 
+  //variable declaration
   form: FormGroup = Object.create(null); // Form group for posting content
   userDetails: any; // Object to store user details
   userPost: any[] = []; // Array to store user posts
@@ -36,17 +38,16 @@ export class FeedComponent implements OnInit, OnDestroy {
     private _snackBar: MatSnackBar
   ) { }
 
+
+  /**
+ * Lifecycle hook to initialize component
+ */
   ngOnInit(): void {
     this.initForm();
     this.retrieveUserDetails();
-    this.retrieveUserPosts();
+    this.filterFollowingStatus();
   }
 
-  ngOnDestroy(): void {
-    if (this.getUserPostSubscription) {
-      this.getUserPostSubscription.unsubscribe();
-    }
-  }
 
   /**
   * Initializes the form group for posting content.
@@ -66,9 +67,10 @@ export class FeedComponent implements OnInit, OnDestroy {
   }
 
   /**
-  * Retrieves user posts based on the following status.
-  */
-  retrieveUserPosts(): void {
+ * Retrieves all users and filters following status.
+ * We will show posts of users followed by the current user.
+ */
+  filterFollowingStatus(): void {
     this.getUserPostSubscription = this.userService.getUserStatus(this.userDetails.id).subscribe((data: any) => {
       this.followingStatus = data.users.filter((v: any) => v.status === 1);
       this.handleFollowingStatus();
@@ -91,6 +93,7 @@ export class FeedComponent implements OnInit, OnDestroy {
 
   /**
  * Retrieves and maps user posts for display.
+ * It iterates over each user the current user is following, retrieves their posts, and maps profile images.
  */
   retrieveAndMapUserPosts(): void {
     const userPosts: any[] = [];
@@ -145,15 +148,16 @@ export class FeedComponent implements OnInit, OnDestroy {
   }
 
   /**
- * Posts content to the feed.
- */
+   * Posts content to the feed.
+   */
   post(): void {
     const currentDate = new Date();
     const day = currentDate.getDate().toString().padStart(2, '0');
     const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
     const year = currentDate.getFullYear();
     const formattedDate = `${day}/${month}/${year}`;
-    const postObj = {
+    const postObj : PostContent = {
+      id : "",
       content: this.form.controls['content'].value,
       time: formattedDate,
       name: this.userDetails.name
@@ -164,5 +168,14 @@ export class FeedComponent implements OnInit, OnDestroy {
     });
     this.showPost = false;
     this.form.reset();
+  }
+
+  /**
+ * Lifecycle hook to clean up subscriptions
+ */
+  ngOnDestroy(): void {
+    if (this.getUserPostSubscription) {
+      this.getUserPostSubscription.unsubscribe();
+    }
   }
 }

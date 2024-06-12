@@ -4,6 +4,10 @@ import { PostServices } from 'src/app/core/services/post-service';
 import { UserService } from 'src/app/core/services/user-service';
 import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
 
+/**
+ * UserComponent is responsible for managing user-related functionalities such as loading users, following/unfollowing actions, and displaying user posts.
+ */
+
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
@@ -81,8 +85,7 @@ export class UserComponent implements OnInit {
 
     /**
    * Method to retrieve all users in our appliaction.
-   * This method fetches all users from the database.
-   * As userData initially do not contain user status,profile images, we subsequently call loadUserStatus() to load the user statuses and map them to profile images.
+   * After retrieving user data, it subsequently calls loadUserStatus() to load the statuses of users and map them to profile images.
    */
   private loadUser(): void {
     this.userService.getAllUsers().subscribe((users: any) => {

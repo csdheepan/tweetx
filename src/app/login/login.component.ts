@@ -18,6 +18,7 @@ import { Subscription } from 'rxjs';
 })
 export class LoginComponent implements OnInit {
 
+  //variable declaration
   banner = "assets/images/login-banner.png"; // Path to the banner image used in the login/signup page.
   loader: boolean = false; // Flag to control the display of a loading spinner.
   showButton: boolean = true; // Flag to control the visibility of a button.
@@ -37,6 +38,9 @@ export class LoginComponent implements OnInit {
     private userService: UserService
   ) {}
 
+/**
+ * Lifecycle hook to initialize component
+ */
   ngOnInit(): void {
     this.initializeForms();
   }
@@ -165,6 +169,9 @@ export class LoginComponent implements OnInit {
   
   }
 
+/**
+ * Lifecycle hook to clean up subscriptions
+ */
   ngOnDestroy(): void {
       this.loginSubscription.unsubscribe();
   }

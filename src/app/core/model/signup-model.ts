@@ -17,3 +17,10 @@ export class UserStatus{
     id !: string;
     status !: string;
 }
+
+export class PostContent{
+    content !: string;
+    id !: string
+    name !: string;
+    time !: string;
+}
