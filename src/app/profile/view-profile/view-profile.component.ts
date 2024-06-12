@@ -13,6 +13,7 @@ import { UserService } from 'src/app/core/services/user-service';
 })
 export class ViewProfileComponent implements OnInit, OnDestroy {
 
+  //variable declaration
   person: string = "assets/images/person.jpg"; // Default profile picture
   showPost: boolean = true; // Flag to control visibility of posts
   showFollower: boolean = false; // Flag to control visibility of followers
@@ -35,40 +36,37 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     private userService: UserService,
   ) { }
 
+
+  /**
+  * Lifecycle hook to initialize component
+  */
   ngOnInit(): void {
     this.initializeUserDetails();
     this.loadUserProfile();
   }
 
-  ngOnDestroy(): void {
-    if (this.getUserStatusSubscription) {
-      this.getUserStatusSubscription.unsubscribe();
-    }
-    if (this.profileSubscription) {
-      this.profileSubscription.unsubscribe();
-    }
-  }
-
-  // Create a centralized error handling function
-  private handleErrors(error: any, context: string): void {
-    console.error(`Error fetching ${context}:`, error);
-  }
-
-  // Initialize user details from local storage
+  /**
+  * Initialize user details from local storage
+  */
   private initializeUserDetails(): void {
     const userDetailsJson = this.store.getItem("USER_DETAILS");
     this.userDetails = userDetailsJson ? JSON.parse(userDetailsJson) : null;
     this.person = this.userDetails?.profileImg || this.person;
   }
 
-  // Load user profile including posts, followers, and following status
+  /**
+  * Load user profile including posts, followers, and following status
+  */
   private loadUserProfile(): void {
     this.loadUserPosts();
-     // Load all users with their followers and following status
+    // Load all users with their followers and following status
     this.loadAllUser();
   }
 
-  // Load user posts from database
+
+  /**
+ * Load user posts from database
+ */
   private loadUserPosts(): void {
     if (this.userDetails) {
       this.postServices.getUserPost(this.userDetails).subscribe((data: any) => {
@@ -79,19 +77,24 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Load all users
+  /**
+ *  Load all users
+ */
   private loadAllUser(): void {
-    if (this.userDetails?.id) {
       this.profileSubscription = this.userService.getAllUsers().subscribe((res: any) => {
+        // Map the response to extract user IDs, profile images, and names
         this.userData = res.map(({ id, profileImg, name }: { id: string, profileImg: string, name: string }) => ({ id, profileImg, name }));
         this.loadUserStatus();
       }, (err: any) => {
         this.handleErrors(err, 'all users');
       });
-    }
   }
 
-  // Load user status including followers and following users
+  /**
+ * Load user status including followers and following users
+ * 1. If a new user doesn't have any user status with followers and following, initialize all users with status 0 (not following).
+ * 2. If a user already has a user status, update status 0 for new users.
+ */
   private loadUserStatus(): void {
     // Unsubscribe from any existing subscriptions
     if (this.getUserStatusSubscription) {
@@ -101,8 +104,10 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     this.getUserStatusSubscription = this.userService.getUserStatus(this.userDetails.id).subscribe((datas: any) => {
       if (datas) {
         this.allUserstatus = datas.users;
+        // Update user status if data available
         this.updateUserStatus();
       } else {
+        // Initialize user status if not available
         this.initializeUserStatus();
       }
     }, (err: any) => {
@@ -110,15 +115,17 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     });
   }
 
-  // Initialize user status if not available
+  /**
+ * Initialize user status if not available
+ */
   private initializeUserStatus(): void {
     // Find index of the current user in the user data
     const indexToRemove = this.userData.findIndex((user: any) => user.id === this.userDetails.id);
-     // Remove the current user from the user data
+    // Remove the current user from the user data
     if (indexToRemove !== -1) {
       this.userData.splice(indexToRemove, 1);
     }
-     // Initialize follower data with all users and status as 0 (not following)
+    // Initialize follower data with all users and status as 0 (not following)
     this.followerData = this.userData.map((user: any) => ({ ...user, status: 0 }));
     this.userService.allUserStatus(this.userDetails.id, this.followerData);
 
@@ -131,7 +138,9 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     });
   }
 
-  // Update user status based on fetched data
+  /**
+ * Update user status based on fetched data
+ */
   private updateUserStatus(): void {
     this.userData.forEach((user: any) => {
       // Find the user in the fetched user status data
@@ -140,7 +149,7 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
       if (!foundUser) {
         this.allUserstatus.push({ ...user, status: 0 });
       }
-     // Map profile image for each user
+      // Map profile image for each user
       this.allUserstatus.forEach((obj: any) => {
         const userDataMatch = this.userData.find((user: any) => user.id === obj.id);
         if (userDataMatch) {
@@ -149,33 +158,39 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
       });
     });
 
-     // Remove the current user from the user status data
+    // Remove the current user from the user status data
     const indexToRemove = this.allUserstatus.findIndex((user: any) => user.id === this.userDetails.id);
     if (indexToRemove !== -1) {
       this.allUserstatus.splice(indexToRemove, 1);
     }
 
-     // Filter follower and following data based on status
+    // Filter follower and following data based on status
     this.followerData = this.allUserstatus.filter((v: any) => v.status === 0);
     this.followingData = this.allUserstatus.filter((v: any) => v.status === 1);
 
     setTimeout(() => this.loader = false, 1500);
 
-     // Update user status in the service if not already updated
+    // Update user status in the service if not already updated
     if (!this.serviceFlag) {
       this.userService.allUserStatus(this.userDetails.id, this.allUserstatus);
       this.serviceFlag = true;
     }
   }
 
-  // Handle view switch between posts, followers, and following
+  /**
+  * Handle view switch between posts, followers, and following
+  * @param view The view to display ('posts'|'followers' | 'following').
+  */
   handleProfileView(view: string): void {
     this.showPost = view === 'POST';
     this.showFollower = view === 'FOLLOW';
     this.showFollowing = view === 'FOLLOWING';
   }
 
-  // Open edit profile modal
+
+  /**
+   *Open edit profile modal
+   */
   openModal(): void {
     const dialogRef = this.dialog.open(EditProfileComponent, {
       width: "580px",
@@ -190,7 +205,9 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     });
   }
 
-  // Refresh user profile after editing
+  /**
+   *Refresh user profile after editing
+   */
   private refreshUserProfile(): void {
     const userDetails = JSON.parse(this.store.getItem("USER_DETAILS") || '{}');
     this.userService.getIndividualUser(userDetails.id).subscribe((data: any) => {
@@ -202,23 +219,48 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     });
   }
 
-  // Action to follow a user
+  /**
+  * Action to follow a user
+  */
   followAction(user: any): void {
     user.status = 1; // Update status to following
     this.updateUserStatusData();
   }
 
-  // Action to unfollow a user
+  /**
+   * Action to unfollow a user
+   */
   unFollowAction(user: any): void {
     user.status = 0; // Update status to not following
     this.updateUserStatusData();
   }
 
-  // Update user status data in the database
+  /**
+  *  Update user status data in the database
+  */
   private updateUserStatusData(): void {
     this.userService.followReqAction(this.allUserstatus, this.userDetails.id);
     this.followerData = this.allUserstatus.filter((v: any) => v.status === 0);
     this.followingData = this.allUserstatus.filter((v: any) => v.status === 1);
+  }
+
+  /**
+ * Create a centralized error handling function
+ */
+  private handleErrors(error: any, context: string): void {
+    console.error(`Error fetching ${context}:`, error);
+  }
+
+  /**
+ * Lifecycle hook to clean up subscriptions
+ */
+  ngOnDestroy(): void {
+    if (this.getUserStatusSubscription) {
+      this.getUserStatusSubscription.unsubscribe();
+    }
+    if (this.profileSubscription) {
+      this.profileSubscription.unsubscribe();
+    }
   }
 
 }
