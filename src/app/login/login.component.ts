@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from '../core/services/authentication-service';
 import { UserService } from '../core/services/user-service';
 import { InMemoryCache } from '../shared/service/memory-cache.service';
-import { Login, SignUp } from '../core/model/signup-model';
+import { Login, SignUp } from '../core/model/user-model';
 import { Subscription } from 'rxjs';
 
 /**
@@ -98,7 +98,7 @@ export class LoginComponent implements OnInit {
  */
   checkValidation(email: string): void {
     if (!email || !this.signupForm.controls['email'].valid) return;
-    this.userService.getAllUsers().subscribe((users: any[]) => {
+    this.userService.getAllUsers().subscribe((users: SignUp[]) => {
       const emailExists = users.some((user: any) => user.email === email);
       if (emailExists) this.signupForm.controls['email'].setErrors({ 'emailExists': true });
     });
@@ -113,15 +113,15 @@ export class LoginComponent implements OnInit {
   login(): void {
     this.loader = true;
     this.showButton = false;
+    this.loginError = false;
    setTimeout(() => {
     const loginDetails: Login = {
       userName: this.loginForm.controls['userName'].value,
       passcode: this.loginForm.controls['passcode'].value
     };
   
-   this.loginSubscription = this.authenticationService.getRegisterUser().subscribe((users: any[]) => {
+   this.loginSubscription = this.authenticationService.getRegisterUser().subscribe((users: SignUp[]) => {
       const user = users.find(u => u.email === loginDetails.userName && u.password === loginDetails.passcode);
-  
       if (user) {
         console.log('Login successful');
         this.store.setItem("USER_DETAILS", JSON.stringify(user));
@@ -165,7 +165,7 @@ export class LoginComponent implements OnInit {
     this.showButton = true;
     this.resetForms();
     this.isLoggedIn = true;
-  }, 1500);
+  }, 1000);
   
   }
 

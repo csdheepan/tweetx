@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { SignUp } from '../model/signup-model';
+import { SignUp, UserPost } from '../model/user-model';
+import { Observable } from 'rxjs';
 
 /**
  * UserService provides functionalities related to user management, such as retrieving user data and updating user profiles.
@@ -16,8 +17,8 @@ export class UserService {
    * Retrieves all users registered in the application.
    * @returns An observable that emits an array of registered users.
    */
-  getAllUsers() {
-    return this.afs.collection("/register").valueChanges();
+  getAllUsers():Observable<SignUp[]> {
+    return this.afs.collection<SignUp>("/register").valueChanges();
   }
 
   /**
@@ -50,8 +51,8 @@ export class UserService {
    * @param loggedId The ID of the logged-in user.
    * @returns An observable that emits the user status data.
    */
-  getUserStatus(loggedId: string){
-    return this.afs.collection('/register/' + loggedId + "/profile/").doc(loggedId).valueChanges();
+  getUserStatus(loggedId: string):Observable<any>{
+    return this.afs.collection<any>('/register/' + loggedId + "/profile/").doc(loggedId).valueChanges();
   }
 
   /**
@@ -68,8 +69,8 @@ export class UserService {
    * @param loggedId The ID of the user.
    * @returns An observable that emits the user data.
    */
-  getIndividualUser(loggedId:string){
-    return this.afs.collection('/register/').doc(loggedId).valueChanges();
+  getIndividualUser(loggedId:string):Observable<any>{
+    return this.afs.collection<any>('/register/').doc(loggedId).valueChanges();
   }
 
   /**
@@ -77,7 +78,7 @@ export class UserService {
    * @param userDetails The ID of the user.
    * @returns An observable that emits the post status data.
    */
-  getStatusPost(userDetails:string){
-    return this.afs.collection('/register/' + userDetails + '/feed post').valueChanges();
+  getStatusPost(userDetails:string):Observable<UserPost[]>{
+    return this.afs.collection<UserPost>('/register/' + userDetails + '/feed post').valueChanges();
   }
 }

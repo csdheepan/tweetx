@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { SignUp } from '../model/signup-model';
+import { SignUp } from '../model/user-model';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Observable } from 'rxjs';
 
 /**
  * AuthenticationServices provides functionalities related to user authentication, such as user registration.
@@ -30,8 +31,8 @@ export class AuthenticationService {
  * Retrieves all registered users.
  * @returns An observable that emits an array of registered users.
  */
-  getRegisterUser() {
-    return this.afs.collection('/register').valueChanges()
+  getRegisterUser():Observable<SignUp[]> {
+    return this.afs.collection<SignUp>('/register').valueChanges()
   }
 
 }

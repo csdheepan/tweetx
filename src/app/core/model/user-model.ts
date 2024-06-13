@@ -11,14 +11,14 @@ export class Login {
     userName !: string;
 }
 
-export class UserStatus{
+export class Users{
     name !: string;
     profileImg !: string
     id !: string;
-    status !: string;
+    status !: number;
 }
 
-export class PostContent{
+export class UserPost{
     content !: string;
     id !: string
     name !: string;

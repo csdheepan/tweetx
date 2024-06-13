@@ -10,7 +10,7 @@ const routes: Routes = [
   {
     path: 'full',
     component: FullComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard],  //Router Guard
     children: [
       {
         path: 'user-profile',

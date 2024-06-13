@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ViewProfileComponent } from '../../view-profile/view-profile.component';
 import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
 import { UserService } from 'src/app/core/services/user-service';
+import { SignUp } from 'src/app/core/model/user-model';
 
 @Component({
   selector: 'app-edit-profile',
@@ -11,112 +12,56 @@ import { UserService } from 'src/app/core/services/user-service';
 })
 export class EditProfileComponent implements OnInit {
 
-
- // Variable declaration
+  // Array of available profile images with titles.
   images = [
-    {
-      image: "assets/images/person-1.jpg",
-      title: "Avatar 1"
-    },
-    {
-      image: "assets/images/person-2.jpg",
-      title: "Avatar 2"
-    }, 
-    {
-      image: "assets/images/person-3.jpg",
-      title: "Avatar 3"
-    },
-    {
-      image: "assets/images/person-4.jpg",
-      title: "Avatar 4"
-    }, 
-    {
-      image: "assets/images/person-5.jpg",
-      title: "Avatar 5"
-    },
-    {
-      image: "assets/images/person-6.jpg",
-      title: "Avatar 6"
-    },
-    {
-      image: "assets/images/person-7.jpg",
-      title: "Avatar 7"
-    },
-    {
-      image: "assets/images/person-8.jpg",
-      title: "Avatar 8"
-    }
-    ,{
-      image: "assets/images/person-9.jpg",
-      title: "Avatar 9"
-    }
-    ,{
-      image: "assets/images/person-10.jpg",
-      title: "Avatar 10"
-    },
-    {
-      image: "assets/images/person-11.jpg",
-      title: "Avatar 11"
-    },
-    {
-      image: "assets/images/person-12.jpg",
-      title: "Avatar 12"
-    },
-    {
-      image: "assets/images/person-13.jpg",
-      title: "Avatar 13"
-    },
-    {
-      image: "assets/images/person-14.jpg",
-      title: "Avatar 14"
-    },
-    {
-      image: "assets/images/person-15.jpg",
-      title: "Avatar 15"
-    }
+    { image: "assets/images/person-1.jpg", title: "Avatar 1" },
+    { image: "assets/images/person-2.jpg", title: "Avatar 2" },
+    { image: "assets/images/person-3.jpg", title: "Avatar 3" },
+    { image: "assets/images/person-4.jpg", title: "Avatar 4" },
+    { image: "assets/images/person-5.jpg", title: "Avatar 5" },
+    { image: "assets/images/person-6.jpg", title: "Avatar 6" },
+    { image: "assets/images/person-7.jpg", title: "Avatar 7" },
+    { image: "assets/images/person-8.jpg", title: "Avatar 8" },
+    { image: "assets/images/person-9.jpg", title: "Avatar 9" },
+    { image: "assets/images/person-10.jpg", title: "Avatar 10" },
+    { image: "assets/images/person-11.jpg", title: "Avatar 11" },
+    { image: "assets/images/person-12.jpg", title: "Avatar 12" },
+    { image: "assets/images/person-13.jpg", title: "Avatar 13" },
+    { image: "assets/images/person-14.jpg", title: "Avatar 14" },
+    { image: "assets/images/person-15.jpg", title: "Avatar 15" }
   ];
-  loggedUser: any;
-  profileImg: string = "assets/images/person.jpg";
-  selectedImageIndex !: number;
 
- //constructor : Utilize Dependency Injection here.
+  loggedUser!: SignUp; // Object to store logged-in user details
+  profileImg: string = "assets/images/person.jpg"; // Default profile image
+  selectedImageIndex!: number; // Index of the selected image
+
+  // Dependency injection through constructor
   constructor(
     private store: InMemoryCache,
-    private userService : UserService,
+    private userService: UserService,
     public dialogRef: MatDialogRef<ViewProfileComponent>,
-    @Inject(MAT_DIALOG_DATA) public data : any
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
 
-
-  //onload method
+  // Lifecycle hook to initialize component data
   ngOnInit(): void {
-
-    //retrieve the details from local storage
-    let obj = this.store.getItem("USER_DETAILS");
+    // Retrieve the logged-in user details from local storage
+    const obj = this.store.getItem("USER_DETAILS");
     this.loggedUser = JSON.parse(obj);
-
   }
 
+  // Method to save the selected profile image
+  onSave(): void {
+    this.loggedUser.profileImg = this.profileImg; // Update the profile image
+    this.userService.updateProfile(this.loggedUser.id, this.loggedUser); // Save updated user details
 
-  //method to save profile Image
-  onSave() {
-
-    let obj = this.loggedUser;
-
-    obj.profileImg = this.profileImg;
-
-   //update profile image in register
-    this.userService.updateProfile(this.loggedUser.id,obj);
-
-    //pass data while dialog box closed.
-    this.dialogRef.close("data saved");
-    
+    // Close the dialog and pass back success status
+    this.dialogRef.close({ status: "success", message: "Profile updated.", refreshPage: true });
   }
 
-  //method for selecting avatar
-  selectedImage(value: any) {
-    this.profileImg = value.image;
-    this.selectedImageIndex = value;
+  // Method to select an avatar from the list
+  selectedImage(value: any): void {
+    this.profileImg = value.image; // Set the selected image as profile image
+    this.selectedImageIndex = value; // Update the selected image index
   }
-
 }

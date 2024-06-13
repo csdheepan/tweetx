@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/co
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
-import { PostContent } from 'src/app/core/model/signup-model';
+import { UserPost, Users} from 'src/app/core/model/user-model';
 import { PostServices } from 'src/app/core/services/post-service';
 import { UserService } from 'src/app/core/services/user-service';
 import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
@@ -21,14 +21,14 @@ export class FeedComponent implements OnInit, OnDestroy {
   //variable declaration
   form: FormGroup = Object.create(null); // Form group for posting content
   userDetails: any; // Object to store user details
-  userPost: any[] = []; // Array to store user posts
-  followingStatus: any[] = []; // Array to store following status
+  userPost: UserPost[] = []; // Array to store user posts
+  followingStatus: Users[] = []; // Array to store following status
   showButton = false; // Flag to control the visibility of the add post button
   loader = true; // Flag to control loading state
   showPost = false; // Flag to control the visibility of the post form
   showNoFeedPost = false; // Flag to control the visibility of no feed post message
   private getUserPostSubscription!: Subscription; // Subscription for user post retrieval
-  @ViewChild('scrollUp', { static: true }) scrollUp!: ElementRef;
+  @ViewChild('scrollUp', { static: true }) scrollUp!: ElementRef; // Reference to an element for scrolling up  
 
   constructor(
     private store: InMemoryCache,
@@ -100,7 +100,7 @@ export class FeedComponent implements OnInit, OnDestroy {
     // Iterate over each user the current user is following
     this.followingStatus.forEach((user: any) => {
       // Fetch the posts of the user being iterated over
-      this.userService.getStatusPost(user.id).subscribe((postData: any) => {
+      this.userService.getStatusPost(user.id).subscribe((postData:UserPost[]) => {
         userPosts.push(postData);
         // Check if we have fetched posts for all users in the followingStatus list
         if (userPosts.length === this.followingStatus.length) {
@@ -122,7 +122,7 @@ export class FeedComponent implements OnInit, OnDestroy {
   */
   mapProfileImages(): void {
     this.userPost.forEach((post: any) => {
-      const follower = this.followingStatus.find((follower: any) => follower.id === post.id);
+      const follower = this.followingStatus.find((follower:Users) => follower.id === post.id);
       post.profileImg = follower ? follower.profileImg : "assets/images/person.jpg";
     });
   }
@@ -156,7 +156,7 @@ export class FeedComponent implements OnInit, OnDestroy {
     const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
     const year = currentDate.getFullYear();
     const formattedDate = `${day}/${month}/${year}`;
-    const postObj : PostContent = {
+    const postObj : UserPost = {
       id : "",
       content: this.form.controls['content'].value,
       time: formattedDate,

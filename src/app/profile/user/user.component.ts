@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SignUp, UserStatus } from 'src/app/core/model/signup-model';
+import { SignUp, UserPost, Users } from 'src/app/core/model/user-model';
 import { PostServices } from 'src/app/core/services/post-service';
 import { UserService } from 'src/app/core/services/user-service';
 import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
@@ -18,10 +18,10 @@ export class UserComponent implements OnInit {
  // Variable declaration
  showPost: boolean = false; // Flag to control the visibility of the post form
  showUser: boolean = true; // Flag to control the visibility of the user list
- allUserStatus: UserStatus[] = []; // Array to store all user status 
+ allUserStatus: Users[] = []; // Array to store all user with status 
  person = "assets/images/person.jpg"; // Default user image
- loggedUser!: any; // Object to store logged-in user details
- individualFeed: any[] = []; // Array to store individual user feed
+ loggedUser!: SignUp; // Object to store logged-in user details
+ individualFeed: UserPost[] = []; // Array to store individual user feed
  userData: any[] = []; // Array to store user data
  loader: boolean = true; // Flag to control loading state
 
@@ -48,7 +48,7 @@ export class UserComponent implements OnInit {
 
   // Method to load feed content for a specific user
   loadFeed(userDetails: SignUp): void {
-    this.postServices.getUserPost(userDetails).subscribe((data: any) => {
+    this.postServices.getUserPost(userDetails).subscribe((data: UserPost[]) => {
       this.showPost = true;
       this.showUser = false;
       this.individualFeed = data;
@@ -88,7 +88,7 @@ export class UserComponent implements OnInit {
    * After retrieving user data, it subsequently calls loadUserStatus() to load the statuses of users and map them to profile images.
    */
   private loadUser(): void {
-    this.userService.getAllUsers().subscribe((users: any) => {
+    this.userService.getAllUsers().subscribe((users: SignUp[]) => {
       this.userData = users.map(({ id, profileImg }: { id: string, profileImg: string }) => ({ id, profileImg }));
       this.loadUserStatus();
     });
