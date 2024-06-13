@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { SignUp, UserPost } from '../model/user-model';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
 
 /**
  * UserService provides functionalities related to user management, such as retrieving user data and updating user profiles.
@@ -61,7 +61,7 @@ export class UserService {
    * @param updateObj An object containing the updated user profile data.
    */
   updateProfile(loggedId:string,updateObj:SignUp){
-    this.afs.collection('/register/').doc(loggedId).update(updateObj);
+    return from(this.afs.collection('/register/').doc(loggedId).update(updateObj));
   }
 
   /**

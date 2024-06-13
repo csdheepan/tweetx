@@ -25,6 +25,7 @@ export class LoginComponent implements OnInit {
   hide: boolean = true; // Flag to toggle password visibility in the form.
   isLoggedIn: boolean = true; // Indicates whether a user is currently authenticated.
   loginError: boolean = false; // Show alert if login attempt was unsuccessful.
+  signupError: boolean = false; // Show alert if signup attempt was unsuccessful.
   signupForm : FormGroup = Object.create(null); // Form group for the signup form, used to manage form controls and validation.
   loginForm: FormGroup = Object.create(null); // Form group for the login form, used to manage form controls and validation.
   signupDetails!: SignUp; // Object to hold the signup details entered by the user.
@@ -78,6 +79,7 @@ export class LoginComponent implements OnInit {
     this.signupForm.reset();
     this.loginForm.reset();
     this.loginError = false;
+    this.signupError = false;
   }
 
   /**
@@ -151,6 +153,7 @@ export class LoginComponent implements OnInit {
   signup(): void {
     this.loader = true;
     this.showButton = false;
+    this.signupError = false;
   setTimeout(() => {
     const profileImg = "assets/images/person.jpg"; //user default profile image.
     this.signupDetails = {
@@ -160,11 +163,20 @@ export class LoginComponent implements OnInit {
       password: this.signupForm.controls['password'].value,
       profileImg: profileImg
     };
-    this.authenticationService.signup(this.signupDetails);
-    this.loader = false;
-    this.showButton = true;
-    this.resetForms();
-    this.isLoggedIn = true;
+    this.authenticationService.signup(this.signupDetails).subscribe((data:any)=>{
+      console.log('Signup successful' + data);
+      this.loader = false;
+      this.showButton = true;
+      this.resetForms();
+      this.isLoggedIn = true;
+      this.signupError = false;
+    },(error:any)=>{
+      console.error('Error retrieving user details:', error);
+      this.loader = false;
+      this.showButton = true;
+      this.signupError = true;
+      this.isLoggedIn = false;
+    });
   }, 1000);
   
   }

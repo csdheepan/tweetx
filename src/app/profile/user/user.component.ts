@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { SignUp, UserPost, Users } from 'src/app/core/model/user-model';
 import { PostServices } from 'src/app/core/services/post-service';
 import { UserService } from 'src/app/core/services/user-service';
@@ -24,6 +25,7 @@ export class UserComponent implements OnInit {
  individualFeed: UserPost[] = []; // Array to store individual user feed
  userData: any[] = []; // Array to store user data
  loader: boolean = true; // Flag to control loading state
+ private subscription!: Subscription;
 
   // Constructor with Dependency Injection
   constructor(
@@ -48,11 +50,13 @@ export class UserComponent implements OnInit {
 
   // Method to load feed content for a specific user
   loadFeed(userDetails: SignUp): void {
-    this.postServices.getUserPost(userDetails).subscribe((data: UserPost[]) => {
+   this.subscription = this.postServices.getUserPost(userDetails).subscribe((data: UserPost[]) => {
       this.showPost = true;
       this.showUser = false;
       this.individualFeed = data;
       this.person = userDetails.profileImg;
+    },(err:any)=>{
+      this.handleErrors(err,"Retrieve user post")
     });
   }
 
@@ -88,17 +92,21 @@ export class UserComponent implements OnInit {
    * After retrieving user data, it subsequently calls loadUserStatus() to load the statuses of users and map them to profile images.
    */
   private loadUser(): void {
-    this.userService.getAllUsers().subscribe((users: SignUp[]) => {
+    this.subscription = this.userService.getAllUsers().subscribe((users: SignUp[]) => {
       this.userData = users.map(({ id, profileImg }: { id: string, profileImg: string }) => ({ id, profileImg }));
       this.loadUserStatus();
+    },(err:any)=>{
+      this.handleErrors(err,"Retrieve users")
     });
   }
 
   // Load user status and map profile images
   private loadUserStatus(): void {
-    this.userService.getUserStatus(this.loggedUser.id).subscribe((data: any) => {
+    this.subscription = this.userService.getUserStatus(this.loggedUser.id).subscribe((data: any) => {
       this.allUserStatus = data.users;
       this.mapProfileImages();
+    },(err:any)=>{
+      this.handleErrors(err,"Retrieve user status")
     });
 
      // Set loader flag to false after a delay of 1.5 seconds (1500 milliseconds)
@@ -124,6 +132,18 @@ export class UserComponent implements OnInit {
       this.loadUserStatus();
     } else {
       this.allUserStatus = this.allUserStatus.filter(user => user.name.toLowerCase().includes(searchText));
+    }
+  }
+
+   // Create a centralized error handling function
+   private handleErrors(error: any, context: string): void {
+    console.error(`Error fetching ${context}:`, error);
+  }
+
+  //Lifecycle hook to clean up subscription
+   ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   }
 }

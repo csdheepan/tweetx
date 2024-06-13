@@ -44,6 +44,7 @@
 
         <div *ngIf="!isLoggedIn">
           <h2 class="login-text">Create Account</h2>
+          <div class="alert" *ngIf="signupError">Signup Failed, Please Try again later</div>
           <form [formGroup]="signupForm" class="signup-form">
             <div>
               <!-- name field -->

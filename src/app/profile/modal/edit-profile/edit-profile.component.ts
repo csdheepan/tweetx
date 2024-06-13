@@ -53,10 +53,16 @@ export class EditProfileComponent implements OnInit {
   // Method to save the selected profile image
   onSave(): void {
     this.loggedUser.profileImg = this.profileImg; // Update the profile image
-    this.userService.updateProfile(this.loggedUser.id, this.loggedUser); // Save updated user details
-
-    // Close the dialog and pass back success status
-    this.dialogRef.close({ status: "success", message: "Profile updated.", refreshPage: true });
+    // Save updated user details
+    this.userService.updateProfile(this.loggedUser.id, this.loggedUser).subscribe((data: any) => {
+      // Close the dialog and pass back success status
+      this.dialogRef.close({ status: "success", message: "Profile updated.", refreshPage: true });
+      console.log("Profile image updated sucessfully" + data);
+    }, (err: any) => {
+      console.log("Error to updating profile image" + err);
+      // Close the dialog and pass back failure status
+      this.dialogRef.close({ status: "failed", message: "Profile not updated.", refreshPage: false });
+    });
   }
 
   // Method to select an avatar from the list

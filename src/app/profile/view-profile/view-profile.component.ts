@@ -6,6 +6,7 @@ import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
 import { PostServices } from 'src/app/core/services/post-service';
 import { UserService } from 'src/app/core/services/user-service';
 import { SignUp, UserPost, Users } from 'src/app/core/model/user-model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-view-profile',
@@ -35,6 +36,7 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     private postServices: PostServices,
     private dialog: MatDialog,
     private userService: UserService,
+    private _snackBar: MatSnackBar
   ) { }
 
 
@@ -118,13 +120,13 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
   }
 
   /**
-    * Update user status by setting new users to status 0 (following) and updating the profile images.
+    * Update user status by setting new users to status 0 (follow) and updating the profile images.
     * This will add status 0 for users who have recently joined the application.
     */
   private updateUserStatus(): void {
     this.userData.forEach((user: any) => {
       const foundUser = this.allUserstatus.find((item: any) => item.id === user.id);
-      // If user not found, add with status 0 (not following)
+      // If user not found, add with status 0 (not following || follow)
       if (!foundUser) {
         this.allUserstatus.push({ ...user, status: 0 });
       }
@@ -187,6 +189,8 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       if (result.status === "success" && result.refreshPage) {
         this.refreshUserProfile();
+      }else if(result.status === "failed" && !result.refreshPage){
+        this._snackBar.open('profile image not upadted,Please try again later' + ' ', 'Close');
       }
     });
   }

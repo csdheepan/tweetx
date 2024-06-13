@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { SignUp, UserPost } from '../model/user-model';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
 
 /**
  * PostService provides functionalities related to managing user posts, such as posting new content and retrieving posts.
@@ -27,7 +27,7 @@ export class PostServices {
     postObj.id = userDetails.id;
     const id = userDetails.id; // mapping  ID
     // Use set to store the document with the  ID
-    this.afs.collection('/register/' + id + '/feed post').doc(generateId).set(postObj);
+    return from(this.afs.collection('/register/' + id + '/feed post').doc(generateId).set(postObj));
   }
 
     /**

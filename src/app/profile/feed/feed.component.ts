@@ -74,6 +74,8 @@ export class FeedComponent implements OnInit, OnDestroy {
     this.getUserPostSubscription = this.userService.getUserStatus(this.userDetails.id).subscribe((data: any) => {
       this.followingStatus = data.users.filter((v: any) => v.status === 1);
       this.handleFollowingStatus();
+    },(err:any)=>{
+      this.handleErrors(err,"Retrieving user status");
     });
   }
 
@@ -112,6 +114,8 @@ export class FeedComponent implements OnInit, OnDestroy {
             this.showNoFeedPost = true;
           }
         }
+      },(err:any)=>{
+        this.handleErrors(err,"while retrieving user post");
       });
     });
     this.setLoaderFalse();
@@ -162,13 +166,20 @@ export class FeedComponent implements OnInit, OnDestroy {
       time: formattedDate,
       name: this.userDetails.name
     };
-    this.postServices.postContent(postObj, this.userDetails);
-    this._snackBar.open('Post Added Sucessfully' + ' ', 'Close', {
-      duration: 5000, // Duration in milliseconds
+    this.postServices.postContent(postObj, this.userDetails).subscribe((data:any)=>{
+      this._snackBar.open('Post Added Sucessfully' + ' ', 'Close');
+    },(error:any)=>{
+       this.handleErrors(error,"user post");
+       this._snackBar.open('Post Added Failed,Please try again later' + ' ', 'Close');
     });
     this.showPost = false;
     this.form.reset();
   }
+
+    // Create a centralized error handling function
+    private handleErrors(error: any, context: string): void {
+      console.error(`Error fetching ${context}:`, error);
+    }
 
   /**
  * Lifecycle hook to clean up subscriptions

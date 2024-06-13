@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SignUp } from '../model/user-model';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
 
 /**
  * AuthenticationServices provides functionalities related to user authentication, such as user registration.
@@ -23,7 +23,7 @@ export class AuthenticationService {
     const id = this.afs.createId(); // Generate a ID
     signUp.id = id;
     // Use set to store the data with the  document ID
-    this.afs.collection('/register').doc(id).set(signUp);
+    return from(this.afs.collection('/register').doc(id).set(signUp));
   }
 
 
