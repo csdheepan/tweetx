@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { SignUp, UserPost, Users } from 'src/app/core/model/user-model';
 import { PostServices } from 'src/app/core/services/post-service';
 import { UserService } from 'src/app/core/services/user-service';
+import { ErrorDialogComponent } from 'src/app/shared/components/error-dialog/error-dialog.component';
 import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
 
 /**
@@ -16,22 +18,22 @@ import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
 })
 export class UserComponent implements OnInit {
 
- // Variable declaration
- showPost: boolean = false; // Flag to control the visibility of the post form
- showUser: boolean = true; // Flag to control the visibility of the user list
- allUserStatus: Users[] = []; // Array to store all user with status 
- person = "assets/images/person.jpg"; // Default user image
- loggedUser!: SignUp; // Object to store logged-in user details
- individualFeed: UserPost[] = []; // Array to store individual user feed
- userData: any[] = []; // Array to store user data
- loader: boolean = true; // Flag to control loading state
+// Variable declaration
+ showPost: boolean = false;
+ showUser: boolean = true;
+ allUserStatus: Users[] = [];
+ person = "assets/images/person.jpg";
+ loggedUser!: SignUp;
+ individualFeed: UserPost[] = [];
+ userData: any[] = [];
+ loader: boolean = true;
  private subscription!: Subscription;
 
-  // Constructor with Dependency Injection
   constructor(
     private userService: UserService,
     private postServices: PostServices,
-    private store: InMemoryCache
+    private store: InMemoryCache,
+    private dialog : MatDialog
   ) {}
 
   // OnInit lifecycle hook
@@ -68,21 +70,21 @@ export class UserComponent implements OnInit {
   }
 
   // Method to perform follow action for a user
-  followAction(user: any, index: number): void {
+  followAction(user:Users, index: number): void {
     user.status = 1;
     this.updateUserStatus(user, index);
     this.loadUser();
   }
 
    // Method to perform unfollow action for a user
-  unFollowAction(user: any, index: number): void {
+  unFollowAction(user:Users, index: number): void {
     user.status = 0;
     this.updateUserStatus(user, index);
     this.loadUser();
   }
 
   // Update user status and make a service call
-  private updateUserStatus(user: any, index: number): void {
+  private updateUserStatus(user:Users, index: number): void {
     this.allUserStatus[index] = user;
     this.userService.followReqAction(this.allUserStatus, this.loggedUser.id);
   }
@@ -138,6 +140,9 @@ export class UserComponent implements OnInit {
    // Create a centralized error handling function
    private handleErrors(error: any, context: string): void {
     console.error(`Error fetching ${context}:`, error);
+    this.dialog.open(ErrorDialogComponent,{
+      width:'400px'
+    });
   }
 
   //Lifecycle hook to clean up subscription

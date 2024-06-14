@@ -43,7 +43,7 @@ export class UserService {
     // Wrap the array in an object
     const dataObj = { users: update };
     // Use set to store the document with the ID
-    this.afs.collection('/register/' + loggedId + "/profile/").doc(loggedId).update(dataObj);
+    return from(this.afs.collection('/register/' + loggedId + "/profile/").doc(loggedId).update(dataObj));
   }
 
   /**

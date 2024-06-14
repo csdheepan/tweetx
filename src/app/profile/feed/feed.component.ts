@@ -1,10 +1,12 @@
 import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
-import { UserPost, Users} from 'src/app/core/model/user-model';
+import { SignUp, UserPost, Users} from 'src/app/core/model/user-model';
 import { PostServices } from 'src/app/core/services/post-service';
 import { UserService } from 'src/app/core/services/user-service';
+import { ErrorDialogComponent } from 'src/app/shared/components/error-dialog/error-dialog.component';
 import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
 
 /**
@@ -19,23 +21,24 @@ import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
 export class FeedComponent implements OnInit, OnDestroy {
 
   //variable declaration
-  form: FormGroup = Object.create(null); // Form group for posting content
-  userDetails: any; // Object to store user details
-  userPost: UserPost[] = []; // Array to store user posts
-  followingStatus: Users[] = []; // Array to store following status
-  showButton = false; // Flag to control the visibility of the add post button
-  loader = true; // Flag to control loading state
-  showPost = false; // Flag to control the visibility of the post form
-  showNoFeedPost = false; // Flag to control the visibility of no feed post message
-  private getUserPostSubscription!: Subscription; // Subscription for user post retrieval
-  @ViewChild('scrollUp', { static: true }) scrollUp!: ElementRef; // Reference to an element for scrolling up  
+  form: FormGroup = Object.create(null);
+  userDetails !: SignUp;
+  userPost: UserPost[] = [];
+  followingStatus: Users[] = [];
+  showButton = false;
+  loader = true;
+  showPost = false;
+  showNoFeedPost = false;
+  private getUserPostSubscription!: Subscription;
+  @ViewChild('scrollUp', { static: true }) scrollUp!: ElementRef;
 
   constructor(
     private store: InMemoryCache,
     private postServices: PostServices,
     private fb: FormBuilder,
     private userService: UserService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private dialog : MatDialog
   ) { }
 
 
@@ -179,6 +182,9 @@ export class FeedComponent implements OnInit, OnDestroy {
     // Create a centralized error handling function
     private handleErrors(error: any, context: string): void {
       console.error(`Error fetching ${context}:`, error);
+      this.dialog.open(ErrorDialogComponent,{
+        width:'400px'
+      });
     }
 
   /**
