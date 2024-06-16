@@ -1,0 +1,170 @@
+// Shared styles for feed and user-post components
+
+.post-btn {
+    height: 70px;
+    padding: 15px 25px;
+    margin: 20px;
+    font-size: 16px;
+    border-radius: 50%;
+    font-family: system-ui;
+    position: fixed;
+    bottom: 0px;
+    z-index: 100;
+  }
+  
+  mat-icon {
+    transform: scale(1.8);
+    position: relative;
+    left: 5px;
+    cursor: pointer;
+  }
+  
+  .note-input-container button {
+    margin: 0px 15px 0px 5px;
+  }
+  
+  .add-note-input {
+    width: 85%;
+    padding: 20px 13px 190px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    overflow: auto;
+    resize: vertical;
+  }
+  
+  img {
+    width: 100px;
+  }
+  
+  mat-card {
+    margin: 20px;
+    padding: 25px;
+    border-radius: 8px;
+  }
+  
+  .title {
+    font-size: 23px;
+    line-height: 40px;
+    font-weight: 500;
+    font-family: system-ui;
+  }
+  
+  .value {
+    font-size: 15px;
+    line-height: 30px;
+    font-family: system-ui;
+    color: #505050;
+  }
+  
+  .date-value {
+    font-weight: 300;
+    color: #9d9d9d;
+    margin-top: 3px;
+    font-size: 15px;
+  }
+  
+  .time-value {
+    font-weight: normal;
+    color: #a2a2a2;
+    font-family: inherit;
+    font-size: 12px;
+    position: relative;
+    top: 8px;
+  }
+  
+  .big-text {
+    font-size: 26px;
+    line-height: 45px;
+    font-weight: 300;
+    font-family: system-ui;
+    text-align: center;
+    margin: 30px;
+  }
+  
+  @media screen and (max-width: 520px) {
+    .value {
+      font-size: 12px;
+      line-height: 25px;
+    }
+  
+    .title {
+      font-size: 16px;
+      line-height: 30px;
+    }
+  
+    img {
+      width: 75px;
+    }
+  
+    .date-value {
+      font-size: 11px;
+    }
+  
+    .time-value {
+      font-size: 10px;
+    }
+  
+    .like-icon {
+      transform: scale(0.8) !important;
+    }
+  
+    .emoji-picker-container {
+      right: 50px !important;
+      width: 60% !important;
+    }
+  
+    .post-btn {
+      height: 60px;
+      padding: 15px;
+    }
+  }
+  
+  .note-input-container {
+    position: relative;
+    margin: 20px;
+  }
+  
+  .liked {
+    color: #ff4081;
+  }
+  
+  .like-icon {
+    transform: scale(1);
+  }
+  
+  .emoji-picker-container {
+    position: absolute;
+    top: 20px;
+    right: 85px;
+    z-index: 10;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 15px 0px 10px 15px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    max-height: 160px;
+    width: 350px;
+    border-radius: 6px;
+    overflow-y: auto;
+  }
+  
+  .emoji-icon {
+    transform: scale(1);
+    position: relative;
+    color: #676767;
+    top: -40px;
+    left: 15px;
+  }
+  
+  .emoji-icon-container {
+    width: 85%;
+  }
+  
+  ::ng-deep .emoji-mart .emoji-mart-anchors {
+    display: none;
+  }
+  
+  ::ng-deep .emoji-mart .emoji-mart-search {
+    display: none;
+  }
+  

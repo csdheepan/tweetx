@@ -23,4 +23,12 @@ export class UserPost{
     id !: string
     name !: string;
     time !: string;
+    date !: string;
+    postId !: string
+}
+
+export class UserProfile{
+    name !: string;
+    profileImg !: string
+    id !: string;
 }

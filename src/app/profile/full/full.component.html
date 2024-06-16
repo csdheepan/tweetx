@@ -2,7 +2,7 @@
 
   <!-- Side Navigation -->
   <mat-sidenav #sidenav mode="side" closed>
-    
+
     <!-- Toolbar with Menu and Close Icons -->
     <mat-toolbar>
       <div fxLayout="row" fxLayoutAlign="space-between center" style="width: 100%;">
@@ -22,9 +22,12 @@
         <mat-icon>supervised_user_circle</mat-icon> User
       </a>
       <a mat-list-item routerLink="feed" (click)="sidenav.close()">
-        <mat-icon>chat</mat-icon> Feed
+        <mat-icon>question_answer</mat-icon> Feed
       </a>
-      <a mat-list-item (click)="logout()">
+      <a mat-list-item routerLink="user-post" (click)="sidenav.close()">
+        <mat-icon>chat</mat-icon>My Post
+      </a>
+      <a mat-list-item (click)="logoutDialog()">
         <mat-icon>logout</mat-icon> Logout
       </a>
     </mat-nav-list>

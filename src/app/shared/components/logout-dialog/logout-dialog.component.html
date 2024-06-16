@@ -1,0 +1,11 @@
+<mat-toolbar> Confirm Action</mat-toolbar>
+<div mat-dialog-content>
+    <mat-icon>warning</mat-icon>
+    Are you sure you want to logout?
+</div>
+<div mat-dialog-content>
+    <div fxLayout="row" fxLayoutAlign="end">
+        <button mat-flat-button color="accent" [mat-dialog-close]="true" class="button-margin">No</button>
+        <button mat-button color="accent" [mat-dialog-close]="true" (click)="logout()">Yes</button>
+    </div>
+</div>

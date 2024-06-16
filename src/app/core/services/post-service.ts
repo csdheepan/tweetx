@@ -6,37 +6,55 @@ import { Observable, from } from 'rxjs';
 /**
  * PostService provides functionalities related to managing user posts, such as posting new content and retrieving posts.
  */
-
 @Injectable({
   providedIn: 'root'
 })
-
 export class PostServices {
 
-  // Constructor
   constructor(private afs: AngularFirestore) { }
 
-   /**
+  /**
    * Posts new content created by a user.
-   * @param userId The ID of the user posting the content.
-   * @param content The content to be posted.
+   * @param postObj The content to be posted.
+   * @param userDetails The details of the user posting the content.
+   * @returns An observable that completes when the post is created.
    */
-  postContent(postObj: any, userDetails: SignUp) {
-    const generateId = this.afs.createId(); // Generate a ID
-    //map id in postObj
+  postContent(postObj:UserPost, userDetails: SignUp): Observable<void> {
+    const generateId = this.afs.createId(); // Generate an ID
     postObj.id = userDetails.id;
-    const id = userDetails.id; // mapping  ID
-    // Use set to store the document with the  ID
-    return from(this.afs.collection('/register/' + id + '/feed post').doc(generateId).set(postObj));
+    postObj.postId = generateId;
+
+    return from(this.afs.collection(`/register/${userDetails.id}/feed post`).doc(generateId).set(postObj));
   }
 
-    /**
+  /**
    * Retrieves posts created by a specific user.
-   * @param userId The ID of the user whose posts are to be retrieved.
+   * @param userDetails The details of the user whose posts are to be retrieved.
    * @returns An observable that emits an array of user posts.
    */
-  getUserPost(userDetails: SignUp):Observable<UserPost[]> {
-    const id = userDetails.id; // mapping  ID
-    return this.afs.collection<UserPost>('/register/' + id + '/feed post').valueChanges();
+  getUserPost(userDetails: SignUp): Observable<UserPost[]> {
+    return this.afs.collection<UserPost>(`/register/${userDetails.id}/feed post`).valueChanges();
+  }
+
+  /**
+   * Updates content edited by a user in Firestore.
+   * @param postObj The updated content object.
+   * @param userDetails The details of the user editing the content.
+   * @returns An observable that completes when the update is finished.
+   */
+  editContent(postObj:UserPost, userDetails: SignUp): Observable<void> {
+    postObj.id = userDetails.id;
+
+    return from(this.afs.collection('register').doc(userDetails.id).collection('feed post').doc(postObj.postId).set(postObj, { merge: true }));
+  }
+
+  /**
+   * Deletes content from Firestore.
+   * @param postId The ID of the content to delete.
+   * @param userDetails The details of the user deleting the content.
+   * @returns An observable that completes when the delete operation is finished.
+   */
+  deleteContent(postId: string, userDetails: SignUp): Observable<void> {
+    return from(this.afs.collection('register').doc(userDetails.id).collection('feed post').doc(postId).delete());
   }
 }

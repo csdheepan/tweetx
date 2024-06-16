@@ -5,6 +5,7 @@ import { ViewProfileComponent } from './view-profile/view-profile.component';
 import { UserComponent } from './user/user.component';
 import { FeedComponent } from './feed/feed.component';
 import { AuthGuard } from '../shared/service/auth.guard';
+import { UserPostComponent } from './user-post/user-post.component';
 
 const routes: Routes = [
   {
@@ -24,7 +25,11 @@ const routes: Routes = [
         path: 'feed',
         component: FeedComponent
       },
-      
+      {
+        path: 'user-post',
+        component: UserPostComponent
+      }
+
     ]
   },
 ];

@@ -5,9 +5,9 @@ import { EditProfileComponent } from '../modal/edit-profile/edit-profile.compone
 import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
 import { PostServices } from 'src/app/core/services/post-service';
 import { UserService } from 'src/app/core/services/user-service';
-import { SignUp, UserPost, Users } from 'src/app/core/model/user-model';
+import { SignUp, UserProfile, UserPost, Users } from 'src/app/core/model/user-model';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ErrorDialogComponent } from 'src/app/shared/components/error-dialog/error-dialog.component';
+import { ErrorHandlerService } from 'src/app/shared/service/error-handler.service';
 
 @Component({
   selector: 'app-view-profile',
@@ -16,28 +16,28 @@ import { ErrorDialogComponent } from 'src/app/shared/components/error-dialog/err
 })
 export class ViewProfileComponent implements OnInit, OnDestroy {
 
-  //variable declaration
   person: string = "assets/images/person.jpg";
   showPost: boolean = true;
   showFollower: boolean = false;
   showFollowing: boolean = false;
+  loader: boolean = true;
+  serviceFlag: boolean = false;
   userPost: UserPost[] = [];
   followerData: Users[] = [];
   followingData: Users[] = [];
   allUserstatus: Users[] = [];
-  userData: any[] = [];
+  userProfile: UserProfile[] = [];
   userDetails!: SignUp;
-  loader: boolean = true;
-  private serviceFlag: boolean = false;
   private getUserStatusSubscription!: Subscription;
-  private profileSubscription !: Subscription;
+  private profileSubscription!: Subscription;
 
   constructor(
     private store: InMemoryCache,
     private postServices: PostServices,
     private dialog: MatDialog,
     private userService: UserService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private errorHandlerService: ErrorHandlerService
   ) { }
 
 
@@ -63,7 +63,7 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
       this.postServices.getUserPost(this.userDetails).subscribe((data: UserPost[]) => {
         this.userPost = data;
       }, (err: any) => {
-        this.handleErrors(err, 'user posts');
+        this.errorHandlerService.handleErrors(err, 'While retrieve user posts');
       });
     }
   }
@@ -71,10 +71,10 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
   private loadAllUser(): void {
     this.profileSubscription = this.userService.getAllUsers().subscribe((data: SignUp[]) => {
       // Map the response to extract user IDs, profile images, and names
-      this.userData = data.map(({ id, profileImg, name }: { id: string, profileImg: string, name: string }) => ({ id, profileImg, name }));
+      this.userProfile = data.map(({ id, profileImg, name }: UserProfile) => ({ id, profileImg, name }));
       this.loadUserStatus();
     }, (err: any) => {
-      this.handleErrors(err, 'all users');
+      this.errorHandlerService.handleErrors(err, 'While retrieve all users');
     });
   }
 
@@ -84,7 +84,6 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
    * 2. If a user already has a user status,but we update status 0 for new upcoming users.
    */
   private loadUserStatus(): void {
-    // Unsubscribe from any existing subscriptions
     if (this.getUserStatusSubscription) {
       this.getUserStatusSubscription.unsubscribe();
     }
@@ -96,7 +95,7 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
         this.initializeUserStatus();
       }
     }, (err: any) => {
-      this.handleErrors(err, 'updating user status');
+      this.errorHandlerService.handleErrors(err, 'While retrieve user status');
     });
   }
 
@@ -107,13 +106,13 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     */
   private initializeUserStatus(): void {
     // Find index of the current user in the user data and remove it.
-    const currentUserIndex = this.userData.findIndex((user: any) => user.id === this.userDetails.id);
+    const currentUserIndex = this.userProfile.findIndex((user: UserProfile) => user.id === this.userDetails.id);
     if (currentUserIndex !== -1) {
-      this.userData.splice(currentUserIndex, 1);
+      this.userProfile.splice(currentUserIndex, 1);
     }
     // Initialize follower data with all users and status as 0 (not following)
-    this.followerData = this.userData.map((user: any) => ({ ...user, status: 0 }));
-    this.userService.allUserStatus(this.userDetails.id, this.followerData);
+    this.followerData = this.userProfile.map((user: UserProfile) => ({ ...user, status: 0 }));
+    this.userService.setUserStatus(this.userDetails.id, this.followerData);
 
     this.allUserstatus = this.followerData;
     this.mapProfileImage();
@@ -124,8 +123,8 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     * This will add status 0 for users who have recently joined the application.
     */
   private updateUserStatus(): void {
-    this.userData.forEach((user: any) => {
-      const foundUser = this.allUserstatus.find((item: any) => item.id === user.id);
+    this.userProfile.forEach((user: UserProfile) => {
+      const foundUser = this.allUserstatus.find((item: Users) => item.id === user.id);
       // If user not found, add with status 0 (not following || follow)
       if (!foundUser) {
         this.allUserstatus.push({ ...user, status: 0 });
@@ -134,7 +133,7 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     });
 
     // Remove the current user from the user status data
-    const currentUserIndex = this.allUserstatus.findIndex((user: any) => user.id === this.userDetails.id);
+    const currentUserIndex = this.allUserstatus.findIndex((user: Users) => user.id === this.userDetails.id);
     if (currentUserIndex !== -1) {
       this.allUserstatus.splice(currentUserIndex, 1);
     }
@@ -147,21 +146,21 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
 
     // Update user status in the service if not already updated
     if (!this.serviceFlag) {
-      this.userService.allUserStatus(this.userDetails.id, this.allUserstatus);
+      this.userService.setUserStatus(this.userDetails.id, this.allUserstatus);
       this.serviceFlag = true;
     }
   }
 
- /**
- * Map profile images for each user status entry.
- * This method ensures that when a user updates their profile image (avatar), 
- * it is reflected across all user statuses. Since the user status data does not
- * store profile images directly, we use the updated images from the userData
- * and map them to the corresponding user statuses.
- */
+  /**
+  * Map profile images for each user status entry.
+  * This method ensures that when a user updates their profile image (avatar), 
+  * it will not reflected across all user statuses. Since the user status data does not
+  * store profile images directly, we use the updated images in registred user details (UserProfile)
+  * and map them to the corresponding user statuses.
+  */
   private mapProfileImage(): void {
-    this.allUserstatus.forEach((obj: any) => {
-      const matchedUser = this.userData.find((user: any) => user.id === obj.id);
+    this.allUserstatus.forEach((obj: Users) => {
+      const matchedUser = this.userProfile.find((user: UserProfile) => user.id === obj.id);
       if (matchedUser) {
         obj.profileImg = matchedUser.profileImg;
       }
@@ -188,8 +187,10 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       if (result.status === "success" && result.refreshPage) {
         this.refreshUserProfile();
-      }else if(result.status === "failed" && !result.refreshPage){
-        this._snackBar.open('Profile Image not upadted,Please try again later' + ' ', 'Close');
+      } else if (result.status === "failed" && !result.refreshPage) {
+        this._snackBar.open('Profile Image not upadted,Please try again later' + ' ', 'Close', {
+          duration: 2000
+        });
       }
     });
   }
@@ -201,36 +202,29 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
       this.userDetails = data;
       this.person = this.userDetails.profileImg;
     }, (err: any) => {
-      this.handleErrors(err, 'user profile');
+      this.errorHandlerService.handleErrors(err, 'While retrieve user profile image');
     });
   }
 
   //Action to follow a user
-  followAction(user:Users): void {
+  followAction(user: Users): void {
     user.status = 1;
     this.updateUserStatusData();
   }
 
   //Action to unfollow a user
-  unFollowAction(user:Users): void {
+  unFollowAction(user: Users): void {
     user.status = 0;
     this.updateUserStatusData();
   }
 
   // Update user status data in the database
   private updateUserStatusData(): void {
-    this.userService.followReqAction(this.allUserstatus, this.userDetails.id).subscribe((data:any)=>{
+    this.userService.followReqAction(this.allUserstatus, this.userDetails.id).subscribe((data: any) => {
       this.followerData = this.allUserstatus.filter((v: Users) => v.status === 0);
       this.followingData = this.allUserstatus.filter((v: Users) => v.status === 1);
-    },(err:any)=>{
-      this.handleErrors(err,"while update user status data");
-    });
-  }
-
-  private handleErrors(error: any, context: string): void {
-    console.error(`Error fetching ${context}:`, error);
-    this.dialog.open(ErrorDialogComponent,{
-      width:'400px'
+    }, (err: any) => {
+      this.errorHandlerService.handleErrors(err, "while update user status data");
     });
   }
 

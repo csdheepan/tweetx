@@ -1,0 +1,25 @@
+
+@import "src/app/shared/styles/post-style.scss";
+
+
+.edit-button,.delete-button{
+    padding: 8px 15px;
+    border: none;
+    font-size: 12px;
+    font-family: system-ui;
+    letter-spacing: 1px;
+    cursor: pointer;
+    margin: 15px 0px 0px;
+    border-radius: 5px;
+  }
+
+  .edit-button{
+    color: white;
+    background: #ff4081;
+  }
+
+  .delete-button{
+    color: #ff4081;
+    background: white;
+    border: 1px solid #ff4081 ;
+  }

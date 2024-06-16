@@ -1,0 +1,26 @@
+/* Styles for the mat-icon element */
+mat-icon {
+    transform: scale(1.5);
+    margin: -5px 15px;
+    position: relative;
+    top: 5px;
+  }
+  
+  /* Styles for the mat-toolbar element */
+  mat-toolbar {
+    background-color: #ff4081;
+    color: white;
+  }
+  
+  /* Margin for buttons */
+  .button-margin {
+    margin: 0 15px;
+  }
+  
+  /* Responsive design for small screens */
+  @media screen and (max-width: 480px) {
+    mat-icon {
+      display: none;
+    }
+  }
+  

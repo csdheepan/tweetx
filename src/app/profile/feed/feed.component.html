@@ -3,20 +3,41 @@
     <!-- Add post field -->
     <div *ngIf="showPost">
         <form [formGroup]="form">
-            <div class="note-input-container">
-                <!-- Input field for feed post -->
-                <textarea matInput [formControl]="form.controls['content']" class="add-note-input" wrap="hard"></textarea>
-                <!-- Cancel button for feed post -->
-                <button mat-flat-button (click)="handlePostView('cancel')">Cancel</button>
-                <!-- Post button for feed post -->
-                <button mat-flat-button color="primary" [disabled]="!form.valid" (click)="post()">Post</button>
+          <div class="note-input-container">
+            <!-- Input field for feed post -->
+            <textarea matInput [formControl]="form.controls['content']" class="add-note-input" wrap="hard"></textarea>
+            
+            <!-- Emoji icon/button to trigger emoji picker -->
+            <div fxLayout="row" fxLayoutAlign="end" class="emoji-icon-container">
+              <mat-icon (click)="toggleEmojiPicker()" class="emoji-icon">insert_emoticon</mat-icon>
             </div>
+            
+            <!-- Emoji picker -->
+            <div class="emoji-picker-container" *ngIf="showEmojiPicker">
+              <emoji-mart (emojiClick)="insertEmoji($event)"></emoji-mart>
+            </div>
+            
+            <!-- Cancel button for feed post -->
+            <button mat-flat-button color="accent" (click)="handlePostView('cancel')">Cancel</button>
+            
+            <!-- Post button for feed post -->
+            <button mat-flat-button color="primary" [disabled]="!form.valid" (click)="post()">Post</button>
+          </div>
         </form>
-    </div>
+      </div>
+      
 
     <div>
+
+          <!-- Add post button -->
+          <div fxLayout="row" fxLayoutAlign="end end" *ngIf="showButton">
+            <button mat-raised-button class="post-btn" color="accent" (click)="handlePostView('post')">
+                <mat-icon>add</mat-icon>
+            </button>
+        </div>
+
         <!-- Show list of user post (only following status) -->
-        <div *ngFor="let user of userPost">
+        <div *ngFor="let user of userPost,let i=index">
             <mat-card class="mat-elevation-z8">
                 <div fxLayout="row" fxLayoutGap="30px">
                     <div fxLayout="row" fxLayoutAlign="center center" style="width: 30%;">
@@ -25,7 +46,7 @@
                         <img [src]="!loader ? user.profileImg : ''" *ngIf="!loader">
                     </div>
                     <div fxLayout="column" fxLayoutAlign="space-between" style="width: 70%;">
-                        <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+                        <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="5px">
                             <!-- Ngx-skeleton-loader -->
                             <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
                                 [theme]="{ width: '80px', height: '20px' }"></ngx-skeleton-loader>
@@ -33,12 +54,24 @@
                             <!-- Ngx-skeleton-loader -->
                             <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
                                 [theme]="{ width: '60px', height: '20px' }"></ngx-skeleton-loader>
-                            <p class="date-value" *ngIf="!loader">{{user.time}}</p>
+                            <p class="date-value" *ngIf="!loader">{{user.date}}</p>      
                         </div>
                         <!-- Ngx-skeleton-loader -->
                         <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
                             [theme]="{ width: '100%', height: '13vh' }"></ngx-skeleton-loader>
                         <p class="value" *ngIf="!loader">{{user.content}}</p>
+
+                        <div fxLayout="row" fxLayoutAlign="space-between center">
+                            <mat-icon class="like-icon" [ngClass]="{'liked': likedProduct[i]}" (click)="handleLike(i)">
+                                {{ likedProduct[i] ? 'favorite' : 'favorite_border' }}
+                            </mat-icon>
+
+                            <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
+                            [theme]="{ width: '60px', height: '20px' }"></ngx-skeleton-loader>
+                        <p class="time-value" *ngIf="!loader">{{user.time}}</p> 
+
+                        </div>
+
                     </div>
                 </div>
             </mat-card>
@@ -57,13 +90,6 @@
             <h2 class="big-text" *ngIf="!loader">
                 Please follow some friends who have posted feed content.
             </h2>
-        </div>
-
-        <!-- Add post button -->
-        <div fxLayout="row" fxLayoutAlign="end end" *ngIf="showButton">
-            <button mat-raised-button class="write-btn" color="accent" (click)="handlePostView('post')">
-                <mat-icon>add</mat-icon>
-            </button>
         </div>
     </div>
 </div>

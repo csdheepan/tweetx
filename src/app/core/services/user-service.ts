@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { SignUp, UserPost } from '../model/user-model';
+import { SignUp, UserPost, Users } from '../model/user-model';
 import { Observable, from } from 'rxjs';
 
 /**
@@ -17,8 +17,8 @@ export class UserService {
    * Retrieves all users registered in the application.
    * @returns An observable that emits an array of registered users.
    */
-  getAllUsers():Observable<SignUp[]> {
-    return this.afs.collection<SignUp>("/register").valueChanges();
+  getAllUsers(): Observable<SignUp[]> {
+    return this.afs.collection<SignUp>('/register').valueChanges();
   }
 
   /**
@@ -26,24 +26,20 @@ export class UserService {
    * @param loggedId The ID of the logged-in user.
    * @param allUser An array containing the user data.
    */
-  allUserStatus(loggedId: any, allUser: any) {
-    const id = loggedId; // Generate a ID
-    // Wrap the array in an object
+  setUserStatus(loggedId: string, allUser:Users[]): void {
     const dataObject = { users: allUser };
-    // Use set to store the document with the ID
-    this.afs.collection('/register/' + loggedId + "/profile/").doc(id).set(dataObject);
+    this.afs.collection('/register').doc(loggedId).collection('profile').doc(loggedId).set(dataObject);
   }
 
   /**
    * Updates the following status of a user.
    * @param update An object containing the updated user data.
    * @param loggedId The ID of the logged-in user.
+   * @returns An observable that completes when the update is finished.
    */
-  followReqAction(update: any, loggedId: string) {
-    // Wrap the array in an object
+  followReqAction(update:Users[], loggedId: string): Observable<void> {
     const dataObj = { users: update };
-    // Use set to store the document with the ID
-    return from(this.afs.collection('/register/' + loggedId + "/profile/").doc(loggedId).update(dataObj));
+    return from(this.afs.collection('/register').doc(loggedId).collection('profile').doc(loggedId).update(dataObj));
   }
 
   /**
@@ -51,17 +47,18 @@ export class UserService {
    * @param loggedId The ID of the logged-in user.
    * @returns An observable that emits the user status data.
    */
-  getUserStatus(loggedId: string):Observable<any>{
-    return this.afs.collection<any>('/register/' + loggedId + "/profile/").doc(loggedId).valueChanges();
+  getUserStatus(loggedId: string): Observable<any> {
+    return this.afs.collection('/register').doc(loggedId).collection('profile').doc(loggedId).valueChanges();
   }
 
   /**
    * Updates the user profile.
    * @param loggedId The ID of the logged-in user.
    * @param updateObj An object containing the updated user profile data.
+   * @returns An observable that completes when the update is finished.
    */
-  updateProfile(loggedId:string,updateObj:SignUp){
-    return from(this.afs.collection('/register/').doc(loggedId).update(updateObj));
+  updateProfile(loggedId: string, updateObj: SignUp): Observable<void> {
+    return from(this.afs.collection('/register').doc(loggedId).update(updateObj));
   }
 
   /**
@@ -69,16 +66,16 @@ export class UserService {
    * @param loggedId The ID of the user.
    * @returns An observable that emits the user data.
    */
-  getIndividualUser(loggedId:string):Observable<any>{
-    return this.afs.collection<any>('/register/').doc(loggedId).valueChanges();
+  getIndividualUser(loggedId: string): Observable<any> {
+    return this.afs.collection<any>('/register').doc(loggedId).valueChanges();
   }
 
   /**
    * Retrieves the post status for a specific user.
-   * @param userDetails The ID of the user.
+   * @param userId The ID of the user.
    * @returns An observable that emits the post status data.
    */
-  getStatusPost(userDetails:string):Observable<UserPost[]>{
-    return this.afs.collection<UserPost>('/register/' + userDetails + '/feed post').valueChanges();
+  getUserPost(userId: string): Observable<UserPost[]> {
+    return this.afs.collection<UserPost>('/register/' + userId + '/feed post').valueChanges();
   }
 }

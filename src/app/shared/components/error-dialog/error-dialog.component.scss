@@ -5,6 +5,7 @@
     align-items: center;
     text-align: center;
     padding: 20px;
+    gap: 5px;
   }
   
   .error-icon {
@@ -13,7 +14,7 @@
     margin: 15px;
   }
   
-  h2 {
+  h1 {
     margin: 10px 0;
     color: #f44336;
   }
@@ -24,6 +25,6 @@
 
   .confirm-button{
     background-color: #f44336 !important;
-    color: white;
+    color: white !important;
   }
   

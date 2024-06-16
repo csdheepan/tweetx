@@ -73,7 +73,7 @@
                 <input matInput type="password" placeholder="Enter Your Password" formControlName="password" [type]="hide ? 'password' : 'text'" aria-label="Password">
                 <mat-icon matSuffix style="cursor: pointer;" (click)="hide = !hide">{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
                 <mat-error *ngIf="signupForm.controls['password'].hasError('required') && signupForm.controls['password'].touched">Password is required</mat-error>
-                <mat-error style="line-height: 16px;" *ngIf="signupForm.controls['password'].hasError('pattern')">Password must have at least 8 characters with 1 uppercase, 1 special char, and 1 number.</mat-error>
+                <mat-error style="line-height: 14px;" *ngIf="signupForm.controls['password'].hasError('pattern')">Password must have at least 8 characters with 1 uppercase, 1 special char, and 1 number.</mat-error>
               </mat-form-field>
             </div>
             <div>

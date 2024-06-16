@@ -10,6 +10,8 @@ import { ViewProfileComponent } from './view-profile/view-profile.component';
 import { EditProfileComponent } from './modal/edit-profile/edit-profile.component';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { FullComponent } from './full/full.component';
+import { PickerModule } from '@ctrl/ngx-emoji-mart';
+import { UserPostComponent } from './user-post/user-post.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,8 @@ import { FullComponent } from './full/full.component';
     UserComponent,
     ViewProfileComponent,
     EditProfileComponent,
-    FullComponent
+    FullComponent,
+    UserPostComponent
   ],
   imports: [
     CommonModule,
@@ -25,7 +28,8 @@ import { FullComponent } from './full/full.component';
     AngularMaterialModule,
     FlexLayoutModule,
     ReactiveFormsModule,
-    NgxSkeletonLoaderModule
+    NgxSkeletonLoaderModule,
+    PickerModule
   ] 
 })
 export class ProfileModule { }

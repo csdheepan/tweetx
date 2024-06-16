@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
-import { SignUp, UserPost, Users } from 'src/app/core/model/user-model';
+import { SignUp, UserPost, UserProfile, Users } from 'src/app/core/model/user-model';
 import { PostServices } from 'src/app/core/services/post-service';
 import { UserService } from 'src/app/core/services/user-service';
-import { ErrorDialogComponent } from 'src/app/shared/components/error-dialog/error-dialog.component';
+import { ErrorHandlerService } from 'src/app/shared/service/error-handler.service';
 import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
 
 /**
@@ -18,25 +18,25 @@ import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
 })
 export class UserComponent implements OnInit {
 
-// Variable declaration
+ person = "assets/images/person.jpg";
  showPost: boolean = false;
  showUser: boolean = true;
- allUserStatus: Users[] = [];
- person = "assets/images/person.jpg";
- loggedUser!: SignUp;
- individualFeed: UserPost[] = [];
- userData: any[] = [];
  loader: boolean = true;
+ loggedUser!: SignUp;
+ allUserStatus: Users[] = [];
+ cloneUserStatus: Users[]=[];
+ individualFeed: UserPost[] = [];
+ userProfile: UserProfile[] = [];
  private subscription!: Subscription;
 
   constructor(
     private userService: UserService,
     private postServices: PostServices,
     private store: InMemoryCache,
-    private dialog : MatDialog
+    private dialog : MatDialog,
+    private errorHandlerService: ErrorHandlerService
   ) {}
 
-  // OnInit lifecycle hook
   ngOnInit(): void {
     this.loggedUser = this.getUserDetails();
     if (this.loggedUser) {
@@ -58,7 +58,7 @@ export class UserComponent implements OnInit {
       this.individualFeed = data;
       this.person = userDetails.profileImg;
     },(err:any)=>{
-      this.handleErrors(err,"Retrieve user post")
+      this.errorHandlerService.handleErrors(err,"While retrieve user post");
     });
   }
 
@@ -86,7 +86,10 @@ export class UserComponent implements OnInit {
   // Update user status and make a service call
   private updateUserStatus(user:Users, index: number): void {
     this.allUserStatus[index] = user;
-    this.userService.followReqAction(this.allUserStatus, this.loggedUser.id);
+    this.userService.followReqAction(this.allUserStatus, this.loggedUser.id).subscribe((data:any)=>{}
+  ,(err:any)=>{
+    this.errorHandlerService.handleErrors(err,"While update users follow request");
+  });
   }
 
     /**
@@ -95,10 +98,10 @@ export class UserComponent implements OnInit {
    */
   private loadUser(): void {
     this.subscription = this.userService.getAllUsers().subscribe((users: SignUp[]) => {
-      this.userData = users.map(({ id, profileImg }: { id: string, profileImg: string }) => ({ id, profileImg }));
+      this.userProfile = users.map(({ id, profileImg,name }: UserProfile) => ({ id, profileImg,name }));
       this.loadUserStatus();
     },(err:any)=>{
-      this.handleErrors(err,"Retrieve users")
+      this.errorHandlerService.handleErrors(err,"While retrieve all users");
     });
   }
 
@@ -106,12 +109,13 @@ export class UserComponent implements OnInit {
   private loadUserStatus(): void {
     this.subscription = this.userService.getUserStatus(this.loggedUser.id).subscribe((data: any) => {
       this.allUserStatus = data.users;
+      this.cloneUserStatus = [...this.allUserStatus]
       this.mapProfileImages();
     },(err:any)=>{
-      this.handleErrors(err,"Retrieve user status")
+      this.errorHandlerService.handleErrors(err,"While retrieve user status");
     });
 
-     // Set loader flag to false after a delay of 1.5 seconds (1500 milliseconds)
+   // Set loader flag to false after a delay of 1.5 seconds (1500 milliseconds)
     setTimeout(() => {
       this.loader = false;
     }, 1500);
@@ -119,8 +123,8 @@ export class UserComponent implements OnInit {
 
   // Map profile images to user posts
   private mapProfileImages(): void {
-    this.allUserStatus.forEach((post: any) => {
-      const matchedUser = this.userData.find((user: any) => user.id === post.id);
+    this.allUserStatus.forEach((post: Users) => {
+      const matchedUser = this.userProfile.find((user:UserProfile) => user.id === post.id);
       if (matchedUser) {
         post.profileImg = matchedUser.profileImg;
       }
@@ -131,18 +135,10 @@ export class UserComponent implements OnInit {
   filterUsers(event: any): void {
     const searchText = event.target.value.toLowerCase();
     if (event.key === 'Backspace' || searchText === "") {
-      this.loadUserStatus();
+      this.allUserStatus = this.cloneUserStatus;
     } else {
       this.allUserStatus = this.allUserStatus.filter(user => user.name.toLowerCase().includes(searchText));
     }
-  }
-
-   // Create a centralized error handling function
-   private handleErrors(error: any, context: string): void {
-    console.error(`Error fetching ${context}:`, error);
-    this.dialog.open(ErrorDialogComponent,{
-      width:'400px'
-    });
   }
 
   //Lifecycle hook to clean up subscription
