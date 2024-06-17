@@ -1,5 +1,5 @@
 <div class="body">
-
+  
     <!-- Display user list with status -->
     <div *ngIf="showUser">
       <!-- Search field -->
@@ -11,7 +11,7 @@
         </mat-form-field>
       </div>
   
-      <!-- Iterate over user posts with status -->
+      <!-- Iterate over list of user with status ('Follow && Folllowing') -->
       <div *ngFor="let user of allUserStatus, let i = index">
         <mat-card class="mat-elevation-z8">
           <div fxLayout="row" fxLayoutAlign="space-between">
@@ -67,6 +67,4 @@
         <h2 class="big-text">No posts or feeds provided by this user.</h2>
       </div>
     </div>
-  
   </div>
-  

@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { SignUp, UserPost, Users } from 'src/app/core/model/user-model';
@@ -58,10 +57,9 @@ export class FeedComponent implements OnInit, OnDestroy {
     });
   }
 
-
   retrieveUserDetails(): void {
-    const obj = this.store.getItem("USER_DETAILS");
-    this.userDetails = JSON.parse(obj);
+    const userDetailsJson:string = this.store.getItem("USER_DETAILS");
+    this.userDetails = JSON.parse(userDetailsJson);
   }
 
   /**
@@ -97,22 +95,20 @@ export class FeedComponent implements OnInit, OnDestroy {
  */
   retrieveAndMapUserPosts(): void {
     const userPosts: any[] = [];
-    // Iterate over each user the current user is following
+    // Iterate over each user the current user is following.
     this.followingStatus.forEach((user: any) => {
-      // Fetch the posts of the user being iterated over
+      // Fetch the posts of the user being iterated over it.
       this.userService.getUserPost(user.id).subscribe((postData: UserPost[]) => {
         userPosts.push(postData);
-        // Check if we have fetched posts for all users in the followingStatus list
+        // Check if we have fetched posts for all users in the followingStatus list.
         if (userPosts.length === this.followingStatus.length) {
-          // Flatten the array of arrays (userPosts) into a single array of posts
+          // Flatten the array of arrays (userPosts) into a single array of posts.
           this.userPost = userPosts.reduce((acc, val) => acc.concat(val), []);
-          // Initialize likedProduct array with false values for each post
+          // Initialize likedProduct array with false values for each post for handling like feature.
           this.likedProduct = new Array(this.userPost.length).fill(false);
           this.mapProfileImages();
           this.showButton = true;
-          if (this.userPost.length === 0) {
-            this.showNoFeedPost = true;
-          }
+          this.showNoFeedPost = this.userPost.length === 0 ? true : false;
         }
       }, (err: any) => {
         this.errorHandlerService.handleErrors(err, "While retrieving user post");
@@ -120,6 +116,15 @@ export class FeedComponent implements OnInit, OnDestroy {
     });
     this.setLoaderFalse();
   }
+
+ /**
+ * Sets the loader flag to false after a delay.
+ */
+    setLoaderFalse(): void {
+      setTimeout(() => {
+        this.loader = false;
+      }, 1500);
+    }
 
   /**
   * Maps profile images to user posts.
@@ -132,22 +137,11 @@ export class FeedComponent implements OnInit, OnDestroy {
   }
 
   /**
- * Sets the loader flag to false after a delay.
- */
-  setLoaderFalse(): void {
-    setTimeout(() => {
-      this.loader = false;
-    }, 1500);
-  }
-
-  /**
   * Function to handle like/unlike
   */
   handleLike(index: number) {
     this.likedProduct[index] = !this.likedProduct[index]; // Toggle the liked state of the post at the given index
-    /**
-     *Api Intergeration - WIP (work-in progress)
-    */
+    //Api Intergeration - WIP (work-in progress)
   }
 
   /**
@@ -159,11 +153,18 @@ export class FeedComponent implements OnInit, OnDestroy {
     if (this.showPost) {
       this.scrollUp.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' }); // Scroll to the top of the page from the starting point
     }
+    this.form.reset();
   }
 
-  /**
-   * Posts content to the feed.
-   */
+  toggleEmojiPicker(): void {
+    this.showEmojiPicker = this.dateUtilsService.toggleEmojiPicker(this.showEmojiPicker);
+  }
+
+  insertEmoji(event: any): void {
+    this.dateUtilsService.insertEmoji(event, this.form.controls['content']);
+    this.showEmojiPicker = false;
+  }
+
   post(): void {
     const formattedDateandTime = this.dateUtilsService.getCurrentFormattedDateTime();
     this.postDetails = {
@@ -183,15 +184,6 @@ export class FeedComponent implements OnInit, OnDestroy {
     });
     this.showPost = false;
     this.form.reset();
-  }
-
-  toggleEmojiPicker(): void {
-    this.showEmojiPicker = this.dateUtilsService.toggleEmojiPicker(this.showEmojiPicker);
-  }
-
-  insertEmoji(event: any): void {
-    this.dateUtilsService.insertEmoji(event, this.form.controls['content']);
-    this.showEmojiPicker = false;
   }
 
   ngOnDestroy(): void {

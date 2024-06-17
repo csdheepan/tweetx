@@ -25,6 +25,7 @@ export class LoginComponent implements OnInit {
   isLoggedIn: boolean = true;
   loginError: boolean = false;
   signupError: boolean = false;
+  performEmailValidation: boolean = true;
   signupForm: FormGroup = Object.create(null);
   loginForm: FormGroup = Object.create(null);
   signupDetails!: SignUp;
@@ -63,11 +64,12 @@ export class LoginComponent implements OnInit {
     this.loginForm.reset();
     this.loginError = false;
     this.signupError = false;
+    this.performEmailValidation = true;
   }
 
   checkPasswordMatch(): void {
-    const password = this.signupForm.controls['password']?.value;
-    const confirmPassword = this.signupForm.controls['confirmPassword']?.value;
+    const password:string = this.signupForm.controls['password']?.value;
+    const confirmPassword :string = this.signupForm.controls['confirmPassword']?.value;
     const passwordMatch: boolean = password === confirmPassword;
     this.signupForm.controls['confirmPassword']?.setErrors(passwordMatch ? null : { 'passwordMismatch': true });
   }
@@ -81,8 +83,8 @@ export class LoginComponent implements OnInit {
   checkValidation(email: string): void {
     if (!email || !this.signupForm.controls['email'].valid) return;
     this.userService.getAllUsers().subscribe((users: SignUp[]) => {
-      const emailExists = users.some((user: any) => user.email === email);
-      if (emailExists) this.signupForm.controls['email'].setErrors({ 'emailExists': true });
+      const emailExists:boolean = users.some((user: any) => user.email === email);
+      if (emailExists && this.performEmailValidation) this.signupForm.controls['email'].setErrors({ 'emailExists': true });
     });
   }
 
@@ -98,48 +100,54 @@ export class LoginComponent implements OnInit {
   /**
   * Attempt to login the user.
   * If the provided email and password match an existing registered user's credentials,
-  * the user is authenticated and redirected to their profile page.
+  * The user is authenticated and redirected to their profile page.
   * Otherwise, an error message is displayed indicating invalid login credentials.
   */
   login(): void {
     this.loader = true;
     this.showButton = false;
     this.loginError = false;
-    const loginDetails: Login = {
-      userName: this.loginForm.controls['userName'].value,
-      passcode: this.loginForm.controls['passcode'].value
-    };
-    this.loginSubscription = this.authenticationService.getRegisterUser().subscribe((users: SignUp[]) => {
-      const user = users.find(u => u.email === loginDetails.userName && u.password === loginDetails.passcode);
-      if (user) {
-        console.log('Login successful');
-        this.store.setItem("USER_DETAILS", JSON.stringify(user));
-        this.router.navigate(["profile/full/user-profile"]);
+    setTimeout(() => {
+      const loginDetails: Login = {
+        userName: this.loginForm.controls['userName'].value,
+        passcode: this.loginForm.controls['passcode'].value
+      };
+      this.loginSubscription = this.authenticationService.getRegisterUser().subscribe((users: SignUp[]) => {
+        const user = users.find(u => u.email === loginDetails.userName && u.password === loginDetails.passcode);
+        if (user) {
+          console.log('Login successful');
+          this.store.setItem("USER_DETAILS", JSON.stringify(user));
+          this.router.navigate(["profile/full/user-profile"]);
+          this.loader = false;
+          this.showButton = true;
+          this.resetForms();
+        } else {
+          console.log('Invalid login credentials');
+          this.loginError = true;
+          this.loader = false;
+          this.showButton = true;
+        }
+      }, (error: any) => {
+        console.error('Error retrieving user details:', error);
         this.loader = false;
         this.showButton = true;
-        this.resetForms();
-      } else {
-        console.log('Invalid login credentials');
-        this.loginError = true;
-        this.loader = false;
-        this.showButton = true;
-      }
-    }, (error: any) => {
-      console.error('Error retrieving user details:', error);
-      this.loader = false;
-      this.showButton = true;
-    });
+      });
+    }, 1000);
   }
 
   /**
    * Create a new user account and store the details in the database.
    * The user's name, email, and password are obtained from the signup form,
    * and upon successful creation of the account, the user is redirected to the login page.
+   * The `performEmailValidation` flag is used to disable email validation during signup,
+   * preventing unnecessary validation errors from `valueChanges` triggers.
    */
   signup(): void {
     this.loader = true;
     this.showButton = false;
     this.signupError = false;
+    this.performEmailValidation = false;
+   setTimeout(() => {
     const profileImg = "assets/images/person.jpg"; //user default profile image.
     this.signupDetails = {
       id: "",
@@ -158,11 +166,12 @@ export class LoginComponent implements OnInit {
     }, (error: any) => {
       console.error('Error retrieving user details:', error);
       this.loader = false;
+      this.performEmailValidation = true;
       this.showButton = true;
       this.signupError = true;
       this.isLoggedIn = false;
     });
-
+   }, 1000);
   }
 
   ngOnDestroy(): void {

@@ -18,7 +18,7 @@ import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
 })
 export class UserComponent implements OnInit {
 
- person = "assets/images/person.jpg";
+ person:string = "assets/images/person.jpg";
  showPost: boolean = false;
  showUser: boolean = true;
  loader: boolean = true;
@@ -46,8 +46,8 @@ export class UserComponent implements OnInit {
 
   // Retrieve user details from local storage
   private getUserDetails(): any {
-    const userDetails = this.store.getItem("USER_DETAILS");
-    return userDetails ? JSON.parse(userDetails) : null;
+    const userDetailsJson:string = this.store.getItem("USER_DETAILS");
+    return userDetailsJson ? JSON.parse(userDetailsJson) : null;
   }
 
   // Method to load feed content for a specific user
@@ -140,8 +140,6 @@ export class UserComponent implements OnInit {
       this.allUserStatus = this.allUserStatus.filter(user => user.name.toLowerCase().includes(searchText));
     }
   }
-
-  //Lifecycle hook to clean up subscription
    ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();

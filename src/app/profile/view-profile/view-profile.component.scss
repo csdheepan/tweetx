@@ -128,10 +128,15 @@ mat-card {
 
 strong {
     color: black;
+    text-align: center;
 }
 
 .profile-container {
     padding: 20px;
+}
+
+.mat-container .selected {
+    color: #ff4081;
 }
 
 @media screen and (max-width: 520px) {

@@ -4,7 +4,7 @@
         <div *ngIf="showPost">
             <form [formGroup]="form">
               <div class="note-input-container">
-                <!-- Input field for feed post -->
+                <!-- Input field for user post -->
                 <textarea matInput [formControl]="form.controls['content']" class="add-note-input" wrap="hard"></textarea>
                 
                 <!-- Emoji icon/button to trigger emoji picker -->
@@ -17,26 +17,34 @@
                   <emoji-mart (emojiClick)="insertEmoji($event)"></emoji-mart>
                 </div>
                 
-                <!-- Cancel button for feed post -->
+                <!-- Cancel button for user post -->
                 <button mat-flat-button color="accent" (click)="handlePostView('cancel')">Cancel</button>
                 
-                <!-- Post button for feed post -->
-                <button mat-flat-button color="primary" [disabled]="!form.valid" (click)="post()">Save</button>
+                <!-- Post button for user post -->
+                <button mat-flat-button color="primary" [disabled]="!form.valid" (click)="post(buttonMessage)">{{buttonMessage}}</button>
               </div>
             </form>
           </div>
           
         <div>
+
+            <!-- Add post button -->
+            <div fxLayout="row" fxLayoutAlign="end end" *ngIf="showButton">
+                <button mat-raised-button class="post-btn" color="accent" (click)="handlePostView('post')">
+                    <mat-icon>add</mat-icon>
+                </button>
+            </div>
+
             <!-- Show list of current user post -->
             <div *ngFor="let user of userPost,let i=index">
                 <mat-card class="mat-elevation-z8">
-                    <div fxLayout="row" fxLayoutGap="30px">
+                    <div fxLayout="row" fxLayoutGap="25px">
                         <div fxLayout="row" fxLayoutAlign="center center" style="width: 30%;">
                             <ngx-skeleton-loader *ngIf="loader" appearance="circle" animation="pulse"
                                 [theme]="{ width: '105px', height: '105px' }"></ngx-skeleton-loader>
                             <img [src]="!loader ? profileImg : ''" *ngIf="!loader">
                         </div>
-                        <div fxLayout="column" fxLayoutAlign="space-between" style="width: 70%;">
+                        <div fxLayout="column" fxLayoutAlign="space-between" style="width: 70%;" fxLayoutGap="5px">
                             <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="5px">
                                 <!-- Ngx-skeleton-loader -->
                                 <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
@@ -55,10 +63,10 @@
                             <div fxLayout="row" fxLayoutAlign="start" fxLayoutGap="20px">
                                 <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
                                 [theme]="{ width: '60px', height: '20px' }"></ngx-skeleton-loader>
-                                <button class="edit-button" *ngIf="!loader" (click)="editContent(user,'edit')">Edit</button>
+                                <button class="edit-button" *ngIf="!loader" (click)="editPost(user,'edit')">Edit</button>
                                 <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
                                 [theme]="{ width: '60px', height: '20px' }"></ngx-skeleton-loader>
-                                <button class="delete-button" *ngIf="!loader" (click)="deleteContent(user)">Delete</button>
+                                <button class="delete-button" *ngIf="!loader" (click)="deletePost(user)">Delete</button>
                             </div>
     
                             <div fxLayout="row" fxLayoutAlign="end">

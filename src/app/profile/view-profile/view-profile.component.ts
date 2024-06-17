@@ -17,6 +17,7 @@ import { ErrorHandlerService } from 'src/app/shared/service/error-handler.servic
 export class ViewProfileComponent implements OnInit, OnDestroy {
 
   person: string = "assets/images/person.jpg";
+  selectedView: string = 'POST';
   showPost: boolean = true;
   showFollower: boolean = false;
   showFollowing: boolean = false;
@@ -47,7 +48,7 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
   }
 
   private initializeUserDetails(): void {
-    const userDetailsJson = this.store.getItem("USER_DETAILS");
+    const userDetailsJson:string = this.store.getItem("USER_DETAILS");
     this.userDetails = userDetailsJson ? JSON.parse(userDetailsJson) : null;
     this.person = this.userDetails?.profileImg || this.person;
   }
@@ -119,13 +120,13 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
   }
 
   /**
-    * Update user status by setting new users to status 0 (follow) and updating the profile images.
-    * This will add status 0 for users who have recently joined the application.
+    * Method is used to setting new users to status 0 (follow) and updating the profile images.
+    * (ie) This will add status 0 for users who have recently joined the application.
     */
   private updateUserStatus(): void {
     this.userProfile.forEach((user: UserProfile) => {
       const foundUser = this.allUserstatus.find((item: Users) => item.id === user.id);
-      // If user not found, add with status 0 (not following || follow)
+      // If user not found, add with status 0 (follow)
       if (!foundUser) {
         this.allUserstatus.push({ ...user, status: 0 });
       }
@@ -151,13 +152,18 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-  * Map profile images for each user status entry.
-  * This method ensures that when a user updates their profile image (avatar), 
-  * it will not reflected across all user statuses. Since the user status data does not
-  * store profile images directly, we use the updated images in registred user details (UserProfile)
-  * and map them to the corresponding user statuses.
-  */
+ /**
+ * Map profile images for each user status entry.
+ * 
+ * When a user updates their profile image (avatar), the change is reflected in the 
+ * registered user details (UserProfile) but not directly in the user status entries.
+ * This is because updating user statuses in a NoSQL database can be complex and inefficient.
+ * 
+ * To address this, we map the profile images from the registered user details to the 
+ * corresponding user statuses based on the user ID. This ensures that the most current 
+ * profile image is displayed for each user status entry without needing to update the 
+ * user status records directly.
+ */
   private mapProfileImage(): void {
     this.allUserstatus.forEach((obj: Users) => {
       const matchedUser = this.userProfile.find((user: UserProfile) => user.id === obj.id);
@@ -172,6 +178,7 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
   * @param view The view to display ('posts'|'followers' | 'following').
   */
   handleProfileView(view: string): void {
+    this.selectedView = view;
     this.showPost = view === 'POST';
     this.showFollower = view === 'FOLLOW';
     this.showFollowing = view === 'FOLLOWING';

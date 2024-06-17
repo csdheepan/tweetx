@@ -5,7 +5,7 @@
             <!-- Profile Image and Avatar Button -->
             <div fxLayout="column" fxLayoutAlign="center center">
                 <ngx-skeleton-loader *ngIf="loader" appearance="circle" animation="pulse" [theme]="{ width: '100px', height: '100px' }"></ngx-skeleton-loader>
-                <img [src]="!loader ? person : ''" *ngIf="!loader" alt="Profile Image" />
+                <img [src]="!loader ? person : ''" *ngIf="!loader" alt="Profile Image" matTooltip="Your profile picture is awesome!"/>
                 <button mat-flat-button class="avatar-button" (click)="openModal()">Edit Avatar
                 </button>
             </div>
@@ -45,19 +45,20 @@
         <!-- Post Section -->
         <div fxLayout="row" fxLayoutGap="10px" (click)="handleProfileView('POST')">
             <span class="material-symbols-outlined">chat</span>
-            <p class="h-label">Post</p>
+            <p class="h-label" [ngClass]="{'selected': selectedView === 'POST'}">Post</p>
         </div>
         <!-- Follow Section -->
         <div fxLayout="row" fxLayoutGap="10px" (click)="handleProfileView('FOLLOW')">
             <span class="material-symbols-outlined">person_add</span>
-            <p class="h-label">Follow</p>
+            <p class="h-label" [ngClass]="{'selected': selectedView === 'FOLLOW'}">Follow</p>
         </div>
         <!-- Following Section -->
         <div fxLayout="row" fxLayoutGap="10px" (click)="handleProfileView('FOLLOWING')">
             <span class="material-symbols-outlined">group</span>
-            <p class="h-label">Following</p>
+            <p class="h-label" [ngClass]="{'selected': selectedView === 'FOLLOWING'}">Following</p>
         </div>
     </div>
+    
 
     <!-- User Posts -->
     <div *ngIf="showPost">
