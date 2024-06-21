@@ -101,7 +101,7 @@
                     </div>
                     <!-- Follower Information -->
                     <div fxLayout="column" fxLayoutAlign="center" style="width: 65%;">
-                        <div fxLayout="row" fxLayoutAlign="space-between center">
+                        <div fxLayout="row" fxLayoutAlign="space-between center" class="user-action-container">
                             <!-- Follower Name -->
                             <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse" [theme]="{ width: '120px', height: '30px', position: 'relative', top: '6px' }"></ngx-skeleton-loader>
                             <p class="title-1" *ngIf="!loader">{{ user.name }}</p>
@@ -128,7 +128,7 @@
                     </div>
                     <!-- Following Information -->
                     <div fxLayout="column" fxLayoutAlign="center" style="width: 65%;">
-                        <div fxLayout="row" fxLayoutAlign="space-between center">
+                        <div fxLayout="row" fxLayoutAlign="space-between center" class="user-action-container">
                             <!-- Following Name -->
                             <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse" [theme]="{ width: '120px', height: '30px', position: 'relative', top: '6px' }"></ngx-skeleton-loader>
                             <p class="title-1" *ngIf="!loader">{{ user.name }}</p>

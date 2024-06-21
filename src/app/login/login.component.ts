@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
   signupForm: FormGroup = Object.create(null);
   loginForm: FormGroup = Object.create(null);
   signupDetails!: SignUp;
-  private loginSubscription!: Subscription;
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -82,10 +82,11 @@ export class LoginComponent implements OnInit {
   */
   checkValidation(email: string): void {
     if (!email || !this.signupForm.controls['email'].valid) return;
-    this.userService.getAllUsers().subscribe((users: SignUp[]) => {
+   const userSubscription= this.userService.getAllUsers().subscribe((users: SignUp[]) => {
       const emailExists:boolean = users.some((user: any) => user.email === email);
       if (emailExists && this.performEmailValidation) this.signupForm.controls['email'].setErrors({ 'emailExists': true });
     });
+    this.subscriptions.push(userSubscription);
   }
 
   /**
@@ -107,32 +108,31 @@ export class LoginComponent implements OnInit {
     this.loader = true;
     this.showButton = false;
     this.loginError = false;
-    setTimeout(() => {
-      const loginDetails: Login = {
-        userName: this.loginForm.controls['userName'].value,
-        passcode: this.loginForm.controls['passcode'].value
-      };
-      this.loginSubscription = this.authenticationService.getRegisterUser().subscribe((users: SignUp[]) => {
-        const user = users.find(u => u.email === loginDetails.userName && u.password === loginDetails.passcode);
-        if (user) {
-          console.log('Login successful');
-          this.store.setItem("USER_DETAILS", JSON.stringify(user));
-          this.router.navigate(["profile/full/user-profile"]);
-          this.loader = false;
-          this.showButton = true;
-          this.resetForms();
-        } else {
-          console.log('Invalid login credentials');
-          this.loginError = true;
-          this.loader = false;
-          this.showButton = true;
-        }
-      }, (error: any) => {
-        console.error('Error retrieving user details:', error);
+    const loginDetails: Login = {
+      userName: this.loginForm.controls['userName'].value,
+      passcode: this.loginForm.controls['passcode'].value
+    };
+    const loginSubscription = this.authenticationService.getRegisterUser().subscribe((users: SignUp[]) => {
+      const user = users.find(user => user.email === loginDetails.userName && user.password === loginDetails.passcode);
+      if (user) {
+        console.log('Login successful');
+        this.store.setItem("USER_DETAILS", JSON.stringify(user));
+        this.router.navigate(["profile/full/user-profile"]);
         this.loader = false;
         this.showButton = true;
-      });
-    }, 1000);
+        this.resetForms();
+      } else {
+        console.log('Invalid login credentials');
+        this.loginError = true;
+        this.loader = false;
+        this.showButton = true;
+      }
+    }, (error: any) => {
+      console.error('Error retrieving user details:', error);
+      this.loader = false;
+      this.showButton = true;
+    });
+    this.subscriptions.push(loginSubscription);
   }
 
   /**
@@ -147,8 +147,7 @@ export class LoginComponent implements OnInit {
     this.showButton = false;
     this.signupError = false;
     this.performEmailValidation = false;
-   setTimeout(() => {
-    const profileImg = "assets/images/person.jpg"; //user default profile image.
+    const profileImg:string = "assets/images/person.jpg"; //user default profile image.
     this.signupDetails = {
       id: "",
       name: this.signupForm.controls['name'].value,
@@ -156,25 +155,25 @@ export class LoginComponent implements OnInit {
       password: this.signupForm.controls['password'].value,
       profileImg: profileImg
     };
-    this.authenticationService.signup(this.signupDetails).subscribe((data: any) => {
+   const signupSubscription = this.authenticationService.signup(this.signupDetails).subscribe((data: any) => {
       console.log('Signup successful');
       this.loader = false;
       this.showButton = true;
-      this.resetForms();
-      this.isLoggedIn = true;
       this.signupError = false;
+      this.isLoggedIn = true;
+      this.resetForms();
     }, (error: any) => {
       console.error('Error retrieving user details:', error);
       this.loader = false;
-      this.performEmailValidation = true;
       this.showButton = true;
       this.signupError = true;
       this.isLoggedIn = false;
+      this.performEmailValidation = true;
     });
-   }, 1000);
+    this.subscriptions.push(signupSubscription);
   }
 
   ngOnDestroy(): void {
-    this.loginSubscription.unsubscribe();
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }

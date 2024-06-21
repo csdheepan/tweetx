@@ -9,35 +9,26 @@ This Angular 16 application uses Google Firebase on the backend and is like a so
 - Hosting : Google Firebase
 
 
-## Project Structure:
+## Project Structure
 The project is structured with the following modules:
 
-- Root Module : This is the main module of the Angular application, serving as the entry point and orchestrating the loading of other modules.
-
--Angular Material Module : This module likely contains imports and configurations related to Angular Material, a UI component library for Angular applications.
-
-- Core
-    - Service: : It contains service files. Services typically handle data access, business logic, and other non-UI related tasks
-    - Model: It contains data model files. These are classes or interfaces that represent the structure of data used within the application.
-
--login
-  --login component : login component responsible for rendering the login interface and handling user authentication
-
-- Profile Module (contains all components required for the application) :  This module is dedicated to functionalities related to profile,user and feed post. It includes components and services required for managing and displaying user profiles.
-
-
-- shared Module
-
-  --components: It contains shared components that can be reused throughout the application.
-     ---page-not-found : This component is responsible for displaying a "Page Not Found" message when a user navigates to a URL that does not exist within the application. It ensures a user-friendly experience by informing users about invalid routes.
-      
-  --service : It contains shared services that provide common functionality needed across different parts of the application.
-
--assets
-  --Images :  Stores all images used in the application.
-
--environment
-  --environment.ts- It contains Firebase authentication details
+- **Root Module:** Main entry point orchestrating the loading of other modules.
+- **Angular Material Module:** Configurations related to Angular Material UI components.
+- **Core:**
+  - **Guard:** Router guards for security purposes.
+  - **Service:** Handles data access and business logic.
+  - **Model:** Defines data structures used in the application.
+- **Login Module:**
+  - **Login Component:** Responsible for user authentication and login interface.
+- **Profile Module:** Manages user profiles, posts, and related functionalities.
+- **Shared Module:**
+  - **Components:** Reusable UI components like logout dialog, error dialog, and page-not-found.
+  - **Service:** Shared services providing common functionality.
+  - **Styles:** Common styles used across components.
+- **Assets:**
+  - **Images:** Stores images used in the application.
+- **Environment:**
+  - **environment.ts:** Firebase authentication configuration.
 
 ## Setup and Installation:
 1. Clone the repository using the command 👉🏻 git clone https://github.com/csdheepan/tweetx.git
@@ -60,6 +51,7 @@ Link: [https://tweet-x-18.web.app](https://tweet-x-18.web.app)
 - **Posting Feed:** Users can share posts with the community.
 - **Following Friends:** Users can follow and stay updated on posts from friends.
 - **Avatar Customization:** Provide users the ability to change their avatars.
+- **Add, Update, and Delete Posts:** Users can manage their posts by adding new posts, updating existing ones, and deleting posts they no longer want to keep.
 - **Responsive Design:** The application is fully responsive for a seamless user experience.
 - **Preview the diagram for better understanding:** ![Application Functionality Diagram](src/assets/images/application-diagram.jpg)
 
@@ -72,6 +64,21 @@ The application utilizes Google Firestore Database for efficient data storage an
 
 ## Database Design:
 ![firestore database design diagram](src/assets/images/database-design.jpg)
+
+## Contributing
+Contributions are welcome! To contribute to this project, please follow these steps:
+
+1. Fork the repository and create your branch from `main`.
+2. Open an issue to discuss your proposed changes.
+3. Make your modifications and ensure tests pass.
+4. Submit a pull request detailing your changes and the problem they solve.
+
+## Credits
+We would like to acknowledge the following individuals, companies, and projects for their contributions to this project:
+
+- [Omnipractice](https://omnipractice.co/): Provided draft designs and assigned the project.
+
+Special thanks to Omnipractice for their valuable support and assistance throughout the development of this application.
 
 
 ## Contact Information:

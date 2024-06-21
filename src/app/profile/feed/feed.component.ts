@@ -31,7 +31,7 @@ export class FeedComponent implements OnInit, OnDestroy {
   userPost: UserPost[] = [];
   followingStatus: Users[] = [];
   postDetails!: UserPost;
-  private getUserPostSubscription!: Subscription;
+  private subscriptions: Subscription[] = [];
   @ViewChild('scrollUp', { static: true }) scrollUp!: ElementRef;
 
   constructor(
@@ -58,7 +58,7 @@ export class FeedComponent implements OnInit, OnDestroy {
   }
 
   retrieveUserDetails(): void {
-    const userDetailsJson:string = this.store.getItem("USER_DETAILS");
+    const userDetailsJson: string = this.store.getItem("USER_DETAILS");
     this.userDetails = JSON.parse(userDetailsJson);
   }
 
@@ -67,15 +67,16 @@ export class FeedComponent implements OnInit, OnDestroy {
    * We will show posts of users followed by the current user.
    */
   filterFollowingStatus(): void {
-    this.getUserPostSubscription = this.userService.getUserStatus(this.userDetails.id).subscribe((data: any) => {
+    const userPostSubscription = this.userService.getUserStatus(this.userDetails.id).subscribe((data:any) => {
       this.followingStatus = data.users.filter((v: any) => v.status === 1);
       this.handleFollowingStatus();
     }, (err: any) => {
       this.errorHandlerService.handleErrors(err, "While retrieving user status");
     });
+    this.subscriptions.push(userPostSubscription);
   }
 
-  /**
+/**
  * Handles the following status of users to determine whether to display the add post button or no feed post message.
  */
   handleFollowingStatus(): void {
@@ -90,45 +91,59 @@ export class FeedComponent implements OnInit, OnDestroy {
   }
 
   /**
- * Retrieves and maps user posts for display.
- * It iterates over each user the current user is following, retrieves their posts, and maps profile images.
- */
+    * Retrieves and maps user posts for display.
+    * It iterates over each user the current user is following, retrieves their posts, and maps profile images.
+    */
   retrieveAndMapUserPosts(): void {
     const userPosts: any[] = [];
-    // Iterate over each user the current user is following.
-    this.followingStatus.forEach((user: any) => {
-      // Fetch the posts of the user being iterated over it.
-      this.userService.getUserPost(user.id).subscribe((postData: UserPost[]) => {
-        userPosts.push(postData);
-        // Check if we have fetched posts for all users in the followingStatus list.
-        if (userPosts.length === this.followingStatus.length) {
-          // Flatten the array of arrays (userPosts) into a single array of posts.
-          this.userPost = userPosts.reduce((acc, val) => acc.concat(val), []);
-          // Initialize likedProduct array with false values for each post for handling like feature.
-          this.likedProduct = new Array(this.userPost.length).fill(false);
-          this.mapProfileImages();
-          this.showButton = true;
-          this.showNoFeedPost = this.userPost.length === 0 ? true : false;
-        }
-      }, (err: any) => {
-        this.errorHandlerService.handleErrors(err, "While retrieving user post");
-      });
+    this.followingStatus.forEach((user: Users) => {
+      this.fetchUserPosts(user, userPosts);
     });
     this.setLoaderFalse();
   }
 
- /**
- * Sets the loader flag to false after a delay.
- */
-    setLoaderFalse(): void {
-      setTimeout(() => {
-        this.loader = false;
-      }, 1500);
-    }
+  /**
+   * Fetches posts of a single user and adds them to the userPosts array.
+   * It subscribes to the getUserPost method of the UserService to retrieve the posts.
+   * If all posts are fetched, it processes the posts for display.
+   * 
+   * @param user - The user whose posts are to be fetched.
+   * @param userPosts - The array to store the fetched posts.
+   */
+  private fetchUserPosts(user: Users, userPosts: any[]): void {
+    const userPostSubscription = this.userService.getUserPost(user.id).subscribe(
+      (postData: UserPost[]) => {
+        userPosts.push(postData);
+        if (userPosts.length === this.followingStatus.length) {
+          this.processUserPosts(userPosts);
+        }
+      },
+      (err: any) => {
+        this.errorHandlerService.handleErrors(err, "While retrieving user posts");
+      }
+    );
+    this.subscriptions.push(userPostSubscription);
+  }
 
   /**
-  * Maps profile images to user posts.
-  */
+   * Processes the user posts for display.
+   * It flattens the array of arrays into a single array of posts, initializes the likedProduct array,
+   * maps profile images to the posts, and updates the visibility of the post-related elements.
+   * 
+   * @param userPosts - The array of arrays containing user posts.
+   */
+  private processUserPosts(userPosts: UserPost[]): void {
+    this.userPost = userPosts.flat();
+    this.likedProduct = new Array(this.userPost.length).fill(false);
+    this.mapProfileImages();
+    this.showButton = true;
+    this.showNoFeedPost = this.userPost.length === 0;
+  }
+
+  /**
+   * Maps profile images to user posts.
+   * It iterates over each post and assigns the profile image of the corresponding user from the followingStatus array.
+   */
   mapProfileImages(): void {
     this.userPost.forEach((post: any) => {
       const follower = this.followingStatus.find((follower: Users) => follower.id === post.id);
@@ -137,11 +152,12 @@ export class FeedComponent implements OnInit, OnDestroy {
   }
 
   /**
-  * Function to handle like/unlike
-  */
-  handleLike(index: number) {
+   * Function to handle like/unlike.
+   * @param index - The index of the post to be liked or unliked.
+   */
+  handleLike(index: number): void {
     this.likedProduct[index] = !this.likedProduct[index]; // Toggle the liked state of the post at the given index
-    //Api Intergeration - WIP (work-in progress)
+    // Api Integration - WIP (work-in progress)
   }
 
   /**
@@ -154,6 +170,13 @@ export class FeedComponent implements OnInit, OnDestroy {
       this.scrollUp.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' }); // Scroll to the top of the page from the starting point
     }
     this.form.reset();
+  }
+
+ // Set loader flag to false after a delay of 1.5 seconds (1500 milliseconds)
+  setLoaderFalse(): void {
+    setTimeout(() => {
+      this.loader = false;
+    }, 1500);
   }
 
   toggleEmojiPicker(): void {
@@ -187,8 +210,6 @@ export class FeedComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.getUserPostSubscription) {
-      this.getUserPostSubscription.unsubscribe();
-    }
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }

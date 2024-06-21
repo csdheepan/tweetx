@@ -4,8 +4,8 @@ import { FullComponent } from './full/full.component';
 import { ViewProfileComponent } from './view-profile/view-profile.component';
 import { UserComponent } from './user/user.component';
 import { FeedComponent } from './feed/feed.component';
-import { AuthGuard } from '../shared/service/auth.guard';
 import { UserPostComponent } from './user-post/user-post.component';
+import { AuthGuard } from '../core/guard/auth-guard';
 
 const routes: Routes = [
   {

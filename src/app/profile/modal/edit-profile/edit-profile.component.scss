@@ -31,9 +31,10 @@ img {
 }
 
 .selected {
-    border: 2px solid #ff4081;
+    border: 1px solid #ff4081;
     border-radius: 50%;
     padding: 3px;
+    box-shadow: 1px 1px 10px 5px #ff759da8;
 }
 
 button {

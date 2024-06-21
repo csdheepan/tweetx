@@ -72,9 +72,7 @@ export class UserPostComponent {
     this.setLoaderFalse();
   }
 
- /**
- * Sets the loader flag to false after a delay.
- */
+  // Set loader flag to false after a delay of 1.5 seconds (1500 milliseconds)
   setLoaderFalse(): void {
     setTimeout(() => {
       this.loader = false;

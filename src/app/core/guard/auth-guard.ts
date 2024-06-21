@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
-import { InMemoryCache } from './memory-cache.service';
+import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
 
 @Injectable({
   providedIn: 'root'

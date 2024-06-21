@@ -143,6 +143,7 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     this.followerData = this.allUserstatus.filter((v: Users) => v.status === 0);
     this.followingData = this.allUserstatus.filter((v: Users) => v.status === 1);
 
+    // Set loader flag to false after a delay of 1.5 seconds (1500 milliseconds)
     setTimeout(() => this.loader = false, 1500);
 
     // Update user status in the service if not already updated

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { SignUp, UserPost, UserProfile, Users } from 'src/app/core/model/user-model';
 import { PostServices } from 'src/app/core/services/post-service';
@@ -33,7 +32,6 @@ export class UserComponent implements OnInit {
     private userService: UserService,
     private postServices: PostServices,
     private store: InMemoryCache,
-    private dialog : MatDialog,
     private errorHandlerService: ErrorHandlerService
   ) {}
 
