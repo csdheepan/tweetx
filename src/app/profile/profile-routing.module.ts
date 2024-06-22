@@ -28,6 +28,10 @@ const routes: Routes = [
       {
         path: 'user-post',
         component: UserPostComponent
+      },
+      {
+        path: 'user-profile/:id',
+        component: ViewProfileComponent
       }
 
     ]

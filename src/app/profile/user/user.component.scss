@@ -8,6 +8,7 @@
 
 .profile-img-container {
   width: 20%;
+  cursor: pointer;
 }
 
 .user-details-container {
@@ -82,6 +83,11 @@ mat-card {
   line-height: 40px;
   font-weight: 400;
   font-family: system-ui;
+  cursor: pointer;
+}
+
+.title:hover{
+  color: #ff4081;
 }
 
 .value {

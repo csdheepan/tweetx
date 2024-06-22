@@ -8,6 +8,7 @@ import { UserService } from 'src/app/core/services/user-service';
 import { SignUp, UserProfile, UserPost, Users } from 'src/app/core/model/user-model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ErrorHandlerService } from 'src/app/shared/service/error-handler.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-view-profile',
@@ -23,6 +24,9 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
   showFollowing: boolean = false;
   loader: boolean = true;
   serviceFlag: boolean = false;
+  showEditButton: boolean = true;
+  disableFollowButtons: boolean=false;
+  showBackButton: boolean=false;
   userPost: UserPost[] = [];
   followerData: Users[] = [];
   followingData: Users[] = [];
@@ -38,19 +42,48 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private userService: UserService,
     private _snackBar: MatSnackBar,
-    private errorHandlerService: ErrorHandlerService
+    private errorHandlerService: ErrorHandlerService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) { }
 
 
   ngOnInit(): void {
-    this.initializeUserDetails();
+    this.setupUserDetails();
     this.loadUserProfile();
   }
 
-  private initializeUserDetails(): void {
-    const userDetailsJson:string = this.store.getItem("USER_DETAILS");
+  private setupUserDetails(): void {
+    this.activatedRoute.queryParams.subscribe((params: any) => {
+      if (Object.keys(params).length === 0) {
+        this.setUserDetailsFromStorage(); // loggedIn user profile
+      } else {
+        this.setUserDetailsFromParams(params);  // initialize the profile view for an individual user
+      }
+    });
+  }
+
+/**
+ * This method is used to initialize the profile view for the logged-in user.
+ */
+  private setUserDetailsFromStorage(): void {
+    const userDetailsJson: string = this.store.getItem("USER_DETAILS");
     this.userDetails = userDetailsJson ? JSON.parse(userDetailsJson) : null;
     this.person = this.userDetails?.profileImg || this.person;
+  }
+
+/**
+ * This method is used to initialize the profile view for an individual user 
+ * when their profile is accessed via query parameters.
+ * 
+ * @param params The user details passed as route query parameters.
+ */
+  private setUserDetailsFromParams(params:SignUp): void {
+    this.userDetails = params;
+    this.person = this.userDetails.profileImg;
+    this.showEditButton = false;
+    this.disableFollowButtons = true;
+    this.showBackButton = true;
   }
 
   // Load user profile including posts, followers, and following status
@@ -194,9 +227,12 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result.status === "success" && result.refreshPage) {
+        this._snackBar.open('Profile Image updated Successfully' + ' ', 'Close', {
+          duration: 2000
+        });
         this.refreshUserProfile();
       } else if (result.status === "failed" && !result.refreshPage) {
-        this._snackBar.open('Profile Image not upadted,Please try again later' + ' ', 'Close', {
+        this._snackBar.open('Profile Image not updated,Please try again later' + ' ', 'Close', {
           duration: 2000
         });
       }
@@ -234,6 +270,10 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     }, (err: any) => {
       this.errorHandlerService.handleErrors(err, "while update user status data");
     });
+  }
+
+  navigateAllUsers(){
+    this.router.navigate(['profile/full/users'])
   }
 
   ngOnDestroy(): void {

@@ -63,7 +63,7 @@
                 <input matInput placeholder="Enter Your Email" formControlName="email" (keyup)="checkValidation(signupForm.controls['email'].value)" aria-label="Email">
                 <mat-error *ngIf="signupForm.controls['email'].hasError('required') && signupForm.controls['email'].touched">Email is required</mat-error>
                 <mat-error *ngIf="signupForm.controls['email'].hasError('email')">Invalid email format</mat-error>
-                <mat-error  class="overlap-error-msg" *ngIf="signupForm.controls['email'].hasError('emailExists')">Email already exists,Please choose a different one.</mat-error>
+                <mat-error  class="overlap-error-msg" *ngIf="signupForm.controls['email'].hasError('emailExists')">Email already taken, Please choose a different one.</mat-error>
               </mat-form-field>
             </div>
             <div>

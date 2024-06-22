@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { SignUp, UserPost, UserProfile, Users } from 'src/app/core/model/user-model';
 import { PostServices } from 'src/app/core/services/post-service';
@@ -32,7 +33,8 @@ export class UserComponent implements OnInit {
     private userService: UserService,
     private postServices: PostServices,
     private store: InMemoryCache,
-    private errorHandlerService: ErrorHandlerService
+    private errorHandlerService: ErrorHandlerService,
+    private router:Router
   ) {}
 
   ngOnInit(): void {
@@ -138,6 +140,20 @@ export class UserComponent implements OnInit {
       this.allUserStatus = this.allUserStatus.filter(user => user.name.toLowerCase().includes(searchText));
     }
   }
+
+  // Method to view individual profile
+  navigateUserProfile(user: Users) {
+    this.router.navigate(['profile/full/user-profile', user.id], {
+      queryParams: {
+        id:user.id,
+        name: user.name,
+        profileImg: user.profileImg,
+        emailId: '',
+        password: ''
+      }
+    });
+  }  
+
    ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();

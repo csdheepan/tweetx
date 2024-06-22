@@ -108,6 +108,7 @@ export class LoginComponent implements OnInit {
     this.loader = true;
     this.showButton = false;
     this.loginError = false;
+   setTimeout(() => {
     const loginDetails: Login = {
       userName: this.loginForm.controls['userName'].value,
       passcode: this.loginForm.controls['passcode'].value
@@ -133,6 +134,7 @@ export class LoginComponent implements OnInit {
       this.showButton = true;
     });
     this.subscriptions.push(loginSubscription);
+   }, 1000);
   }
 
   /**
@@ -147,6 +149,7 @@ export class LoginComponent implements OnInit {
     this.showButton = false;
     this.signupError = false;
     this.performEmailValidation = false;
+   setTimeout(() => {
     const profileImg:string = "assets/images/person.jpg"; //user default profile image.
     this.signupDetails = {
       id: "",
@@ -171,6 +174,7 @@ export class LoginComponent implements OnInit {
       this.performEmailValidation = true;
     });
     this.subscriptions.push(signupSubscription);
+   }, 1000);
   }
 
   ngOnDestroy(): void {

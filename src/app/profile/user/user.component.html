@@ -15,7 +15,7 @@
       <div *ngFor="let user of allUserStatus, let i = index">
         <mat-card class="mat-elevation-z8">
           <div fxLayout="row" fxLayoutAlign="space-between">
-            <div fxLayout="row" fxLayoutAlign="center center" class="profile-img-container">
+            <div fxLayout="row" fxLayoutAlign="center center" class="profile-img-container" (click)="navigateUserProfile(user)">
               <!-- ngx-skeleton-loader for loading state -->
               <ngx-skeleton-loader *ngIf="loader" appearance="circle" animation="pulse" [theme]="{ width: '80px', height: '80px' }"></ngx-skeleton-loader>
               <img [src]="!loader ? user.profileImg : ''" *ngIf="!loader">
@@ -24,7 +24,7 @@
               <div class="wrap-container">
                 <!-- ngx-skeleton-loader for loading state -->
                 <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse" [theme]="{ width: '85px', height: '30px', position: relative, top: '8px' }"></ngx-skeleton-loader>
-                <p class="title" *ngIf="!loader">{{user.name}}</p>
+                <p class="title" *ngIf="!loader" (click)="navigateUserProfile(user)">{{user.name}}</p>
                 <div *ngIf="user.status === 0" fxLayout="row" fxLayoutGap="20px">
                   <button (click)="loadFeed(user)" class="feed-view-icon" [disabled]="loader">
                     <mat-icon>description</mat-icon>
