@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../core/services/authentication-service';
 import { UserService } from '../core/services/user-service';
 import { InMemoryCache } from '../shared/service/memory-cache.service';
 import { Login, SignUp } from '../core/model/user-model';
 import { Subscription } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { AngularMaterialModule } from '../angular-material/angular-material.module';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 /**
  * Component responsible for handling user signup/login functionality.
@@ -13,6 +16,8 @@ import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
+  standalone: true,
+  imports: [CommonModule,AngularMaterialModule,FlexLayoutModule,ReactiveFormsModule,],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })

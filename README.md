@@ -57,7 +57,7 @@ Link: [https://tweet-x-18.web.app](https://tweet-x-18.web.app)
 
 ## Future Improvements:
 - **Direct Messaging:** Allow users to send messages to each other.
-- **Additional features and enhancements for an enriched user experience.
+- **Additional features:** Enhancements done based on user experience.
 
 ## Database:
 The application utilizes Google Firestore Database for efficient data storage and retrieval.
