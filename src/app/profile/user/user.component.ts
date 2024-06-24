@@ -141,7 +141,14 @@ export class UserComponent implements OnInit {
     }
   }
 
-  // Method to view individual profile
+/**
+ * Navigates to the view profile component to view a specific user.
+ * 
+ * This method is called to display the profile of a specific user,
+ * including their profile details such as ID, name, and profile image.
+ * 
+ * @param user The user object containing the details of the specific user.
+ */
   navigateUserProfile(user: Users) {
     this.router.navigate(['profile/full/user-profile', user.id], {
       queryParams: {
@@ -153,6 +160,18 @@ export class UserComponent implements OnInit {
       }
     });
   }  
+
+  openMessage(user:Users){
+    this.router.navigate(['profile/full/message'],{
+      queryParams: {
+        id:user.id,
+        name: user.name,
+        profileImg: user.profileImg,
+        emailId: '',
+        password: ''
+      }
+    })
+  }
 
    ngOnDestroy(): void {
     if (this.subscription) {

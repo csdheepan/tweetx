@@ -5,13 +5,15 @@ import { AngularMaterialModule } from '../angular-material/angular-material.modu
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FeedComponent } from './feed/feed.component';
 import { UserComponent } from './user/user.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ViewProfileComponent } from './view-profile/view-profile.component';
 import { EditProfileComponent } from './modal/edit-profile/edit-profile.component';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { FullComponent } from './full/full.component';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { UserPostComponent } from './user-post/user-post.component';
+import { MessageComponent } from './message/message.component';
+import { UserMessageComponent } from './user-message/user-message.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,9 @@ import { UserPostComponent } from './user-post/user-post.component';
     ViewProfileComponent,
     EditProfileComponent,
     FullComponent,
-    UserPostComponent
+    UserPostComponent,
+    MessageComponent,
+    UserMessageComponent
   ],
   imports: [
     CommonModule,
@@ -29,7 +33,8 @@ import { UserPostComponent } from './user-post/user-post.component';
     FlexLayoutModule,
     ReactiveFormsModule,
     NgxSkeletonLoaderModule,
-    PickerModule
+    PickerModule,
+    FormsModule
   ] 
 })
 export class ProfileModule { }

@@ -11,14 +11,14 @@ import { Observable, from } from 'rxjs';
 })
 export class UserService {
 
-  constructor(private afs: AngularFirestore) { }
+  constructor(private firestore: AngularFirestore) { }
 
   /**
    * Retrieves all users registered in the application.
    * @returns An observable that emits an array of registered users.
    */
   getAllUsers(): Observable<SignUp[]> {
-    return this.afs.collection<SignUp>('/register').valueChanges();
+    return this.firestore.collection<SignUp>('/register').valueChanges();
   }
 
   /**
@@ -28,7 +28,7 @@ export class UserService {
    */
   setUserStatus(loggedId: string, allUser:Users[]): void {
     const dataObject = { users: allUser };
-    this.afs.collection('/register').doc(loggedId).collection('profile').doc(loggedId).set(dataObject);
+    this.firestore.collection('/register').doc(loggedId).collection('profile').doc(loggedId).set(dataObject);
   }
 
   /**
@@ -39,7 +39,7 @@ export class UserService {
    */
   followReqAction(update:Users[], loggedId: string): Observable<void> {
     const dataObj = { users: update };
-    return from(this.afs.collection('/register').doc(loggedId).collection('profile').doc(loggedId).update(dataObj));
+    return from(this.firestore.collection('/register').doc(loggedId).collection('profile').doc(loggedId).update(dataObj));
   }
 
   /**
@@ -48,7 +48,7 @@ export class UserService {
    * @returns An observable that emits the user status data.
    */
   getUserStatus(loggedId: string): Observable<any> {
-    return this.afs.collection('/register').doc(loggedId).collection('profile').doc(loggedId).valueChanges();
+    return this.firestore.collection('/register').doc(loggedId).collection('profile').doc(loggedId).valueChanges();
   }
 
   /**
@@ -58,7 +58,7 @@ export class UserService {
    * @returns An observable that completes when the update is finished.
    */
   updateProfile(loggedId: string, updateObj: SignUp): Observable<void> {
-    return from(this.afs.collection('/register').doc(loggedId).update(updateObj));
+    return from(this.firestore.collection('/register').doc(loggedId).update(updateObj));
   }
 
   /**
@@ -67,7 +67,7 @@ export class UserService {
    * @returns An observable that emits the user data.
    */
   getIndividualUser(loggedId: string): Observable<any> {
-    return this.afs.collection<any>('/register').doc(loggedId).valueChanges();
+    return this.firestore.collection<any>('/register').doc(loggedId).valueChanges();
   }
 
   /**
@@ -76,6 +76,6 @@ export class UserService {
    * @returns An observable that emits the post status data.
    */
   getUserPost(userId: string): Observable<UserPost[]> {
-    return this.afs.collection<UserPost>('/register/' + userId + '/feed post').valueChanges();
+    return this.firestore.collection<UserPost>('/register/' + userId + '/feed post').valueChanges();
   }
 }

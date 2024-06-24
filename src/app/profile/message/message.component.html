@@ -1,0 +1,46 @@
+<div fxLayout="row" fxLayoutAlign="center center" style="min-height: 100vh;">
+<div class="message-container">
+  <div class="header">
+    <img [src]="profileImage" alt="Profile Picture" class="profile-pic">
+    <div class="user-info">
+      <span class="name">{{ receiverDetails.name }}</span>
+      <span class="status-text">Offline</span>
+    </div>
+  </div>
+  <div class="message-list">
+    <div *ngFor="let message of messages"
+      [ngClass]="{'sender': message.senderId === senderId, 'receiver': message.senderId !== senderId}">
+      <div fxLayout="column" fxLayoutAlign="space-between">
+        <div class="message-content">
+          {{ message.content }}
+        </div>
+        <div fxLayout="row" fxLayoutAlign="end end" class="message-info">
+          <span class="timestamp">{{ message.timestamp }}</span>
+          <span class="status">
+            <ng-container *ngIf="message.status === 'sent'">
+              <span class="material-symbols-outlined">check</span>
+            </ng-container>
+            <ng-container *ngIf="message.status === 'received'">
+              <span class="material-symbols-outlined">check_circle</span>
+            </ng-container>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <form [formGroup]="form">
+    <div class="message-input">
+      <mat-form-field appearance="outline">
+        <mat-label>Type your message...</mat-label>
+        <input matInput [formControl]="form.controls['messageInput']">
+        <mat-icon matSuffix (click)="toggleEmojiPicker()">sentiment_very_satisfied</mat-icon>
+      </mat-form-field>
+      <!-- Emoji picker -->
+      <div class="emoji-picker-container" *ngIf="showEmojiPicker">
+        <emoji-mart (emojiClick)="insertEmoji($event)"></emoji-mart>
+      </div>
+      <button (click)="sendMessage()">Send</button>
+    </div>
+  </form>
+</div>
+</div>

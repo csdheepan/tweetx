@@ -114,6 +114,11 @@ mat-card {
   height: 70vh;
 }
 
+mat-icon{
+  position: relative;
+  right: 2px;
+}
+
 @media screen and (max-width: 520px) {
   button {
     font-size: 11px;

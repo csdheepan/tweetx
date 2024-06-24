@@ -1,0 +1,37 @@
+<div class="body">
+  <!-- Navigation button to all users -->
+  <div fxLayout="row" fxLayoutAlign="end end">
+    <button mat-raised-button class="msg-btn" color="accent" (click)="navigateAllUsers()">
+      <mat-icon>near_me</mat-icon>
+    </button>
+  </div>
+
+  <!-- Displaying processed messages -->
+  <div>
+    <div *ngFor="let message of messages; let i = index" (click)="openMessage(message)" style="cursor: pointer;">
+      <mat-card class="mat-elevation-z8">
+        <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="10px">
+          <!-- User profile image -->
+          <div class="small-container">
+            <img [src]="message.profileImg" width="75px" height="75px">
+          </div>
+          <!-- Message information -->
+          <div fxLayout="column" class="info-container">
+            <h3 class="name-text">{{ message.name }}</h3>
+            <p>{{ message.content }}</p>
+          </div>
+          <!-- Message timestamp -->
+          <div fxLayout="column" fxLayoutAlign="space-between start" class="small-container">
+            <p class="date-value">{{ message.date }}</p>
+            <p class="time-value">{{ message.timestamp }}</p>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+
+    <!-- Display message when no messages are available -->
+    <div *ngIf="showNoMessage" fxLayout="row" fxLayoutAlign="center center" class="no-msg">
+      <h2 class="big-text">No Messages Sent by you</h2>
+    </div>
+  </div>
+</div>

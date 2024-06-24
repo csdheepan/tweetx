@@ -13,17 +13,17 @@ import { Observable, from } from 'rxjs';
 
 export class AuthenticationService {
 
-  constructor(private afs: AngularFirestore) { }
+  constructor(private firestore: AngularFirestore) { }
 
   /**
    * Registers a new user.
    * @param signUp The SignUp object containing user registration details.
    */
   signup(signUp: SignUp) {
-    const id = this.afs.createId(); // Generate a ID
+    const id = this.firestore.createId(); // Generate a ID
     signUp.id = id;
     // Use set to store the data with the  document ID
-    return from(this.afs.collection('/register').doc(id).set(signUp));
+    return from(this.firestore.collection('/register').doc(id).set(signUp));
   }
 
 
@@ -32,7 +32,7 @@ export class AuthenticationService {
  * @returns An observable that emits an array of registered users.
  */
   getRegisterUser():Observable<SignUp[]> {
-    return this.afs.collection<SignUp>('/register').valueChanges()
+    return this.firestore.collection<SignUp>('/register').valueChanges()
   }
 
 }

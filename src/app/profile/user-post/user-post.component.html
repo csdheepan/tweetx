@@ -62,10 +62,10 @@
 
                             <div fxLayout="row" fxLayoutAlign="start" fxLayoutGap="20px">
                                 <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
-                                [theme]="{ width: '60px', height: '20px' }"></ngx-skeleton-loader>
+                                [theme]="{ width: '60px', height: '30px' }"></ngx-skeleton-loader>
                                 <button class="edit-button" *ngIf="!loader" (click)="editPost(user,'edit')">Edit</button>
                                 <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
-                                [theme]="{ width: '60px', height: '20px' }"></ngx-skeleton-loader>
+                                [theme]="{ width: '60px', height: '30px' }"></ngx-skeleton-loader>
                                 <button class="delete-button" *ngIf="!loader" (click)="deletePost(user)">Delete</button>
                             </div>
     

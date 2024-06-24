@@ -11,14 +11,14 @@ export class Login {
     userName !: string;
 }
 
-export class Users{
+export class Users {
     name !: string;
     profileImg !: string
     id !: string;
     status !: number;
 }
 
-export class UserPost{
+export class UserPost {
     content !: string;
     id !: string
     name !: string;
@@ -27,8 +27,24 @@ export class UserPost{
     postId !: string
 }
 
-export class UserProfile{
+export class UserProfile {
     name !: string;
     profileImg !: string
     id !: string;
+}
+
+export class Chats {
+    content !: string;
+    senderId !: string;
+    receiverId !: string;
+    timestamp !: string;
+    date !: string;
+    status !: string;
+}
+
+export class Message {
+    name !: string;
+    profileImg !: string;
+    receiverId!: string;
+    chat !: Chats[];
 }

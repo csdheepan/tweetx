@@ -25,8 +25,8 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
   loader: boolean = true;
   serviceFlag: boolean = false;
   showEditButton: boolean = true;
-  disableFollowButtons: boolean=false;
-  showBackButton: boolean=false;
+  disableFollowButtons: boolean = false;
+  showBackButton: boolean = false;
   userPost: UserPost[] = [];
   followerData: Users[] = [];
   followingData: Users[] = [];
@@ -53,37 +53,50 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     this.loadUserProfile();
   }
 
+  /**
+  * Sets up user details for the profile view component.
+  * 
+  * This component serves two purposes:
+  * 1. For the logged-in user to view and perform actions on their own profile, such as showing posts, following, or unfollowing.
+  * 2. For the logged-in user to view another user's profile without being able to perform any actions.
+  * 
+  * The method checks if query parameters are present:
+  * - If no query parameters are found, it initializes the logged-in user's profile.
+  * - If query parameters are present, it initializes the profile view for another user.
+  */
   private setupUserDetails(): void {
     this.activatedRoute.queryParams.subscribe((params: any) => {
       if (Object.keys(params).length === 0) {
-        this.setUserDetailsFromStorage(); // loggedIn user profile
+        this.setUserDetailsFromStorage(); // Initialize logged-in user's profile
       } else {
-        this.setUserDetailsFromParams(params);  // initialize the profile view for an individual user
+        this.setUserDetailsFromParams(params);  // Initialize another user's profile view
       }
     });
   }
 
-/**
- * This method is used to initialize the profile view for the logged-in user.
- */
+  /**
+   * This method is used to initialize the profile view for the logged-in user.
+   */
   private setUserDetailsFromStorage(): void {
     const userDetailsJson: string = this.store.getItem("USER_DETAILS");
     this.userDetails = userDetailsJson ? JSON.parse(userDetailsJson) : null;
     this.person = this.userDetails?.profileImg || this.person;
   }
 
-/**
- * This method is used to initialize the profile view for an individual user 
- * when their profile is accessed via query parameters.
- * 
- * @param params The user details passed as route query parameters.
- */
-  private setUserDetailsFromParams(params:SignUp): void {
+  /**
+   * Initializes the profile view for an individual user when accessed via query parameters.
+   * 
+   * Called when navigating from the user component to the view profile component.
+   * Updates user details, displays the profile image, and adjusts the UI elements accordingly.
+   * 
+   * @param params The user details passed as route query parameters.
+   */
+  private setUserDetailsFromParams(params: SignUp): void {
     this.userDetails = params;
     this.person = this.userDetails.profileImg;
-    this.showEditButton = false;
-    this.disableFollowButtons = true;
-    this.showBackButton = true;
+    this.showEditButton = false;          // Hide edit button for other user's profile
+    this.disableFollowButtons = true;     // Disable follow/unfollow buttons
+    this.showBackButton = true;           // Show back button for navigation
   }
 
   // Load user profile including posts, followers, and following status
@@ -176,8 +189,8 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     this.followerData = this.allUserstatus.filter((v: Users) => v.status === 0);
     this.followingData = this.allUserstatus.filter((v: Users) => v.status === 1);
 
-    // Set loader flag to false after a delay of 1.5 seconds (1500 milliseconds)
-    setTimeout(() => this.loader = false, 1500);
+    // Set loader flag to false after a delay of less than 1 second (800 milliseconds)
+    setTimeout(() => this.loader = false, 800);
 
     // Update user status in the service if not already updated
     if (!this.serviceFlag) {
@@ -186,18 +199,18 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     }
   }
 
- /**
- * Map profile images for each user status entry.
- * 
- * When a user updates their profile image (avatar), the change is reflected in the 
- * registered user details (UserProfile) but not directly in the user status entries.
- * This is because updating user statuses in a NoSQL database can be complex and inefficient.
- * 
- * To address this, we map the profile images from the registered user details to the 
- * corresponding user statuses based on the user ID. This ensures that the most current 
- * profile image is displayed for each user status entry without needing to update the 
- * user status records directly.
- */
+  /**
+  * Map profile images for each user status entry.
+  * 
+  * When a user updates their profile image (avatar), the change is reflected in the 
+  * registered user details (UserProfile) but not directly in the user status entries.
+  * This is because updating user statuses in a NoSQL database can be complex and inefficient.
+  * 
+  * To address this, we map the profile images from the registered user details to the 
+  * corresponding user statuses based on the user ID. This ensures that the most current 
+  * profile image is displayed for each user status entry without needing to update the 
+  * user status records directly.
+  */
   private mapProfileImage(): void {
     this.allUserstatus.forEach((obj: Users) => {
       const matchedUser = this.userProfile.find((user: UserProfile) => user.id === obj.id);
@@ -272,7 +285,7 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     });
   }
 
-  navigateAllUsers(){
+  navigateAllUsers() {
     this.router.navigate(['profile/full/users'])
   }
 

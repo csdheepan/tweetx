@@ -6,6 +6,8 @@ import { UserComponent } from './user/user.component';
 import { FeedComponent } from './feed/feed.component';
 import { UserPostComponent } from './user-post/user-post.component';
 import { AuthGuard } from '../core/guard/auth-guard';
+import { MessageComponent } from './message/message.component';
+import { UserMessageComponent } from './user-message/user-message.component';
 
 const routes: Routes = [
   {
@@ -32,6 +34,14 @@ const routes: Routes = [
       {
         path: 'user-profile/:id',
         component: ViewProfileComponent
+      },
+      {
+        path: 'message',
+        component: MessageComponent
+      },
+      {
+        path: 'users-message',
+        component: UserMessageComponent
       }
 
     ]

@@ -11,7 +11,7 @@ import { Observable, from } from 'rxjs';
 })
 export class PostServices {
 
-  constructor(private afs: AngularFirestore) { }
+  constructor(private firestore: AngularFirestore) { }
 
   /**
    * Posts new content created by a user.
@@ -20,11 +20,11 @@ export class PostServices {
    * @returns An observable that completes when the post is created.
    */
   postContent(postObj:UserPost, userDetails: SignUp): Observable<void> {
-    const generateId = this.afs.createId(); // Generate an ID
+    const generateId = this.firestore.createId(); // Generate an ID
     postObj.id = userDetails.id;
     postObj.postId = generateId;
 
-    return from(this.afs.collection(`/register/${userDetails.id}/feed post`).doc(generateId).set(postObj));
+    return from(this.firestore.collection(`/register/${userDetails.id}/feed post`).doc(generateId).set(postObj));
   }
 
   /**
@@ -33,7 +33,7 @@ export class PostServices {
    * @returns An observable that emits an array of user posts.
    */
   getUserPost(userDetails: SignUp): Observable<UserPost[]> {
-    return this.afs.collection<UserPost>(`/register/${userDetails.id}/feed post`).valueChanges();
+    return this.firestore.collection<UserPost>(`/register/${userDetails.id}/feed post`).valueChanges();
   }
 
   /**
@@ -45,7 +45,7 @@ export class PostServices {
   editContent(postObj:UserPost, userDetails: SignUp): Observable<void> {
     postObj.id = userDetails.id;
 
-    return from(this.afs.collection('register').doc(userDetails.id).collection('feed post').doc(postObj.postId).set(postObj, { merge: true }));
+    return from(this.firestore.collection('register').doc(userDetails.id).collection('feed post').doc(postObj.postId).set(postObj, { merge: true }));
   }
 
   /**
@@ -55,6 +55,6 @@ export class PostServices {
    * @returns An observable that completes when the delete operation is finished.
    */
   deleteContent(postId: string, userDetails: SignUp): Observable<void> {
-    return from(this.afs.collection('register').doc(userDetails.id).collection('feed post').doc(postId).delete());
+    return from(this.firestore.collection('register').doc(userDetails.id).collection('feed post').doc(postId).delete());
   }
 }

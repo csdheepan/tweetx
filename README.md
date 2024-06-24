@@ -52,11 +52,11 @@ Link: [https://tweet-x-18.web.app](https://tweet-x-18.web.app)
 - **Following Friends:** Users can follow and stay updated on posts from friends.
 - **Avatar Customization:** Provide users the ability to change their avatars.
 - **Add, Update, and Delete Posts:** Users can manage their posts by adding new posts, updating existing ones, and deleting posts they no longer want to keep.
+- **Direct Messaging:** Allow users to send messages to each other.
 - **Responsive Design:** The application is fully responsive for a seamless user experience.
 - **Preview the diagram for better understanding:** ![Application Functionality Diagram](src/assets/images/application-diagram.jpg)
 
 ## Future Improvements:
-- **Direct Messaging:** Allow users to send messages to each other.
 - **Additional features:** Enhancements done based on user experience.
 
 ## Database:

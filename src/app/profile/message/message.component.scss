@@ -1,0 +1,176 @@
+.message-container {
+  display: flex;
+  flex-direction: column;
+  height: 500px;
+  max-width: 520px;
+  border: 1px solid #ccc;
+  border-radius: px;
+  margin: auto;
+  margin-top: 15px;
+}
+
+.header {
+  background-color: #f0f2f5;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.profile-pic {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.name {
+  font-weight: 500;
+  font-size: 16px;
+  margin-top: 8px;
+}
+
+.message-list {
+  flex: 1;
+  overflow-y: scroll;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+.message-input {
+  display: flex;
+  align-items: center;
+  padding: 0px 10px;
+  background: #efefef;
+  margin: 2px;
+  position: relative;
+}
+
+mat-form-field {
+  width: 90%;
+  position: relative;
+  top: 15px;
+}
+
+button {
+  background-color: #ff4081;
+  color: #fff;
+  border: 1px solid #ff4081;
+  padding: 10px;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px 0px 0 20px;
+}
+
+/* Sender message styles */
+.sender {
+  background-color: rgb(240 242 245);
+  color: black;
+  border-top-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px;
+  padding: 10px 20px;
+  margin: 10px 0 0px 60px;
+  width: 75%;
+}
+
+/* Receiver message styles */
+.receiver {
+  background-color: #e0e0e0;
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px;
+  padding: 10px 20px;
+  margin: 10px 0;
+  width: 75%;
+}
+
+.timestamp {
+  margin-left: 10px;
+  font-size: 10px;
+}
+
+.status {
+  position: relative;
+  top: 7px;
+  transform: scale(0.7);
+  left: 4px;
+}
+
+.status-text {
+  margin-top: 8px;
+  color: #8a8a8a;
+  font-size: 12px;
+}
+
+mat-icon {
+  cursor: pointer;
+}
+
+@media screen and (max-width:580px) {
+  #message-text {
+    font-size: 12px;
+  }
+
+  .receiver,
+  .sender {
+    padding: 10px 5px 5px 10px;
+    font-size: 12px;
+  }
+
+  .status {
+    position: relative;
+    top: 5px;
+    transform: scale(0.5);
+    left: 1px;
+  }
+
+  .message-container {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .emoji-picker-container {
+    width: 200px !important;
+  }
+
+  mat-form-field mat-label {
+    font-size: 12px;
+  }
+}
+
+::ng-deep .emoji-mart .emoji-mart-anchors {
+  display: none;
+}
+
+::ng-deep .emoji-mart .emoji-mart-search {
+  display: none;
+}
+
+.emoji-picker-container {
+  position: absolute;
+  bottom: 70px;
+  right: 10px;
+  z-index: 1000;
+  padding: 10px 15px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  height: 200px;
+  overflow-y: scroll;
+}
+
+emoji-mart {
+  width: 300px;
+  height: 250px;
+}

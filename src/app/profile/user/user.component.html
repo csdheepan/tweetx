@@ -26,14 +26,14 @@
                 <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse" [theme]="{ width: '85px', height: '30px', position: relative, top: '8px' }"></ngx-skeleton-loader>
                 <p class="title" *ngIf="!loader" (click)="navigateUserProfile(user)">{{user.name}}</p>
                 <div *ngIf="user.status === 0" fxLayout="row" fxLayoutGap="20px">
-                  <button (click)="loadFeed(user)" class="feed-view-icon" [disabled]="loader">
-                    <mat-icon>description</mat-icon>
+                  <button (click)="openMessage(user)" class="feed-view-icon" [disabled]="loader">
+                    <mat-icon>near_me</mat-icon>
                   </button>
                   <button mat-flat-button color="accent" class="follow-btn" [disabled]="loader" (click)="followAction(user, i)">Follow</button>
                 </div>
                 <div *ngIf="user.status === 1" fxLayout="row" fxLayoutGap="20px">
-                  <button (click)="loadFeed(user)" class="feed-view-icon" [disabled]="loader">
-                    <mat-icon>description</mat-icon>
+                  <button (click)="openMessage(user)" class="feed-view-icon" [disabled]="loader">
+                    <mat-icon>near_me</mat-icon>
                   </button>
                   <button mat-flat-button color="accent" class="following-btn" [disabled]="loader" (click)="unFollowAction(user, i)">Following</button>
                 </div>
