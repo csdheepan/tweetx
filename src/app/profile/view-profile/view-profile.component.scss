@@ -108,7 +108,11 @@ mat-card {
 
 .post-img {
     width: 75px;
-    box-shadow: 1px 1px 10px 5px #ff759da8;
+}
+
+.profile-img{
+    box-shadow:0px 0px 5px 5px rgb(255 117 157 / 45%);
+    margin: 15px;
 }
 
 .following-btn {

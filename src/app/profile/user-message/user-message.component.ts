@@ -58,8 +58,8 @@ export class UserMessageComponent implements OnInit {
         id: user.receiverId,
         name: user.name,
         profileImg: user.profileImg,
-        emailId: '', // Placeholder for email ID (if needed in future)
-        password: '' // Placeholder for password (if needed in future)
+        emailId: '',
+        password: ''
       }
     });
   }

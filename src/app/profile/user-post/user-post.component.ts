@@ -9,11 +9,16 @@ import { DateUtilsService } from 'src/app/shared/service/date-utils.service';
 import { ErrorHandlerService } from 'src/app/shared/service/error-handler.service';
 import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
 
+/**
+ * Component responsible for handling loggedIn user post (Create,Read,Update,delete -post (CRUD)).
+ */
+
 @Component({
   selector: 'app-user-post',
   templateUrl: './user-post.component.html',
   styleUrls: ['./user-post.component.scss']
 })
+
 export class UserPostComponent {
 
   profileImg!: string;
@@ -59,9 +64,7 @@ export class UserPostComponent {
     this.profileImg = this.userDetails.profileImg;
   }
 
-   /**
-   * Retrieves user post which posted by loggedIn user.
-   */
+  // Retrieves user post which posted by loggedIn user
   private retreiveUserPost(): void {
     this.subscription = this.userService.getUserPost(this.userDetails.id).subscribe((data: any) => {
       this.userPost = data;
@@ -79,9 +82,7 @@ export class UserPostComponent {
     }, 1500);
   }
 
-   /**
-   * To toggle show and hide emoji.
-   */
+  // To toggle show and hide emoji.
   toggleEmojiPicker(): void {
     this.showEmojiPicker = this.dateUtilsService.toggleEmojiPicker(this.showEmojiPicker);
   }

@@ -6,8 +6,13 @@
       <div fxLayout="column" fxLayoutAlign="center" class="search-field">
         <mat-form-field appearance="outline">
           <mat-label>Search</mat-label>
-          <input matInput (keyup)="filterUsers($event)">
+          <input matInput (keyup)="filterUsers($event)"  [matAutocomplete]="auto">
           <mat-icon matSuffix>search</mat-icon>
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let user of allUserStatus" [value]="user.name">
+              {{ user.name }}
+            </mat-option>
+          </mat-autocomplete>
         </mat-form-field>
       </div>
   
@@ -15,7 +20,7 @@
       <div *ngFor="let user of allUserStatus, let i = index">
         <mat-card class="mat-elevation-z8">
           <div fxLayout="row" fxLayoutAlign="space-between">
-            <div fxLayout="row" fxLayoutAlign="center center" class="profile-img-container" (click)="navigateUserProfile(user)">
+            <div fxLayout="row" fxLayoutAlign="center center" class="profile-img-container" (click)="navigateViewProfile(user)">
               <!-- ngx-skeleton-loader for loading state -->
               <ngx-skeleton-loader *ngIf="loader" appearance="circle" animation="pulse" [theme]="{ width: '80px', height: '80px' }"></ngx-skeleton-loader>
               <img [src]="!loader ? user.profileImg : ''" *ngIf="!loader">
@@ -24,7 +29,7 @@
               <div class="wrap-container">
                 <!-- ngx-skeleton-loader for loading state -->
                 <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse" [theme]="{ width: '85px', height: '30px', position: relative, top: '8px' }"></ngx-skeleton-loader>
-                <p class="title" *ngIf="!loader" (click)="navigateUserProfile(user)">{{user.name}}</p>
+                <p class="title" *ngIf="!loader" (click)="navigateViewProfile(user)">{{user.name}}</p>
                 <div *ngIf="user.status === 0" fxLayout="row" fxLayoutGap="20px">
                   <button (click)="openMessage(user)" class="feed-view-icon" [disabled]="loader">
                     <mat-icon>near_me</mat-icon>
@@ -41,30 +46,6 @@
             </div>
           </div>
         </mat-card>
-      </div>
-    </div>
-  
-    <!-- Display individual user post -->
-    <div *ngIf="showPost">
-      <button mat-flat-button class="back-btn" (click)="handleView()">Back</button>
-      <div *ngFor="let user of individualFeed">
-        <mat-card class="mat-elevation-z8">
-          <div fxLayout="row" fxLayoutGap="30px">
-            <div fxLayout="row" fxLayoutAlign="center center" class="profile-img-container">
-              <img [src]="person">
-            </div>
-            <div fxLayout="column" fxLayoutAlign="space-between" class="user-details-container">
-              <div fxLayout="row wrap" fxLayoutAlign="space-between center">
-                <p class="title">{{user.name}}</p>
-                <p class="date-value">{{user.date}}</p>
-              </div>
-              <p class="value">{{user.content}}</p>
-            </div>
-          </div>
-        </mat-card>
-      </div>
-      <div *ngIf="individualFeed.length === 0" fxLayout="row" fxLayoutAlign="center center" class="no-posts">
-        <h2 class="big-text">No posts or feeds provided by this user.</h2>
       </div>
     </div>
   </div>

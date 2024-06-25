@@ -17,6 +17,10 @@ mat-card {
   width: 20%;
 }
 
+.name-text,p {
+  font-family: system-ui;
+}
+
 @media screen and (max-width: 580px) {
   .msg-btn {
     height: 60px;
@@ -25,20 +29,20 @@ mat-card {
 
   .name-text {
     font-size: 14px;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     font-weight: 500;
     line-height: 18px;
   }
 
   p {
-    font-size: 10px;
+    font-size: 9px;
     line-height: 20px;
     margin-bottom: 0px;
   }
 
   img {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
   }
 }
 

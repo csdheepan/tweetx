@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { SignUp, UserPost, UserProfile, Users } from 'src/app/core/model/user-model';
-import { PostServices } from 'src/app/core/services/post-service';
+import { SignUp, UserProfile, Users } from 'src/app/core/model/user-model';
 import { UserService } from 'src/app/core/services/user-service';
 import { ErrorHandlerService } from 'src/app/shared/service/error-handler.service';
 import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
 
 /**
- * UserComponent is responsible for managing user-related functionalities such as loading users, following/unfollowing actions, and displaying user posts.
+ * UserComponent is responsible for managing user-related functionalities such as loading users, following/unfollowing actions.
  */
 
 @Component({
@@ -19,19 +18,16 @@ import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
 export class UserComponent implements OnInit {
 
  person:string = "assets/images/person.jpg";
- showPost: boolean = false;
  showUser: boolean = true;
  loader: boolean = true;
  loggedUser!: SignUp;
  allUserStatus: Users[] = [];
  cloneUserStatus: Users[]=[];
- individualFeed: UserPost[] = [];
  userProfile: UserProfile[] = [];
- private subscription!: Subscription;
+ private subscriptions: Subscription[] = [];
 
   constructor(
     private userService: UserService,
-    private postServices: PostServices,
     private store: InMemoryCache,
     private errorHandlerService: ErrorHandlerService,
     private router:Router
@@ -48,25 +44,6 @@ export class UserComponent implements OnInit {
   private getUserDetails(): any {
     const userDetailsJson:string = this.store.getItem("USER_DETAILS");
     return userDetailsJson ? JSON.parse(userDetailsJson) : null;
-  }
-
-  // Method to load feed content for a specific user
-  loadFeed(userDetails: SignUp): void {
-   this.subscription = this.postServices.getUserPost(userDetails).subscribe((data: UserPost[]) => {
-      this.showPost = true;
-      this.showUser = false;
-      this.individualFeed = data;
-      this.person = userDetails.profileImg;
-    },(err:any)=>{
-      this.errorHandlerService.handleErrors(err,"While retrieve user post");
-    });
-  }
-
-  // Method to handle navigation back to the user list
-  handleView(): void {
-    this.showPost = false;
-    this.showUser = true;
-    this.individualFeed = [];
   }
 
   // Method to perform follow action for a user
@@ -97,23 +74,25 @@ export class UserComponent implements OnInit {
    * After retrieving user data, it subsequently calls loadUserStatus() to load the statuses of users and map them to profile images.
    */
   private loadUser(): void {
-    this.subscription = this.userService.getAllUsers().subscribe((users: SignUp[]) => {
+   const userSubscription = this.userService.getAllUsers().subscribe((users: SignUp[]) => {
       this.userProfile = users.map(({ id, profileImg,name }: UserProfile) => ({ id, profileImg,name }));
       this.loadUserStatus();
     },(err:any)=>{
       this.errorHandlerService.handleErrors(err,"While retrieve all users");
     });
+    this.subscriptions.push(userSubscription);
   }
 
   // Load user status and map profile images
   private loadUserStatus(): void {
-    this.subscription = this.userService.getUserStatus(this.loggedUser.id).subscribe((data: any) => {
+    const userStatusSubscription = this.userService.getUserStatus(this.loggedUser.id).subscribe((data: any) => {
       this.allUserStatus = data.users;
       this.cloneUserStatus = [...this.allUserStatus]
       this.mapProfileImages();
     },(err:any)=>{
       this.errorHandlerService.handleErrors(err,"While retrieve user status");
     });
+    this.subscriptions.push(userStatusSubscription);
 
    // Set loader flag to false after a delay of 1.5 seconds (1500 milliseconds)
     setTimeout(() => {
@@ -149,7 +128,7 @@ export class UserComponent implements OnInit {
  * 
  * @param user The user object containing the details of the specific user.
  */
-  navigateUserProfile(user: Users) {
+navigateViewProfile(user: Users) {
     this.router.navigate(['profile/full/user-profile', user.id], {
       queryParams: {
         id:user.id,
@@ -161,6 +140,7 @@ export class UserComponent implements OnInit {
     });
   }  
 
+   // Navigate to the message component for sending a message to a specific user
   openMessage(user:Users){
     this.router.navigate(['profile/full/message'],{
       queryParams: {
@@ -174,8 +154,6 @@ export class UserComponent implements OnInit {
   }
 
    ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }

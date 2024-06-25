@@ -41,7 +41,7 @@
                     <div fxLayout="row" fxLayoutGap="25px">
                         <div fxLayout="row" fxLayoutAlign="center center" style="width: 30%;">
                             <ngx-skeleton-loader *ngIf="loader" appearance="circle" animation="pulse"
-                                [theme]="{ width: '105px', height: '105px' }"></ngx-skeleton-loader>
+                                [theme]="{ width: '90px', height: '90px' }"></ngx-skeleton-loader>
                             <img [src]="!loader ? profileImg : ''" *ngIf="!loader">
                         </div>
                         <div fxLayout="column" fxLayoutAlign="space-between" style="width: 70%;" fxLayoutGap="10px">
@@ -57,7 +57,7 @@
                             </div>
                             <!-- Ngx-skeleton-loader -->
                             <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
-                                [theme]="{ width: '100%', height: '13vh' }"></ngx-skeleton-loader>
+                                [theme]="{ width: '100%', height: '10vh' }"></ngx-skeleton-loader>
                             <p class="value" *ngIf="!loader">{{user.content}}</p>
 
                             <div fxLayout="row" fxLayoutAlign="start" fxLayoutGap="20px">
@@ -71,7 +71,7 @@
     
                             <div fxLayout="row" fxLayoutAlign="end">
                                 <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
-                                [theme]="{ width: '60px', height: '20px' }"></ngx-skeleton-loader>
+                                [theme]="{ width: '50px', height: '15px' }"></ngx-skeleton-loader>
                             <p class="time-value" *ngIf="!loader">{{user.time}}</p> 
                             </div>
     

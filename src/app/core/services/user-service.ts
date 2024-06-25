@@ -26,9 +26,9 @@ export class UserService {
    * @param loggedId The ID of the logged-in user.
    * @param allUser An array containing the user data.
    */
-  setUserStatus(loggedId: string, allUser:Users[]): void {
+  setUserStatus(loggedId: string, allUser:Users[]) {
     const dataObject = { users: allUser };
-    this.firestore.collection('/register').doc(loggedId).collection('profile').doc(loggedId).set(dataObject);
+    return from(this.firestore.collection('/register').doc(loggedId).collection('profile').doc(loggedId).set(dataObject));
   }
 
   /**

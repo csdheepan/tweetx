@@ -39,7 +39,7 @@ export class MessageService {
     * @param receiverId The ID of the logged-in user (receiver).
     * @returns An Observable of the messages received.
     */
-  getReceiverMessages(senderId: string, receiverUserId: string) {
+  getMessages(senderId: string, receiverUserId: string) {
     return this.firestore.collection('/register').doc(senderId).collection('message').doc(receiverUserId).collection('chat collection').doc(receiverUserId).valueChanges();
   }
 

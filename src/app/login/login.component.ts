@@ -5,7 +5,7 @@ import { AuthenticationService } from '../core/services/authentication-service';
 import { UserService } from '../core/services/user-service';
 import { InMemoryCache } from '../shared/service/memory-cache.service';
 import { Login, SignUp } from '../core/model/user-model';
-import { Subscription } from 'rxjs';
+import { Subscription, take } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { AngularMaterialModule } from '../angular-material/angular-material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -24,13 +24,13 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 export class LoginComponent implements OnInit {
 
   banner = "assets/images/login-banner.png";
+  errorMessage !:string;
   loader: boolean = false;
   showButton: boolean = true;
   hide: boolean = true;
   isLoggedIn: boolean = true;
   loginError: boolean = false;
   signupError: boolean = false;
-  performEmailValidation: boolean = true;
   signupForm: FormGroup = Object.create(null);
   loginForm: FormGroup = Object.create(null);
   signupDetails!: SignUp;
@@ -69,7 +69,6 @@ export class LoginComponent implements OnInit {
     this.loginForm.reset();
     this.loginError = false;
     this.signupError = false;
-    this.performEmailValidation = true;
   }
 
   checkPasswordMatch(): void {
@@ -87,9 +86,9 @@ export class LoginComponent implements OnInit {
   */
   checkValidation(email: string): void {
     if (!email || !this.signupForm.controls['email'].valid) return;
-   const userSubscription= this.userService.getAllUsers().subscribe((users: SignUp[]) => {
+   const userSubscription= this.userService.getAllUsers().pipe(take(1)).subscribe((users: SignUp[]) => {
       const emailExists:boolean = users.some((user: any) => user.email === email);
-      if (emailExists && this.performEmailValidation) this.signupForm.controls['email'].setErrors({ 'emailExists': true });
+      if (emailExists) this.signupForm.controls['email'].setErrors({ 'emailExists': true });
     });
     this.subscriptions.push(userSubscription);
   }
@@ -129,12 +128,14 @@ export class LoginComponent implements OnInit {
         this.resetForms();
       } else {
         console.log('Invalid login credentials');
+        this.errorMessage = "Invalid Login Credentials"
         this.loginError = true;
         this.loader = false;
         this.showButton = true;
       }
     }, (error: any) => {
       console.error('Error retrieving user details:', error);
+      this.errorMessage = "Login Failed"
       this.loader = false;
       this.showButton = true;
     });
@@ -146,14 +147,11 @@ export class LoginComponent implements OnInit {
    * Create a new user account and store the details in the database.
    * The user's name, email, and password are obtained from the signup form,
    * and upon successful creation of the account, the user is redirected to the login page.
-   * The `performEmailValidation` flag is used to disable email validation during signup,
-   * preventing unnecessary validation errors from `valueChanges` triggers.
    */
   signup(): void {
     this.loader = true;
     this.showButton = false;
     this.signupError = false;
-    this.performEmailValidation = false;
    setTimeout(() => {
     const profileImg:string = "assets/images/person.jpg"; //user default profile image.
     this.signupDetails = {
@@ -172,11 +170,11 @@ export class LoginComponent implements OnInit {
       this.resetForms();
     }, (error: any) => {
       console.error('Error retrieving user details:', error);
+      this.errorMessage = "Signup Failed, Please Try again later"
       this.loader = false;
       this.showButton = true;
       this.signupError = true;
       this.isLoggedIn = false;
-      this.performEmailValidation = true;
     });
     this.subscriptions.push(signupSubscription);
    }, 1000);

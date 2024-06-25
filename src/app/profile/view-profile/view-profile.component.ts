@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Subscription } from 'rxjs';
+import { Subscription, take } from 'rxjs';
 import { EditProfileComponent } from '../modal/edit-profile/edit-profile.component';
 import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
 import { PostServices } from 'src/app/core/services/post-service';
@@ -33,8 +33,7 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
   allUserstatus: Users[] = [];
   userProfile: UserProfile[] = [];
   userDetails!: SignUp;
-  private getUserStatusSubscription!: Subscription;
-  private profileSubscription!: Subscription;
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private store: InMemoryCache,
@@ -58,11 +57,12 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
   * 
   * This component serves two purposes:
   * 1. For the logged-in user to view and perform actions on their own profile, such as showing posts, following, or unfollowing.
-  * 2. For the logged-in user to view another user's profile without being able to perform any actions.
+  * 2. For the logged-in user to view another user's profile without being able to perform any actions (purpose to view other users profile).
   * 
   * The method checks if query parameters are present:
   * - If no query parameters are found, it initializes the logged-in user's profile.
   * - If query parameters are present, it initializes the profile view for another user.
+  *   Note: query parameters passed user-component to view profile component
   */
   private setupUserDetails(): void {
     this.activatedRoute.queryParams.subscribe((params: any) => {
@@ -116,25 +116,23 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
   }
 
   private loadAllUser(): void {
-    this.profileSubscription = this.userService.getAllUsers().subscribe((data: SignUp[]) => {
+    const profileSubscription = this.userService.getAllUsers().pipe(take(1)).subscribe((data: SignUp[]) => {
       // Map the response to extract user IDs, profile images, and names
       this.userProfile = data.map(({ id, profileImg, name }: UserProfile) => ({ id, profileImg, name }));
       this.loadUserStatus();
     }, (err: any) => {
       this.errorHandlerService.handleErrors(err, 'While retrieve all users');
     });
+    this.subscriptions.push(profileSubscription);
   }
 
   /**
    * Load user status including followers and following users
-   * 1. If a new user use application, he doesn't have any user status with followers and following, initialize all users with status 0 (not following).
+   * 1. If a new user use application, he doesn't have any user status with followers and following, initialize all users with status 0 (Followers || not following).
    * 2. If a user already has a user status,but we update status 0 for new upcoming users.
    */
   private loadUserStatus(): void {
-    if (this.getUserStatusSubscription) {
-      this.getUserStatusSubscription.unsubscribe();
-    }
-    this.getUserStatusSubscription = this.userService.getUserStatus(this.userDetails.id).subscribe((datas: any) => {
+    const getUserStatusSubscription = this.userService.getUserStatus(this.userDetails.id).subscribe((datas: any) => {
       if (datas) {
         this.allUserstatus = datas.users;
         this.updateUserStatus();
@@ -144,6 +142,7 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     }, (err: any) => {
       this.errorHandlerService.handleErrors(err, 'While retrieve user status');
     });
+    this.subscriptions.push(getUserStatusSubscription);
   }
 
   /**
@@ -159,7 +158,10 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     }
     // Initialize follower data with all users and status as 0 (not following)
     this.followerData = this.userProfile.map((user: UserProfile) => ({ ...user, status: 0 }));
-    this.userService.setUserStatus(this.userDetails.id, this.followerData);
+    this.userService.setUserStatus(this.userDetails.id,this.followerData).subscribe((data:any)=>{},
+    (err: any) => {
+      this.errorHandlerService.handleErrors(err, 'While update user status');
+    });
 
     this.allUserstatus = this.followerData;
     this.mapProfileImage();
@@ -194,7 +196,10 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
 
     // Update user status in the service if not already updated
     if (!this.serviceFlag) {
-      this.userService.setUserStatus(this.userDetails.id, this.allUserstatus);
+      this.userService.setUserStatus(this.userDetails.id, this.allUserstatus).subscribe((data:any)=>{},
+      (err: any) => {
+        this.errorHandlerService.handleErrors(err, 'While update user status');
+      });
       this.serviceFlag = true;
     }
   }
@@ -265,13 +270,13 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
 
   //Action to follow a user
   followAction(user: Users): void {
-    user.status = 1;
+    user.status = 1;  //1 -following action
     this.updateUserStatusData();
   }
 
   //Action to unfollow a user
   unFollowAction(user: Users): void {
-    user.status = 0;
+    user.status = 0; //0 - unfollow action
     this.updateUserStatusData();
   }
 
@@ -290,11 +295,6 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.getUserStatusSubscription) {
-      this.getUserStatusSubscription.unsubscribe();
-    }
-    if (this.profileSubscription) {
-      this.profileSubscription.unsubscribe();
-    }
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }

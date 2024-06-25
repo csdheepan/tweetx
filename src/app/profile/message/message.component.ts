@@ -54,7 +54,7 @@ export class MessageComponent implements OnInit {
 
   // Retrieve messages between logged in user and receiver
   private retrieveUserMessages(): void {
-    this.messageService.getReceiverMessages(this.senderId, this.receiverId)
+    this.messageService.getMessages(this.senderId, this.receiverId)
       .pipe(take(1))
       .subscribe(
         (receiverData: any) => {
@@ -62,7 +62,7 @@ export class MessageComponent implements OnInit {
           this.updateMessageStatuses('received');
         },
         (err: any) => {
-          this.errorHandlerService.handleErrors(err, "while fetching receiver messages");
+          this.errorHandlerService.handleErrors(err, "while fetching users messages");
         }
       );
   }
@@ -111,10 +111,12 @@ export class MessageComponent implements OnInit {
 
   // Store last sent message in a collection
   private storeLastMessage(lastMessage: any): void {
+
+    const trimmedContent = this.trimContent(lastMessage.content);
     const collection: Message = {
       profileImg: this.receiverDetails.profileImg,
       name: this.receiverDetails.name,
-      chat: lastMessage,
+      chat: { ...lastMessage, content: trimmedContent },
       receiverId: this.receiverId
     };
 
@@ -122,6 +124,10 @@ export class MessageComponent implements OnInit {
       (err: any) => {
         this.errorHandlerService.handleErrors(err, "while saving last chat message");
       })
+  }
+
+  private trimContent(content: string): string {
+    return content.length > 25 ? `${content.substring(0, 24)}...` : content;
   }
 
   // Create a new message object
