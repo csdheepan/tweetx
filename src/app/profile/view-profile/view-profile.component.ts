@@ -23,7 +23,6 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
   showFollower: boolean = false;
   showFollowing: boolean = false;
   loader: boolean = true;
-  serviceFlag: boolean = false;
   showEditButton: boolean = true;
   disableFollowButtons: boolean = false;
   showBackButton: boolean = false;
@@ -107,7 +106,7 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
 
   private loadUserPosts(): void {
     if (this.userDetails) {
-      this.postServices.getUserPost(this.userDetails).subscribe((data: UserPost[]) => {
+      this.postServices.getUserPost(this.userDetails).pipe(take(1)).subscribe((data: UserPost[]) => {
         this.userPost = data;
       }, (err: any) => {
         this.errorHandlerService.handleErrors(err, 'While retrieve user posts');
@@ -132,7 +131,7 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
    * 2. If a user already has a user status,but we update status 0 for new upcoming users.
    */
   private loadUserStatus(): void {
-    const getUserStatusSubscription = this.userService.getUserStatus(this.userDetails.id).subscribe((datas: any) => {
+    const getUserStatusSubscription = this.userService.getUserStatus(this.userDetails.id).pipe(take(1)).subscribe((datas: any) => {
       if (datas) {
         this.allUserstatus = datas.users;
         this.updateUserStatus();
@@ -163,6 +162,8 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
       this.errorHandlerService.handleErrors(err, 'While update user status');
     });
 
+    this.setLoaderFalse();
+
     this.allUserstatus = this.followerData;
     this.mapProfileImage();
   }
@@ -191,17 +192,19 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     this.followerData = this.allUserstatus.filter((v: Users) => v.status === 0);
     this.followingData = this.allUserstatus.filter((v: Users) => v.status === 1);
 
-    // Set loader flag to false after a delay of less than 1 second (800 milliseconds)
-    setTimeout(() => this.loader = false, 800);
+    this.setLoaderFalse();
 
-    // Update user status in the service if not already updated
-    if (!this.serviceFlag) {
-      this.userService.setUserStatus(this.userDetails.id, this.allUserstatus).subscribe((data:any)=>{},
-      (err: any) => {
-        this.errorHandlerService.handleErrors(err, 'While update user status');
-      });
-      this.serviceFlag = true;
-    }
+    this.userService.setUserStatus(this.userDetails.id, this.allUserstatus).subscribe((data:any)=>{},
+    (err: any) => {
+      this.errorHandlerService.handleErrors(err, 'While update user status');
+    });
+  }
+
+   // Set loader flag to false after a delay of 1.5 seconds (1500 milliseconds)
+   setLoaderFalse(): void {
+    setTimeout(() => {
+      this.loader = false;
+    }, 1500);
   }
 
   /**
@@ -282,10 +285,10 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
 
   // Update user status data in the database
   private updateUserStatusData(): void {
-    this.userService.followReqAction(this.allUserstatus, this.userDetails.id).subscribe((data: any) => {
-      this.followerData = this.allUserstatus.filter((v: Users) => v.status === 0);
-      this.followingData = this.allUserstatus.filter((v: Users) => v.status === 1);
-    }, (err: any) => {
+    this.followerData = this.allUserstatus.filter((v: Users) => v.status === 0);
+    this.followingData = this.allUserstatus.filter((v: Users) => v.status === 1);
+    this.userService.followReqAction(this.allUserstatus, this.userDetails.id).subscribe((data: any) => {}, 
+    (err: any) => {
       this.errorHandlerService.handleErrors(err, "while update user status data");
     });
   }

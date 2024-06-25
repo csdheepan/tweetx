@@ -7,6 +7,7 @@ import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
 import { SignUp, Chats, Message } from 'src/app/core/model/user-model';
 import { DateUtilsService } from 'src/app/shared/service/date-utils.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-message',
@@ -23,6 +24,7 @@ export class MessageComponent implements OnInit {
   receiverDetails!: SignUp;
   showEmojiPicker: boolean = false;
   form: FormGroup = Object.create(null);
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -54,7 +56,7 @@ export class MessageComponent implements OnInit {
 
   // Retrieve messages between logged in user and receiver
   private retrieveUserMessages(): void {
-    this.messageService.getMessages(this.senderId, this.receiverId)
+   const messageSubscription = this.messageService.getMessages(this.senderId, this.receiverId)
       .pipe(take(1))
       .subscribe(
         (receiverData: any) => {
@@ -65,6 +67,7 @@ export class MessageComponent implements OnInit {
           this.errorHandlerService.handleErrors(err, "while fetching users messages");
         }
       );
+      this.subscriptions.push(messageSubscription);
   }
 
   initForm(): void {
@@ -161,4 +164,7 @@ export class MessageComponent implements OnInit {
     this.showEmojiPicker = false;
   }
 
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+  }
 }

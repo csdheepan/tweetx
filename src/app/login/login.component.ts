@@ -26,7 +26,8 @@ export class LoginComponent implements OnInit {
   banner = "assets/images/login-banner.png";
   errorMessage !:string;
   loader: boolean = false;
-  showButton: boolean = true;
+  showLoginButton: boolean = true;
+  showSignupButton: boolean = true;
   hide: boolean = true;
   isLoggedIn: boolean = true;
   loginError: boolean = false;
@@ -110,7 +111,7 @@ export class LoginComponent implements OnInit {
   */
   login(): void {
     this.loader = true;
-    this.showButton = false;
+    this.showLoginButton = false;
     this.loginError = false;
    setTimeout(() => {
     const loginDetails: Login = {
@@ -124,20 +125,20 @@ export class LoginComponent implements OnInit {
         this.store.setItem("USER_DETAILS", JSON.stringify(user));
         this.router.navigate(["profile/full/user-profile"]);
         this.loader = false;
-        this.showButton = true;
+        this.showLoginButton = true;
         this.resetForms();
       } else {
         console.log('Invalid login credentials');
         this.errorMessage = "Invalid Login Credentials"
         this.loginError = true;
         this.loader = false;
-        this.showButton = true;
+        this.showLoginButton = true;
       }
     }, (error: any) => {
       console.error('Error retrieving user details:', error);
       this.errorMessage = "Login Failed"
       this.loader = false;
-      this.showButton = true;
+      this.showLoginButton = true;
     });
     this.subscriptions.push(loginSubscription);
    }, 1000);
@@ -150,7 +151,7 @@ export class LoginComponent implements OnInit {
    */
   signup(): void {
     this.loader = true;
-    this.showButton = false;
+    this.showSignupButton = false;
     this.signupError = false;
    setTimeout(() => {
     const profileImg:string = "assets/images/person.jpg"; //user default profile image.
@@ -164,7 +165,7 @@ export class LoginComponent implements OnInit {
    const signupSubscription = this.authenticationService.signup(this.signupDetails).subscribe((data: any) => {
       console.log('Signup successful');
       this.loader = false;
-      this.showButton = true;
+      this.showSignupButton = true;
       this.signupError = false;
       this.isLoggedIn = true;
       this.resetForms();
@@ -172,7 +173,7 @@ export class LoginComponent implements OnInit {
       console.error('Error retrieving user details:', error);
       this.errorMessage = "Signup Failed, Please Try again later"
       this.loader = false;
-      this.showButton = true;
+      this.showSignupButton = true;
       this.signupError = true;
       this.isLoggedIn = false;
     });

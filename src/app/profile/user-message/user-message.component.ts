@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { MessageService } from 'src/app/core/services/message.service';
 import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
 
@@ -12,6 +13,7 @@ export class UserMessageComponent implements OnInit {
 
   messages: any[] = [];
   showNoMessage: boolean = false;
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private messageService: MessageService,
@@ -25,10 +27,11 @@ export class UserMessageComponent implements OnInit {
 
      // Fetch user's message collection from the service
     if (userDetails && userDetails.id) {
-      this.messageService.getUserMessageCollection(userDetails.id).subscribe((data: any) => {
+     const userMessageSubscription= this.messageService.getUserMessageCollection(userDetails.id).subscribe((data: any) => {
         const messageCollection = data;
         this.processMessages(messageCollection);
       });
+      this.subscriptions.push(userMessageSubscription);
     } else {
       this.showNoMessage = true;
     }
@@ -62,5 +65,9 @@ export class UserMessageComponent implements OnInit {
         password: ''
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }

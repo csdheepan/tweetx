@@ -10,8 +10,7 @@
         <div fxLayout="row" fxLayoutAlign="space-around center" class="profile-container">
             <!-- Profile Image and Avatar Button -->
             <div fxLayout="column" fxLayoutAlign="center center">
-                <ngx-skeleton-loader *ngIf="loader" appearance="circle" animation="pulse" [theme]="{ width: '100px', height: '100px' }"></ngx-skeleton-loader>
-                <img [src]="!loader ? person : ''" *ngIf="!loader" alt="Profile Image" class="profile-img"/>
+                <img [src]="person"  alt="Profile Image" class="profile-img"/>
                 <button *ngIf="showEditButton" mat-flat-button class="avatar-button" (click)="openModal()">Edit Avatar
                 </button>
             </div>
