@@ -20,7 +20,7 @@ The project is structured with the following modules:
   - **Model:** Defines data structures used in the application.
 - **Login Module:**
   - **Login Component:** Responsible for user authentication and login interface.
-- **Profile Module:** Manages user profiles, posts, and related functionalities.
+- **Profile Module:** Manages user profiles, posts, Message and related functionalities.
 - **Shared Module:**
   - **Components:** Reusable UI components like logout dialog, error dialog, and page-not-found.
   - **Service:** Shared services providing common functionality.
@@ -68,7 +68,7 @@ The application utilizes Google Firestore Database for efficient data storage an
 ## Contributing
 Contributions are welcome! To contribute to this project, please follow these steps:
 
-1. Fork the repository and create your branch from `main`.
+1. Fork the repository and create your branch from `master`.
 2. Open an issue to discuss your proposed changes.
 3. Make your modifications and ensure tests pass.
 4. Submit a pull request detailing your changes and the problem they solve.

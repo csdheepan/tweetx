@@ -207,18 +207,15 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     }, 1500);
   }
 
-  /**
-  * Map profile images for each user status entry.
-  * 
-  * When a user updates their profile image (avatar), the change is reflected in the 
-  * registered user details (UserProfile) but not directly in the user status entries.
-  * This is because updating user statuses in a NoSQL database can be complex and inefficient.
-  * 
-  * To address this, we map the profile images from the registered user details to the 
-  * corresponding user statuses based on the user ID. This ensures that the most current 
-  * profile image is displayed for each user status entry without needing to update the 
-  * user status records directly.
-  */
+/**
+ * Maps the most current profile images from user profiles to user status entries.
+ * 
+ * When a user updates their profile image, it's stored in registered details (Userprofile) only,
+ * not in each Profile (user Status) entry. This avoids redundant data and complexity.
+ * 
+ * Each user status entry displays the profile image mapped from Registered details,
+ * ensuring consistency without updating status records directly.
+ */
   private mapProfileImage(): void {
     this.allUserstatus.forEach((obj: Users) => {
       const matchedUser = this.userProfile.find((user: UserProfile) => user.id === obj.id);
