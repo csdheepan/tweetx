@@ -20,7 +20,7 @@
       <div *ngFor="let user of allUserStatus, let i = index">
         <mat-card class="mat-elevation-z8">
           <div fxLayout="row" fxLayoutAlign="space-between">
-            <div fxLayout="row" fxLayoutAlign="center center" class="profile-img-container" (click)="navigateViewProfile(user)">
+            <div fxLayout="row" fxLayoutAlign="center center" class="profile-img-container" (click)="navigateViewProfile(user)" [matTooltip]="'Click to view ' + user.name + '\'s profile'">
               <!-- ngx-skeleton-loader for loading state -->
               <ngx-skeleton-loader *ngIf="loader" appearance="circle" animation="pulse" [theme]="{ width: '80px', height: '80px' }"></ngx-skeleton-loader>
               <img [src]="!loader ? user.profileImg : ''" *ngIf="!loader">

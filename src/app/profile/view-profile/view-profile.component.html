@@ -10,7 +10,7 @@
         <div fxLayout="row" fxLayoutAlign="space-around center" class="profile-container">
             <!-- Profile Image and Avatar Button -->
             <div fxLayout="column" fxLayoutAlign="center center">
-                <img [src]="person"  alt="Profile Image" class="profile-img"/>
+                <img [src]="profileImg"  alt="Profile Image" class="profile-img"/>
                 <button *ngIf="showEditButton" mat-flat-button class="avatar-button" (click)="openModal()">Edit Avatar
                 </button>
             </div>
@@ -73,7 +73,7 @@
                     <!-- User Profile Image -->
                     <div fxLayout="row" fxLayoutAlign="center center" style="width: 30%;">
                         <ngx-skeleton-loader *ngIf="loader" appearance="circle" animation="pulse" [theme]="{ width: '85px', height: '85px' }"></ngx-skeleton-loader>
-                        <img [src]="!loader ? person : ''" *ngIf="!loader" class="post-img" alt="Post Image" />
+                        <img [src]="!loader ? profileImg : ''" *ngIf="!loader" class="post-img" alt="Post Image" />
                     </div>
                     <!-- Post Details -->
                     <div fxLayout="column" fxLayoutAlign="space-between" style="width: 70%;">
@@ -108,11 +108,12 @@
                     <div fxLayout="column" fxLayoutAlign="center" style="width: 65%;">
                         <div fxLayout="row" fxLayoutAlign="space-between center" class="user-action-container">
                             <!-- Follower Name -->
-                            <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse" [theme]="{ width: '120px', height: '30px', position: 'relative', top: '6px' }"></ngx-skeleton-loader>
+                            <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse" [theme]="{ width: '105px', height: '30px', position: 'relative', top: '6px' }"></ngx-skeleton-loader>
                             <p class="title-1" *ngIf="!loader">{{ user.name }}</p>
                             <!-- Follow Button -->
                             <div>
-                                <button mat-flat-button color="accent" class="follow-btn" [disabled]="loader" (click)="followAction(user, i)" [disabled]="disableFollowButtons">Follow</button>
+                                <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse" [theme]="{ width: '90px', height: '30px', position: 'relative', top: '6px' }"></ngx-skeleton-loader>
+                                <button  *ngIf="!loader" mat-flat-button color="accent" class="follow-btn" [disabled]="loader" (click)="followAction(user, i)" [disabled]="disableFollowButtons">Follow</button>
                             </div>
                         </div>
                     </div>
@@ -135,11 +136,12 @@
                     <div fxLayout="column" fxLayoutAlign="center" style="width: 65%;">
                         <div fxLayout="row" fxLayoutAlign="space-between center" class="user-action-container">
                             <!-- Following Name -->
-                            <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse" [theme]="{ width: '120px', height: '30px', position: 'relative', top: '6px' }"></ngx-skeleton-loader>
+                            <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse" [theme]="{ width: '105px', height: '30px', position: 'relative', top: '6px' }"></ngx-skeleton-loader>
                             <p class="title-1" *ngIf="!loader">{{ user.name }}</p>
                             <!-- Following Button -->
                             <div>
-                                <button mat-flat-button color="accent" class="following-btn" [disabled]="loader" (click)="unFollowAction(user, i)" [disabled]="disableFollowButtons">Following</button>
+                                <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse" [theme]="{ width: '90px', height: '30px', position: 'relative', top: '6px' }"></ngx-skeleton-loader>
+                                <button  *ngIf="!loader" mat-flat-button color="accent" class="following-btn" [disabled]="loader" (click)="unFollowAction(user, i)" [disabled]="disableFollowButtons">Following</button>
                             </div>
                         </div>
                     </div>

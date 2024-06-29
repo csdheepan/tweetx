@@ -3,8 +3,8 @@
     <div  fxLayout="column" fxLayoutAlign="center" fxLayoutGap="30px">
       <div  fxLayout="column" fxLayoutAlign="space-around" fxLayoutGap="30px">
         <h2 class="tweet-word">TweetX</h2>
-        <button mat-flat-button *ngIf="isLoggedIn" class="account-btn" (click)="handleView('signup')">Create Account</button>
-        <button mat-flat-button *ngIf="!isLoggedIn" class="account-btn" (click)="handleView('login')">Login</button>
+        <button mat-flat-button *ngIf="isLoggedIn" [disabled]="disableViewButton" class="account-btn" (click)="handleView('signup')">Create Account</button>
+        <button mat-flat-button *ngIf="!isLoggedIn" [disabled]="disableViewButton" class="account-btn" (click)="handleView('login')">Login</button>
       </div>
 
       <div  fxLayout="column" fxLayoutAlign="space-around" fxLayoutGap="30px">
@@ -95,7 +95,7 @@
       </div>
     </div>
     <div>
-      <img [src]="banner" class="banner-img">
+      <img [src]="loginBanner" class="banner-img">
     </div>
   </div>
 </div>

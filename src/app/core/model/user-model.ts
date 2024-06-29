@@ -46,5 +46,5 @@ export class Message {
     name !: string;
     profileImg !: string;
     receiverId!: string;
-    chat !: Chats[];
+    chat !: Chats;
 }

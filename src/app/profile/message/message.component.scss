@@ -4,15 +4,12 @@
   height: 500px;
   max-width: 520px;
   border: 1px solid #ccc;
-  border-radius: px;
   margin: auto;
-  position: relative;
-  top: 25px;
 }
 
 .header {
   background-color: #f0f2f5;
-  padding: 10px;
+  padding: 5px 10px;
   display: flex;
   align-items: center;
   gap: 5px;
@@ -22,7 +19,7 @@
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  margin-right: 10px;
+  margin: 5px 10px;
 }
 
 .user-info {
@@ -50,7 +47,6 @@
   align-items: center;
   padding: 0px 10px;
   background: #efefef;
-  margin: 2px;
   position: relative;
 }
 
@@ -107,7 +103,7 @@ button {
 }
 
 .status-text {
-  margin-top: 8px;
+  margin-top: 5px;
   color: #8a8a8a;
   font-size: 12px;
 }

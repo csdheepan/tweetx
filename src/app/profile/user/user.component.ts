@@ -17,7 +17,6 @@ import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
 })
 export class UserComponent implements OnInit {
 
- person:string = "assets/images/person.jpg";
  loader: boolean = true;
  loggedUser!: SignUp;
  allUserStatus: Users[] = [];

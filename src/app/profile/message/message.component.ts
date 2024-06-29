@@ -113,7 +113,7 @@ export class MessageComponent implements OnInit {
   }
 
   // Store last sent message in a collection
-  private storeLastMessage(lastMessage: any): void {
+  private storeLastMessage(lastMessage:Chats): void {
 
     const trimmedContent = this.trimContent(lastMessage.content);
     const collection: Message = {

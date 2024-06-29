@@ -17,7 +17,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class ViewProfileComponent implements OnInit, OnDestroy {
 
-  person: string = "assets/images/person.jpg";
+  profileImg: string = "assets/images/person.jpg";
   selectedView: string = 'POST';
   showPost: boolean = true;
   showFollower: boolean = false;
@@ -79,7 +79,7 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
   private setUserDetailsFromStorage(): void {
     const userDetailsJson: string = this.store.getItem("USER_DETAILS");
     this.userDetails = userDetailsJson ? JSON.parse(userDetailsJson) : null;
-    this.person = this.userDetails?.profileImg || this.person;
+    this.profileImg = this.userDetails?.profileImg || this.profileImg;
   }
 
   /**
@@ -92,7 +92,7 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
    */
   private setUserDetailsFromParams(params: SignUp): void {
     this.userDetails = params;
-    this.person = this.userDetails.profileImg;
+    this.profileImg = this.userDetails.profileImg;
     this.showEditButton = false;          // Hide edit button for other user's profile
     this.disableFollowButtons = true;     // Disable follow/unfollow buttons
     this.showBackButton = true;           // Show back button for navigation
@@ -262,7 +262,7 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     this.userService.getIndividualUser(userDetails.id).subscribe((data: any) => {
       this.store.setItem("USER_DETAILS", JSON.stringify(data));
       this.userDetails = data;
-      this.person = this.userDetails.profileImg;
+      this.profileImg = this.userDetails.profileImg;
     }, (err: any) => {
       this.errorHandlerService.handleErrors(err, 'While retrieve user profile image');
     });

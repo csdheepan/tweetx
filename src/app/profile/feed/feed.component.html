@@ -59,10 +59,12 @@
                             [theme]="{ width: '100%', height: '13vh' }"></ngx-skeleton-loader>
                         <p class="value" *ngIf="!loader">{{user.content}}</p>
 
-                        <div fxLayout="row" fxLayoutAlign="space-between center">
-                            <mat-icon class="like-icon" [ngClass]="{'liked': likedProduct[i]}" (click)="handleLike(i)">
+                        <div fxLayout="row" fxLayoutAlign="end center">
+                            
+                        <!-- After integrating with the API, we will proceed with the UI implementation -->
+                            <!-- <mat-icon class="like-icon" [ngClass]="{'liked': likedProduct[i]}" (click)="handleLike(i)">
                                 {{ likedProduct[i] ? 'favorite' : 'favorite_border' }}
-                            </mat-icon>
+                            </mat-icon> -->
 
                             <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
                             [theme]="{ width: '60px', height: '20px' }"></ngx-skeleton-loader>
