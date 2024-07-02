@@ -1,7 +1,7 @@
 # Angular 16 Firebase TweetX-18 Application
 
 ## Project Overview:
-This Angular 16 application uses Google Firebase on the backend and is like a social media platform inspired by Twitter. You can sign up, log in, share posts, follow friends, and see what others are posting
+Tweet X is a social media platform inspired by Twitter, built using Angular 16 for the frontend and Google Firebase for the backend. The project allows users to sign up, log in, share posts, follow friends, and see what others are posting."
 
 ## Tech Stack:
 - Frontend: Angular 16
@@ -31,12 +31,13 @@ The project is structured with the following modules:
   - **environment.ts:** Firebase authentication configuration.
 
 ## Setup and Installation:
-1. Clone the repository using the command 👉🏻 git clone https://github.com/csdheepan/tweetx.git
 
+- **To set up the project:**
+1. Clone the repository using the command 👉🏻 git clone https://github.com/csdheepan/tweetx.git
 2. Verify Node.js and npm installation using the command node -v , npm -v :
 - Node version: v18.19.0
 - Npm version: 10.2.3
-3. Navigate to the project directory.
+3. Navigate to the project directory using cmd 👉🏻 cd tweetx.
 4. Run `npm install` command to install the dependencies.
 5. Run the application using `ng serve`.
 6. The application is now running successfully on localhost. Please check your browser.
@@ -47,17 +48,18 @@ The application is hosted on Google Firebase.
 Link: [https://tweet-x-18.web.app](https://tweet-x-18.web.app)
 
 ## Functionality:
-- **Sign Up and Login:** Users can create accounts and log in.
-- **Posting Feed:** Users can share posts with the community.
-- **Following Friends:** Users can follow and stay updated on posts from friends.
-- **Avatar Customization:** Provide users the ability to change their avatars.
-- **Add, Update, and Delete Posts:** Users can manage their posts by adding new posts, updating existing ones, and deleting posts they no longer want to keep.
-- **Direct Messaging:** Allow users to send messages to each other.
-- **Responsive Design:** The application is fully responsive for a seamless user experience.
-- **Preview the diagram for better understanding:** ![Application Functionality Diagram](src/assets/images/application-diagram.jpg)
+- **The main functionalities of the application include:**
+      - **Sign Up and Login:** Users can create accounts and log in.
+      - **Posting Feed:** Users can share posts with the community.
+      - **Following Friends:** Users can follow and stay updated on posts from friends.
+      - **Avatar Customization:** Provide users the ability to change their avatars.
+      - **Add, Update, and Delete Posts:** Users can manage their posts by adding new posts, updating existing ones, and deleting posts they no longer want to keep.
+      - **Direct Messaging:** Allow users to send messages to each other.
+      - **Responsive Design:** The application is fully responsive for a seamless user experience.
+      - **Preview the diagram for better understanding:** ![Application Functionality Diagram](src/assets/images/application-diagram.jpg)
 
 ## Future Improvements:
-- **Additional features:** Enhancements done based on user experience.
+- **Additional features:** In the future, I plan to add additional features and enhancements based on user feedback to further improve the user experience.
 
 ## Database:
 The application utilizes Google Firestore Database for efficient data storage and retrieval.
