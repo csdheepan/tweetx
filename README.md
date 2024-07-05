@@ -48,15 +48,14 @@ The application is hosted on Google Firebase.
 Link: [https://tweet-x-18.web.app](https://tweet-x-18.web.app)
 
 ## Functionality:
-- **The main functionalities of the application include:**
-      - **Sign Up and Login:** Users can create accounts and log in.
-      - **Posting Feed:** Users can share posts with the community.
-      - **Following Friends:** Users can follow and stay updated on posts from friends.
-      - **Avatar Customization:** Provide users the ability to change their avatars.
-      - **Add, Update, and Delete Posts:** Users can manage their posts by adding new posts, updating existing ones, and deleting posts they no longer want to keep.
-      - **Direct Messaging:** Allow users to send messages to each other.
-      - **Responsive Design:** The application is fully responsive for a seamless user experience.
-      - **Preview the diagram for better understanding:** ![Application Functionality Diagram](src/assets/images/application-diagram.jpg)
+- **Sign Up and Login:** Users can create accounts and log in.
+- **Posting Feed:** Users can share posts with the community.
+- **Following Friends:** Users can follow and stay updated on posts from friends.
+- **Avatar Customization:** Provide users the ability to change their avatars.
+- **Add, Update, and Delete Posts:** Users can manage their posts by adding new posts, updating existing ones, and deleting posts they no longer want to keep.
+- **Direct Messaging:** Allow users to send messages to each other.
+- **Responsive Design:** The application is fully responsive for a seamless user experience.
+- **Preview the diagram for better understanding:** ![Application Functionality Diagram](src/assets/images/application-diagram.jpg)
 
 ## Future Improvements:
 - **Additional features:** In the future, I plan to add additional features and enhancements based on user feedback to further improve the user experience.
