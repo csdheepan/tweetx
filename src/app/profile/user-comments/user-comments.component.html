@@ -1,0 +1,117 @@
+<div class="body">
+
+    <button mat-flat-button class="back-btn" (click)="navigatePostFeed()">Back</button>
+  
+    <mat-card class="mat-elevation-z8">
+      <div fxLayout="row" fxLayoutGap="25px">
+        <div fxLayout="row" fxLayoutAlign="center center" style="width: 30%;">
+          <img [src]="postDetails?.profileImg" width="80px" height="80px">
+        </div>
+        <div fxLayout="column" fxLayoutAlign="space-between" style="width: 70%;">
+          <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="5px">
+            <p class="title">{{ postDetails?.name }}</p>
+            <p class="time-value">{{ postDetails?.date }}</p>
+          </div>
+          <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="10px">
+            <p class="value">{{ postDetails?.content }}</p>
+            <p class="time-value">{{ postDetails?.time }}</p>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+  
+    <div class="comment-section">
+  
+      <h2>Comments</h2>
+  
+      <div *ngIf="!showNoComment" class="comment-sub-section">
+        <ng-container *ngFor="let comment of postDetails?.comments; let i = index">
+          
+          <!-- user comments -->
+          <section>
+            <div fxLayout="row" fxLayoutAlign="space-around center" [ngClass]="{'commentOwner': postDetails.comments[i].senderId === userDetails.id }">
+              <img [src]="comment?.profileImg">
+              <div fxLayout="column" class="larger-width-container">
+                <div fxLayout="column" fxLayoutAlign="space-between">
+                  <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <p class="title">{{ comment?.name }}</p>
+                    <button class="menu-mat-button" [matMenuTriggerFor]="menu"><mat-icon class="revert-icon">more_vert</mat-icon></button>
+                    <mat-menu #menu="matMenu">
+                      <div *ngIf="isCommentOwner(comment)">
+                        <button mat-menu-item *ngIf="!isEditingComment(i)" (click)="startEditComment(i)">Edit</button>
+                        <button mat-menu-item *ngIf="!isEditingComment(i)" (click)="deleteComment(comment)">Delete</button>
+                      </div>
+                      <button mat-menu-item *ngIf="!isCommentOwner(comment)" (click)="showReplyComment(i)">Reply</button>
+                      <button mat-menu-item (click)="toggleViewReply(i)">View Reply</button>
+                    </mat-menu>
+                  </div>
+                  <p class="value" *ngIf="!isEditingComment(i)">{{ comment?.comment }}</p>
+                  <input *ngIf="isEditingComment(i)" class="edit-input" [(ngModel)]="comment.editedComment" type="text" />
+                  <button class="action-btn save-btn" *ngIf="isEditingComment(i)" (click)="saveComment(comment)">Save</button>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                  <p class="time-value">{{ comment?.date }}</p>
+                  <p class="time-value">{{ comment?.time }}</p>
+                </div>
+              </div>
+            </div>
+          </section>
+      
+          <!-- user reply comments -->
+          <section>
+            <div fxLayout="column" fxLayoutAlign="end end" *ngIf="isReplyingToComment(i)" id="reply-section">
+              <div id="reply-container">
+                <img [src]="userDetails?.profileImg">
+                <div fxLayout="column" fxLayoutAlign="space-between" class="larger-width-container" fxLayoutGap="15px" id="reply-section">
+                  <p class="title">{{ userDetails?.name }}</p>
+                  <input [(ngModel)]="replyText" id="reply-input" type="text" />
+                  <div fxLayout="row" fxLayoutGap="10px" id="reply-section">
+                    <button class="action-btn save-btn" (click)="saveReply()">Save</button>
+                    <button class="action-btn delete-btn" (click)="showReplyComment(null)">Cancel</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+      
+          <!-- displaying reply comments -->
+          <section *ngIf="viewReplyIndex === i">
+            <div fxLayout="column" fxLayoutAlign="end end" *ngFor="let reply of comment.replyComments; let j = index" id="reply-section">
+              <div id="reply-container">
+                <img [src]="reply?.profileImg">
+                <div fxLayout="column" fxLayoutAlign="space-between" class="larger-width-container" id="reply-section">
+                  <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <p class="title">{{ reply?.name }}</p>
+                     <button class="menu-mat-button" *ngIf="isReplyOwner(reply.commentId)" [matMenuTriggerFor]="menu"><mat-icon class="revert-icon">more_vert</mat-icon></button>
+                    <mat-menu #menu="matMenu">
+                      <!-- <button mat-menu-item  (click)="showReplyComment(i)">Reply</button> -->
+                      <button mat-menu-item  (click)="deleteReply(i,j)">Delete</button>
+                    </mat-menu>  
+                  </div>
+                  <p class="value">{{ reply?.comment }}</p>
+                  <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <p class="time-value">{{ reply?.date }}</p>
+                    <p class="time-value">{{ reply?.time }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          
+        </ng-container>
+      </div>
+      
+      <div fxLayout="column" fxLayoutAlign="center center" *ngIf="showNoComment" style="height: 30vh;">
+        <mat-icon class="comment-icon">chat</mat-icon>
+        <h1>No comment posted</h1>
+      </div>
+  
+      <form #commentForm="ngForm">
+        <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px">
+          <input type="text" class="comment-input" name="comment" [(ngModel)]="comment" required>
+          <button mat-flat-button color="accent" class="send-btn" (click)="addComment()">Send</button>
+        </div>
+      </form>
+  
+    </div>
+  </div>  

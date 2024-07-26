@@ -1,7 +1,7 @@
 # Angular 16 Firebase TweetX-18 Application
 
 ## Project Overview:
-Tweet X is a social media platform inspired by Twitter, built using Angular 16 for the frontend and Google Firebase for the backend. The project allows users to sign up, log in, share posts, follow friends, and see what others are posting."
+Tweet X is a social media platform inspired by Twitter, built using Angular 16 for the frontend and Google Firebase for the backend. The project allows users to sign up, log in, share posts, follow friends, and see what others are posting.
 
 ## Tech Stack:
 - Frontend: Angular 16

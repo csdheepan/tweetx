@@ -28,12 +28,7 @@
           
         <div>
 
-            <!-- Add post button -->
-            <div fxLayout="row" fxLayoutAlign="end end" *ngIf="showButton">
-                <button mat-raised-button class="post-btn" color="accent" (click)="handlePostView('post')">
-                    <mat-icon>add</mat-icon>
-                </button>
-            </div>
+
 
             <!-- Show list of current user post -->
             <div *ngFor="let user of userPost,let i=index">
@@ -79,6 +74,13 @@
                     </div>
                 </mat-card>
             </div>
+
+                        <!-- Add post button -->
+                        <div fxLayout="row" fxLayoutAlign="end end" *ngIf="showButton">
+                            <button mat-raised-button class="post-btn" color="accent" (click)="handlePostView('post')">
+                                <mat-icon>add</mat-icon>
+                            </button>
+                        </div>
     
             <!-- Show no post content by current user -->
             <div *ngIf="showNoPost" fxLayout="row" fxLayoutAlign="center center" style="height: 60vh;">

@@ -24,7 +24,8 @@ export class UserPost {
     name !: string;
     time !: string;
     date !: string;
-    postId !: string
+    postId !: string;
+    comments !: Comments[]
 }
 
 export class UserProfile {
@@ -47,4 +48,30 @@ export class Message {
     profileImg !: string;
     receiverId!: string;
     chat !: Chats;
+}
+
+export class Comments{
+    comment!:string;
+    time !:string;
+    profileImg !:string;
+    senderId !:string;
+    date !:string;
+    name!:string;
+    replyComments!:ReplyComments[];
+}
+
+export class LikedPost{
+    name!:string;
+    id!:string;
+    postId!:string;
+    liked!:boolean;
+}
+
+export class ReplyComments{
+    profileImg!:string;
+    name!:string;
+    comment!:string;
+    time!:string;
+    date!:string;
+    commentId!:string;
 }

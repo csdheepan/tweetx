@@ -36,7 +36,7 @@ a.mdc-list-item {
 }
 
 a.mdc-list-item:hover {
-  background: #eaeaea;
+  background: #fdfdfd;
 }
 
 @media screen and (min-width:980px) {
@@ -56,4 +56,12 @@ a.mdc-list-item:hover {
     border-radius: 8px;
   }
 
+}
+
+.active {
+  background-color: #e2e0e0c4;
+}
+
+::ng-deep .mat-mdc-list-base {
+  padding: 1px !important;
 }

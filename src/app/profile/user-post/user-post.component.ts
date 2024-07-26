@@ -2,7 +2,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
-import { SignUp, UserPost } from 'src/app/core/model/user-model';
+import { Comments, SignUp, UserPost } from 'src/app/core/model/user-model';
 import { PostServices } from 'src/app/core/services/post-service';
 import { UserService } from 'src/app/core/services/user-service';
 import { DateUtilsService } from 'src/app/shared/service/date-utils.service';
@@ -35,6 +35,7 @@ export class UserPostComponent {
   form: FormGroup = Object.create(null);
   private subscription!: Subscription;
   @ViewChild('scrollUp', { static: true }) scrollUp!: ElementRef;
+  comments : Comments[]=[];
 
   constructor(
     private store: InMemoryCache,
@@ -99,6 +100,7 @@ export class UserPostComponent {
   handlePostView(value: string): void {
     this.showPost = value === 'post';
     this.buttonMessage = value == 'post' ? 'Add' : "";
+    this.comments = [];
     this.form.reset();
     if (this.showPost) {
       this.scrollUp.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' }); // Scroll to the top of the page from the starting point
@@ -118,7 +120,8 @@ export class UserPostComponent {
       time: formattedDateandTime.formattedTime,
       name: this.userDetails.name,
       date: formattedDateandTime.formattedDate,
-      postId: this.postId
+      postId: this.postId,
+      comments: this.comments
     };
     if(value == 'Update'){
       this.postServices.editContent(this.postDetails, this.userDetails).subscribe((data: any) => {
@@ -153,7 +156,8 @@ export class UserPostComponent {
     this.postId = userPost.postId;
     this.buttonMessage = "Update";
     this.scrollUp.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' }); // Scroll to the top of the page from the starting point
-    this.form.controls['content'].setValue(userPost.content)
+    this.form.controls['content'].setValue(userPost.content);
+    this.comments = userPost.comments ? userPost.comments : [];
   }
 
 /**

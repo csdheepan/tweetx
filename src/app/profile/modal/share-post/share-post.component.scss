@@ -1,0 +1,48 @@
+.list-container{
+    margin: 10px;
+    padding: 5px;
+}
+
+h4{
+    text-align: left;
+    width: 30%;
+    margin-bottom: 5px;
+}
+
+.mat-toolbar{
+    background: #ff4081;
+    height: 40px;
+    margin: -8px -17px 17px;
+    padding: 8px;
+    color: white;
+}
+
+h3{
+    font-size: 16px;
+    margin: 5px 10px;
+    font-family: system-ui;
+}
+
+.scrollable-content{
+    height: 385px;
+    overflow-y: auto;
+}
+
+.send-btn{
+    position: absolute;
+    bottom: 25px;
+    right: 10px;
+    z-index: 99;
+    background: #ff4081;
+    color: white;
+    border-radius: 50%;
+    border: none;
+    padding: 15px;
+}
+
+.send-icon{
+    position: relative;
+    top: 2px;
+    left: 1px;
+    transform: scale(1);
+}

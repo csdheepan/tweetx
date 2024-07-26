@@ -57,4 +57,25 @@ export class PostServices {
   deleteContent(postId: string, userDetails: SignUp): Observable<void> {
     return from(this.firestore.collection('register').doc(userDetails.id).collection('feed post').doc(postId).delete());
   }
+
+  // Method to save liked posts for a user
+  saveLikeStatus(likedPostArray: any, userId: string): Observable<any> {
+    const likedPostObj = { post: likedPostArray };
+    return from(this.firestore.collection('register').doc(userId).collection('liked post').doc(userId).set(likedPostObj, { merge: true }));
+  }
+
+  // Method to retrieve liked posts for a user
+  getLikedPosts(userId: string): Observable<any> {
+    return from(this.firestore.collection('register').doc(userId).collection('liked post').valueChanges());
+  }
+
+   /**
+   * Updates content edited by a user in Firestore.
+   * @param postObj The updated content object.
+   * @param id update the editing content based on Id.
+   * @returns An observable that completes when the update is finished.
+   */
+    updateComment(postObj: UserPost, id: string): Observable<void> {
+      return from(this.firestore.collection('register').doc(id).collection('feed post').doc(postObj.postId).set(postObj, { merge: true }));
+    }
 }

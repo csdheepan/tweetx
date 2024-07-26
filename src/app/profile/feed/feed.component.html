@@ -27,12 +27,6 @@
       </div>
       
     <div>
-          <!-- Add post button -->
-          <div fxLayout="row" fxLayoutAlign="end end" *ngIf="showButton">
-            <button mat-raised-button class="post-btn" color="accent" (click)="handlePostView('post')">
-                <mat-icon>add</mat-icon>
-            </button>
-        </div>
 
         <!-- Show list of user post (only following status) -->
         <div *ngFor="let user of userPost,let i=index">
@@ -61,10 +55,13 @@
 
                         <div fxLayout="row" fxLayoutAlign="end center">
                             
-                        <!-- After integrating with the API, we will proceed with the UI implementation -->
-                            <!-- <mat-icon class="like-icon" [ngClass]="{'liked': likedProduct[i]}" (click)="handleLike(i)">
-                                {{ likedProduct[i] ? 'favorite' : 'favorite_border' }}
-                            </mat-icon> -->
+                            <!-- <div fxLayout="row" fxLayoutGap="20px">
+                                <mat-icon class="like-icon" [ngClass]="{'liked': likedProduct[i]}" (click)="handleLike(i,user)">
+                                    {{ likedProduct[i] ? 'favorite' : 'favorite_border' }}
+                                </mat-icon>
+                                <mat-icon class="comment-icon" (click)="openComment(user)">chat</mat-icon>
+                                <mat-icon class="send-icon" (click)="openBottomSheet(user)">share</mat-icon>
+                            </div>  -->
 
                             <ngx-skeleton-loader *ngIf="loader" appearance="line" animation="pulse"
                             [theme]="{ width: '60px', height: '20px' }"></ngx-skeleton-loader>
@@ -76,6 +73,13 @@
                 </div>
             </mat-card>
         </div>
+
+                  <!-- Add post button -->
+                  <div fxLayout="row" fxLayoutAlign="end end" *ngIf="showButton">
+                    <button mat-raised-button class="post-btn" color="accent" (click)="handlePostView('post')">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
 
         <!-- Show no feed post content -->
         <div *ngIf="showNoFeedPost" fxLayout="row" fxLayoutAlign="center center" style="height: 60vh;">

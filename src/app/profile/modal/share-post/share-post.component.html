@@ -1,0 +1,14 @@
+<div class="mat-toolbar"><h3>Share Post</h3></div>
+
+<button class="send-btn" (click)="sendData()"><mat-icon class="send-icon">send</mat-icon></button>
+
+<div class="scrollable-content">
+    <div *ngFor="let profile of userProfile">
+        <div fxLayout="row" fxLayoutAlign="space-around center" class="list-container">
+            <img [src]="profile.profileImg" width="60px" height="60px">
+            <h4>{{profile.name}}</h4>
+            <!-- Bind mat-checkbox state to selectedProfiles object  -->
+            <mat-checkbox [(ngModel)]="selectedProfiles[profile.name]" (change)="updateSelectedProfiles(profile)"></mat-checkbox> 
+       </div>
+    </div>
+</div>

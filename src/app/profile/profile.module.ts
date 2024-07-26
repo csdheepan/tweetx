@@ -14,6 +14,8 @@ import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { UserPostComponent } from './user-post/user-post.component';
 import { MessageComponent } from './message/message.component';
 import { UserMessageComponent } from './user-message/user-message.component';
+import { SharePostComponent } from './modal/share-post/share-post.component';
+import { UserCommentsComponent } from './user-comments/user-comments.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { UserMessageComponent } from './user-message/user-message.component';
     FullComponent,
     UserPostComponent,
     MessageComponent,
-    UserMessageComponent
+    UserMessageComponent,
+    SharePostComponent,
+    UserCommentsComponent
   ],
   imports: [
     CommonModule,

@@ -1,13 +1,17 @@
 import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subscription } from 'rxjs';
-import { SignUp, UserPost, Users } from 'src/app/core/model/user-model';
+import { Router } from '@angular/router';
+import { Subscription, take } from 'rxjs';
+import { LikedPost, SignUp, UserPost, Users } from 'src/app/core/model/user-model';
 import { PostServices } from 'src/app/core/services/post-service';
 import { UserService } from 'src/app/core/services/user-service';
 import { DateUtilsService } from 'src/app/shared/service/date-utils.service';
 import { ErrorHandlerService } from 'src/app/shared/service/error-handler.service';
 import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
+import { UserCommentService } from 'src/app/shared/service/user-comment.service';
+import { SharePostComponent } from '../modal/share-post/share-post.component';
 
 /**
  * FeedComponent is responsible for managing feed-related functionalities such as posting content, retrieving user posts, and displaying user feeds.
@@ -33,6 +37,7 @@ export class FeedComponent implements OnInit, OnDestroy {
   postDetails!: UserPost;
   private subscriptions: Subscription[] = [];
   @ViewChild('scrollUp', { static: true }) scrollUp!: ElementRef;
+  likedPostArray :LikedPost[]=[];
 
   constructor(
     private store: InMemoryCache,
@@ -41,7 +46,10 @@ export class FeedComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private _snackBar: MatSnackBar,
     private dateUtilsService: DateUtilsService,
-    private errorHandlerService: ErrorHandlerService
+    private errorHandlerService: ErrorHandlerService,
+    private router: Router,
+    private userCommentService:UserCommentService,
+    private _bottomSheet: MatBottomSheet
   ) { }
 
 
@@ -49,6 +57,7 @@ export class FeedComponent implements OnInit, OnDestroy {
     this.initForm();
     this.retrieveUserDetails();
     this.filterFollowingStatus();
+    this.retrieveUserLikedPosts(); 
   }
 
   initForm(): void {
@@ -102,6 +111,14 @@ export class FeedComponent implements OnInit, OnDestroy {
     this.setLoaderFalse();
   }
 
+  retrieveUserLikedPosts(): void {
+    this.postServices.getLikedPosts(this.userDetails.id).pipe(take(1)).subscribe((likedPosts: any[]) => {
+      this.likedPostArray =  likedPosts[0] ? likedPosts[0].post : [];
+    }, (error: any) => {
+      this.errorHandlerService.handleErrors(error, "While retrieving liked posts");
+    });
+  }
+
   /**
    * Fetches posts of a single user and adds them to the userPosts array.
    * It subscribes to the getUserPost method of the UserService to retrieve the posts.
@@ -127,7 +144,7 @@ export class FeedComponent implements OnInit, OnDestroy {
 
   /**
    * Processes the user posts for display.
-   * It flattens the array of arrays into a single array of posts, initializes the likedProduct array,
+   * It flattens the array of arrays into a single array of posts, initializes the likedProduct array and map liked posted by user.
    * maps profile images to the posts, and updates the visibility of the post-related elements.
    * 
    * @param userPosts - The array of arrays containing user posts.
@@ -138,6 +155,13 @@ export class FeedComponent implements OnInit, OnDestroy {
     this.mapProfileImages();
     this.showButton = true;
     this.showNoFeedPost = this.userPost.length === 0;
+
+    // Check if any post is liked by the user based on postId.
+    this.userPost.forEach((post, index) => {
+      if (this.likedPostArray.some((likedPost:LikedPost) => likedPost.postId === post.postId)) {
+        this.likedProduct[index] = true;
+      }
+    });
   }
 
   /**
@@ -155,9 +179,30 @@ export class FeedComponent implements OnInit, OnDestroy {
    * Function to handle like/unlike.
    * @param index - The index of the post to be liked or unliked.
    */
-  handleLike(index: number): void {
-    this.likedProduct[index] = !this.likedProduct[index]; // Toggle the liked state of the post at the given index
-    // Api Integration - WIP (work-in progress)
+  handleLike(index: number, user: any): void {
+    this.likedProduct[index] = !this.likedProduct[index]; // Toggle the liked state of the post at the given index     
+    // Extract specific properties and add 'liked' property
+    const { name, id, postId } = user;
+
+    if (this.likedProduct[index]) {
+      // Add to liked posts array
+      const likedPostObj = { name, id, postId, liked: true };
+      this.likedPostArray.push(likedPostObj);
+    } else {
+      // Remove from liked posts array
+      this.likedPostArray = this.likedPostArray.filter(post => post.postId !== postId);
+    }
+
+    this.postServices.saveLikeStatus(this.likedPostArray, this.userDetails.id).pipe(take(1))
+      .subscribe(response => {
+        console.log('Like status updated successfully');
+      },
+        error => {
+          console.error('Error updating like status', error);
+          // Revert the liked state if the update fails
+          this.likedProduct[index] = !this.likedProduct[index];
+        }
+      );
   }
 
   /**
@@ -196,7 +241,8 @@ export class FeedComponent implements OnInit, OnDestroy {
       time: formattedDateandTime.formattedTime,
       name: this.userDetails.name,
       date: formattedDateandTime.formattedDate,
-      postId: ""
+      postId: "",
+      comments : []
     };
     this.postServices.postContent(this.postDetails, this.userDetails).subscribe((data: any) => {
       this._snackBar.open('Post Added Sucessfully' + ' ', 'Close', {
@@ -207,6 +253,25 @@ export class FeedComponent implements OnInit, OnDestroy {
     });
     this.showPost = false;
     this.form.reset();
+  }
+
+  openComment(user:UserPost){
+    this.router.navigate(["profile/full/comment"]);
+    this.userCommentService.setPostDetails(user);
+  }
+
+  openBottomSheet(user:UserPost): void {
+    const bottomSheetRef = this._bottomSheet.open(SharePostComponent,
+      { data: user } 
+    );
+    bottomSheetRef.afterDismissed().subscribe((result) => {
+      if(result){
+        console.log('Shared post details for users'+ result);
+        this._snackBar.open('Post Shared Successfully' + ' ', 'Close', {
+          duration: 2000
+        });
+      }
+    });
   }
 
   ngOnDestroy(): void {

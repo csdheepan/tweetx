@@ -1,0 +1,206 @@
+.time-value {
+    font-weight: normal;
+    color: #a2a2a2;
+    font-family: inherit;
+    font-size: 12px;
+    line-height: 24px;
+    margin-bottom: 0px;
+  }
+  
+  .title {
+    font-size: 18px;
+    line-height: 30px;
+    font-weight: 500;
+    padding-top: 10px;
+    font-family: system-ui;
+    width: 100%;
+  }
+  
+  .value {
+    font-size: 14px;
+    line-height: 22px;
+    font-family: system-ui;
+    color: #505050;
+    word-break: break-word;
+  }
+  
+  mat-card {
+    margin: 10px 15px 5px 15px;
+    padding: 15px;
+    background: #ffffff00;
+  }
+  
+  mat-card img{
+    box-shadow:0px 0px 5px 5px rgb(255 117 157 / 45%);
+  }
+  
+  img {
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+  }
+  
+  .comment-section {
+    margin: 0px 20px;
+    padding-top: 15px;
+  }
+  
+  .comment-input {
+    padding: 13px;
+    border: none;
+    background: #dedede;
+    width: 85%;
+    border-radius: 5px;
+    margin: 15px 0px;
+  }
+  
+  .comment-sub-section {
+    height: 350px;
+    overflow-y: auto;
+  }
+  
+  section > div:first-child {
+    margin: 10px 5px;
+    background: #f2f2f2;
+    border-radius: 10px;
+    padding: 10px 0px;
+  }
+  
+  h1 {
+    text-align: center;
+    margin: 20px;
+  }
+  
+  .send-btn {
+    font-size: 12px;
+    font-family: system-ui;
+    letter-spacing: 2px;
+    padding: 20px 0px;
+  }
+  
+  .back-btn {
+    margin: 20px 0px 5px 20px;
+    border-radius: 10px;
+    padding: 0px;
+    font-size: 12px;
+    font-family: sans-serif;
+    width: 105px;
+  }
+  
+  .back-btn:hover{
+    background-color: #ff4081;
+    color: white;
+  }
+  
+  .comment-icon {
+    transform: scale(1.5);
+    padding: 10px;
+    color: #757575;
+    position: relative;
+    top: 10px;
+    margin: 5px;
+  }
+  
+  .action-btn {
+    padding: 8px 10px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    font-size: 12px;
+    margin: 10px 0px;
+    width: 85px;
+  }
+  
+  .edit-input {
+    padding: 7px 10px;
+    border-radius: 5px;
+    margin-bottom: 8px;
+    background: #f2f2f2;
+    border: 1px solid lightgrey;
+  }
+  
+  .edit-btn {
+    background: #0540ff;
+  }
+  
+  .save-btn {
+    background-color: #4f2ce9f1;
+  }
+  
+  .delete-btn {
+    background: #f44336e0;
+  }
+  
+  @media screen and (max-width: 520px) {
+    .value {
+      font-size: 12px;
+    }
+    .time-value {
+      font-size: 10px;
+    }
+    .title {
+      font-size: 16px;
+      line-height: 30px;
+    }
+    img {
+      width: 60px;
+      height: 60px;
+    }
+    .revert-icon{
+      transform: scale(0.8);
+    }
+  }
+  
+  #reply-container {
+    display: flex;
+    place-content: space-around;
+    align-items: center;
+    background: #ececec;
+    padding: 10px;
+    margin: 5px 20px;
+    width: 75%;
+    border-radius: 20px;
+    border-top-left-radius: 0px;
+  }
+  
+  #reply-input {
+    padding: 7px 10px;
+    border-radius: 5px;
+    border: none;
+    margin-bottom: 6px !important;
+    margin-top: -10px;
+  }
+  
+  #reply-section {
+    margin: 0px;
+    background: none;
+    border-radius: 0px;
+    padding: 0px;
+  }
+  
+  ::ng-deep .mat-mdc-menu-content {
+    margin: 0px !important;
+    padding: 0px !important;
+  }
+  
+  .menu-mat-button{
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+    color: black;
+  }
+  
+  .revert-icon{
+    position: relative;
+    top: 2px;
+  }
+  
+  .larger-width-container{
+    width: 70%;
+  }
+  .commentOwner{
+    background-color: #ffffffb3 !important;
+    border: 2px solid #f2f2f2;
+    border-radius: 3px !important;
+  }
