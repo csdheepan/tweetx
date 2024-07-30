@@ -1,0 +1,11 @@
+<mat-toolbar>Token Expired</mat-toolbar>
+<div mat-dialog-content>
+    <mat-icon>warning</mat-icon>
+    {{ data.message }}
+</div>
+<div mat-dialog-content>
+    <div fxLayout="row" fxLayoutAlign="end">
+        <!-- <button mat-flat-button color="accent" [mat-dialog-close]="true" class="button-margin">No</button> -->
+        <button mat-flat-button color="accent" [mat-dialog-close]="true" (click)="logout()">Ok</button>
+    </div>
+</div>

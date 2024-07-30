@@ -9,6 +9,7 @@ import { Subscription, take } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { AngularMaterialModule } from '../angular-material/angular-material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { InactivityService } from '../shared/service/inactivity.service';
 
 /**
  * Component responsible for handling user signup/login functionality.
@@ -43,7 +44,8 @@ export class LoginComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private router: Router,
     private store: InMemoryCache,
-    private userService: UserService
+    private userService: UserService,
+    private inactivityService: InactivityService
   ) { }
 
 
@@ -125,6 +127,7 @@ export class LoginComponent implements OnInit {
         if (user) {
           console.log('Login successful');
           this.store.setItem("USER_DETAILS", JSON.stringify(user));
+          this.inactivityService.start();
           this.router.navigate(["profile/full/user-profile"]);
           this.loader = false;
           this.showLoginButton = true;

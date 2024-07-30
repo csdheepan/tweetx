@@ -6,13 +6,15 @@ import { ErrorDialogComponent } from './components/error-dialog/error-dialog.com
 import { AngularMaterialModule } from '../angular-material/angular-material.module';
 import { LogoutDialogComponent } from './components/logout-dialog/logout-dialog.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { UserInactivityComponent } from './components/user-inactivity/user-inactivity.component';
 
 
 @NgModule({
   declarations: [
     PageNotFoundComponent,
     ErrorDialogComponent,
-    LogoutDialogComponent
+    LogoutDialogComponent,
+    UserInactivityComponent
   ],
   imports: [
     CommonModule,
