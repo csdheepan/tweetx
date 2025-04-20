@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Chats } from '../model/user-model';
 import { from } from 'rxjs';
+import { serializeForFirestore } from 'src/app/shared/service/firestore-utils';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MessageService {
 
-  constructor(private firestore: AngularFirestore) { }
+  constructor(
+    private firestore: AngularFirestore
+  ) { }
 
   /**
   * Stores the messages sent by the logged-in user to a specific receiver.
@@ -17,9 +19,10 @@ export class MessageService {
   * @param messages An array of messages to be stored.
   * @returns An Observable of DocumentReference after storing the messages.
   */
-  senderMessage(loggedId: string, receiverId: string, messages: Chats[]) {
+  senderMessage(loggedId: string, receiverId: string, messages:any[]) {
     const messageObject = { message: messages };
-    return from(this.firestore.collection('/register').doc(loggedId).collection('message').doc(receiverId).collection('chat collection').doc(receiverId).set(messageObject));
+    const serializeFireStoreObj = serializeForFirestore(messageObject);
+    return from(this.firestore.collection('/register').doc(loggedId).collection('message').doc(receiverId).collection('chat collection').doc(receiverId).set(serializeFireStoreObj));
   }
 
   /**
@@ -28,9 +31,10 @@ export class MessageService {
    * @param receiverId The ID of the message receiver.
    * @param messages An array of messages to be stored.
    */
-  recieverMessage(senderId: string, receiverUserId: string, messages: Chats[]) {
+  recieverMessage(senderId: string, receiverUserId: string, messages:any[]) {
     const messageObject = { message: messages };
-    return from(this.firestore.collection('/register').doc(receiverUserId).collection('message').doc(senderId).collection('chat collection').doc(senderId).set(messageObject));
+    const serializeFireStoreObj = serializeForFirestore(messageObject);
+    return from(this.firestore.collection('/register').doc(receiverUserId).collection('message').doc(senderId).collection('chat collection').doc(senderId).set(serializeFireStoreObj));
   }
 
   /**
@@ -50,7 +54,8 @@ export class MessageService {
   * @param message The last message object to be stored.
   */
   storeLastMessage(senderId: string, receiverId: string, message: any) {
-    return from(this.firestore.collection('/register').doc(senderId).collection('message').doc(receiverId).set(message));
+    const serializeFireStoreObj = serializeForFirestore(message);
+    return from(this.firestore.collection('/register').doc(senderId).collection('message').doc(receiverId).set(serializeFireStoreObj));
   }
 
   /**

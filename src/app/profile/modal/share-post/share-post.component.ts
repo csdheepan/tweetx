@@ -1,11 +1,11 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { Subscription } from 'rxjs';
-import { SignUp, Users } from 'src/app/core/model/user-model';
 import { UserService } from 'src/app/core/services/user-service';
 import { ErrorHandlerService } from 'src/app/shared/service/error-handler.service';
 import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
 import { FeedComponent } from '../../feed/feed.component';
+import { ISignUp, IUsers } from 'src/app/core/model';
 
 @Component({
   selector: 'app-share-post',
@@ -14,11 +14,11 @@ import { FeedComponent } from '../../feed/feed.component';
 })
 export class SharePostComponent {
 
-  userDetails!: SignUp;
-  userProfile: Users[] = [];
+  userDetails!: ISignUp;
+  userProfile: IUsers[] = [];
   private subscriptions: Subscription[] = [];
   selectedProfiles: any = {};
-  selectedUsers: Users[] = [];
+  selectedUsers: IUsers[] = [];
 
   constructor(
     private store: InMemoryCache,

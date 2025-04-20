@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { SignUp, UserPost, Users } from '../model/user-model';
 import { Observable, from } from 'rxjs';
+import { ISignUp, IUserPost, IUsers, SignUp } from '../model';
+import { serializeForFirestore } from 'src/app/shared/service/firestore-utils';
 
 /**
  * UserService provides functionalities related to user management, such as retrieving user data and updating user profiles.
@@ -11,14 +12,16 @@ import { Observable, from } from 'rxjs';
 })
 export class UserService {
 
-  constructor(private firestore: AngularFirestore) { }
+  constructor(
+    private firestore: AngularFirestore
+  ) { }
 
   /**
    * Retrieves all users registered in the application.
    * @returns An observable that emits an array of registered users.
    */
-  getAllUsers(): Observable<SignUp[]> {
-    return this.firestore.collection<SignUp>('/register').valueChanges();
+  getAllUsers(): Observable<ISignUp[]> {
+    return this.firestore.collection<ISignUp>('/register').valueChanges();
   }
 
   /**
@@ -26,9 +29,10 @@ export class UserService {
    * @param loggedId The ID of the logged-in user.
    * @param allUser An array containing the user data.
    */
-  setUserStatus(loggedId: string, allUser:Users[]) {
+  setUserStatus(loggedId: string, allUser:IUsers[]) {
     const dataObject = { users: allUser };
-    return from(this.firestore.collection('/register').doc(loggedId).collection('profile').doc(loggedId).set(dataObject));
+    const serializeFireStoreObj = serializeForFirestore(dataObject);
+    return from(this.firestore.collection('/register').doc(loggedId).collection('profile').doc(loggedId).set(serializeFireStoreObj));
   }
 
   /**
@@ -37,9 +41,10 @@ export class UserService {
    * @param loggedId The ID of the logged-in user.
    * @returns An observable that completes when the update is finished.
    */
-  followReqAction(update:Users[], loggedId: string): Observable<void> {
+  followReqAction(update:IUsers[], loggedId: string): Observable<void> {
     const dataObj = { users: update };
-    return from(this.firestore.collection('/register').doc(loggedId).collection('profile').doc(loggedId).update(dataObj));
+    const serializeFireStoreObj = serializeForFirestore(dataObj);
+    return from(this.firestore.collection('/register').doc(loggedId).collection('profile').doc(loggedId).update(serializeFireStoreObj));
   }
 
   /**
@@ -75,7 +80,7 @@ export class UserService {
    * @param userId The ID of the user.
    * @returns An observable that emits the post status data.
    */
-  getUserPost(userId: string): Observable<UserPost[]> {
-    return this.firestore.collection<UserPost>('/register/' + userId + '/feed post').valueChanges();
+  getUserPost(userId: string): Observable<IUserPost[]> {
+    return this.firestore.collection<IUserPost>('/register/' + userId + '/feed post').valueChanges();
   }
 }

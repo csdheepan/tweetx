@@ -5,10 +5,10 @@ import { EditProfileComponent } from '../modal/edit-profile/edit-profile.compone
 import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
 import { PostServices } from 'src/app/core/services/post-service';
 import { UserService } from 'src/app/core/services/user-service';
-import { SignUp, UserProfile, UserPost, Users } from 'src/app/core/model/user-model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ErrorHandlerService } from 'src/app/shared/service/error-handler.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ISignUp, IUserPost, IUserProfile, IUsers } from 'src/app/core/model';
 
 @Component({
   selector: 'app-view-profile',
@@ -26,12 +26,12 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
   showEditButton: boolean = true;
   disableFollowButtons: boolean = false;
   showBackButton: boolean = false;
-  userPost: UserPost[] = [];
-  followerData: Users[] = [];
-  followingData: Users[] = [];
-  allUserstatus: Users[] = [];
-  userProfile: UserProfile[] = [];
-  userDetails!: SignUp;
+  userPost: IUserPost[] = [];
+  followerData: IUsers[] = [];
+  followingData: IUsers[] = [];
+  allUserstatus: IUsers[] = [];
+  userProfile: IUserProfile[] = [];
+  userDetails!: ISignUp;
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -90,7 +90,7 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
    * 
    * @param params The user details passed as route query parameters.
    */
-  private setUserDetailsFromParams(params: SignUp): void {
+  private setUserDetailsFromParams(params: ISignUp): void {
     this.userDetails = params;
     this.profileImg = this.userDetails.profileImg;
     this.showEditButton = false;          // Hide edit button for other user's profile
@@ -106,7 +106,7 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
 
   private loadUserPosts(): void {
     if (this.userDetails) {
-      this.postServices.getUserPost(this.userDetails).pipe(take(1)).subscribe((data: UserPost[]) => {
+      this.postServices.getUserPost(this.userDetails).pipe(take(1)).subscribe((data: IUserPost[]) => {
         this.userPost = data;
       }, (err: any) => {
         this.errorHandlerService.handleErrors(err, 'While retrieve user posts');
@@ -115,9 +115,9 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
   }
 
   private loadAllUser(): void {
-    const profileSubscription = this.userService.getAllUsers().pipe(take(1)).subscribe((data: SignUp[]) => {
+    const profileSubscription = this.userService.getAllUsers().pipe(take(1)).subscribe((data: ISignUp[]) => {
       // Map the response to extract user IDs, profile images, and names
-      this.userProfile = data.map(({ id, profileImg, name }: UserProfile) => ({ id, profileImg, name }));
+      this.userProfile = data.map(({ id, profileImg, name }: IUserProfile) => ({ id, profileImg, name }));
       this.loadUserStatus();
     }, (err: any) => {
       this.errorHandlerService.handleErrors(err, 'While retrieve all users');
@@ -151,12 +151,12 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     */
   private initializeUserStatus(): void {
     // Find index of the current user in the user data and remove it.
-    const currentUserIndex = this.userProfile.findIndex((user: UserProfile) => user.id === this.userDetails.id);
+    const currentUserIndex = this.userProfile.findIndex((user: IUserProfile) => user.id === this.userDetails.id);
     if (currentUserIndex !== -1) {
       this.userProfile.splice(currentUserIndex, 1);
     }
     // Initialize follower data with all users and status as 0 (not following)
-    this.followerData = this.userProfile.map((user: UserProfile) => ({ ...user, status: 0 }));
+    this.followerData = this.userProfile.map((user: IUserProfile) => ({ ...user, status: 0 }));
     this.userService.setUserStatus(this.userDetails.id,this.followerData).subscribe((data:any)=>{},
     (err: any) => {
       this.errorHandlerService.handleErrors(err, 'While update user status');
@@ -173,8 +173,8 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     * (ie) This will add status 0 for users who have recently joined the application.
     */
   private updateUserStatus(): void {
-    this.userProfile.forEach((user: UserProfile) => {
-      const foundUser = this.allUserstatus.find((item: Users) => item.id === user.id);
+    this.userProfile.forEach((user: IUserProfile) => {
+      const foundUser = this.allUserstatus.find((item: IUsers) => item.id === user.id);
       // If user not found, add with status 0 (follow)
       if (!foundUser) {
         this.allUserstatus.push({ ...user, status: 0 });
@@ -183,14 +183,14 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
     });
 
     // Remove the current user from the user status data
-    const currentUserIndex = this.allUserstatus.findIndex((user: Users) => user.id === this.userDetails.id);
+    const currentUserIndex = this.allUserstatus.findIndex((user: IUsers) => user.id === this.userDetails.id);
     if (currentUserIndex !== -1) {
       this.allUserstatus.splice(currentUserIndex, 1);
     }
 
     // Filter follower and following data based on status
-    this.followerData = this.allUserstatus.filter((v: Users) => v.status === 0);
-    this.followingData = this.allUserstatus.filter((v: Users) => v.status === 1);
+    this.followerData = this.allUserstatus.filter((v: IUsers) => v.status === 0);
+    this.followingData = this.allUserstatus.filter((v: IUsers) => v.status === 1);
 
     this.setLoaderFalse();
 
@@ -217,8 +217,8 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
  * ensuring consistency without updating status records directly.
  */
   private mapProfileImage(): void {
-    this.allUserstatus.forEach((obj: Users) => {
-      const matchedUser = this.userProfile.find((user: UserProfile) => user.id === obj.id);
+    this.allUserstatus.forEach((obj: IUsers) => {
+      const matchedUser = this.userProfile.find((user: IUserProfile) => user.id === obj.id);
       if (matchedUser) {
         obj.profileImg = matchedUser.profileImg;
       }
@@ -269,21 +269,21 @@ export class ViewProfileComponent implements OnInit, OnDestroy {
   }
 
   //Action to follow a user
-  followAction(user: Users): void {
+  followAction(user: IUsers): void {
     user.status = 1;  //1 -following action
     this.updateUserStatusData();
   }
 
   //Action to unfollow a user
-  unFollowAction(user: Users): void {
+  unFollowAction(user: IUsers): void {
     user.status = 0; //0 - unfollow action
     this.updateUserStatusData();
   }
 
   // Update user status data in the database
   private updateUserStatusData(): void {
-    this.followerData = this.allUserstatus.filter((v: Users) => v.status === 0);
-    this.followingData = this.allUserstatus.filter((v: Users) => v.status === 1);
+    this.followerData = this.allUserstatus.filter((v: IUsers) => v.status === 0);
+    this.followingData = this.allUserstatus.filter((v: IUsers) => v.status === 1);
     this.userService.followReqAction(this.allUserstatus, this.userDetails.id).subscribe((data: any) => {}, 
     (err: any) => {
       this.errorHandlerService.handleErrors(err, "while update user status data");

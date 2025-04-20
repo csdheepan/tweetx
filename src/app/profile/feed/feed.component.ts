@@ -4,14 +4,14 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Subscription, take } from 'rxjs';
-import { LikedPost, SignUp, UserPost, Users } from 'src/app/core/model/user-model';
 import { PostServices } from 'src/app/core/services/post-service';
 import { UserService } from 'src/app/core/services/user-service';
 import { DateUtilsService } from 'src/app/shared/service/date-utils.service';
 import { ErrorHandlerService } from 'src/app/shared/service/error-handler.service';
 import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
-import { UserCommentService } from 'src/app/shared/service/user-comment.service';
+import { UserCommentService } from 'src/app/core/services/user-comment.service';
 import { SharePostComponent } from '../modal/share-post/share-post.component';
+import { ILikedPost, ISignUp, IUserPost, IUsers, UserPost } from 'src/app/core/model';
 
 /**
  * FeedComponent is responsible for managing feed-related functionalities such as posting content, retrieving user posts, and displaying user feeds.
@@ -31,13 +31,13 @@ export class FeedComponent implements OnInit, OnDestroy {
   loader: boolean = true;
   showPost: boolean = false;
   showNoFeedPost: boolean = false;
-  userDetails!: SignUp;
-  userPost: UserPost[] = [];
-  followingStatus: Users[] = [];
-  postDetails!: UserPost;
+  userDetails!: ISignUp;
+  userPost: IUserPost[] = [];
+  followingStatus: IUsers[] = [];
+  postDetails!: IUserPost;
+  likedPostArray: ILikedPost[]=[];
   private subscriptions: Subscription[] = [];
   @ViewChild('scrollUp', { static: true }) scrollUp!: ElementRef;
-  likedPostArray :LikedPost[]=[];
 
   constructor(
     private store: InMemoryCache,
@@ -105,7 +105,7 @@ export class FeedComponent implements OnInit, OnDestroy {
     */
   retrieveAndMapUserPosts(): void {
     const userPosts: any[] = [];
-    this.followingStatus.forEach((user: Users) => {
+    this.followingStatus.forEach((user: IUsers) => {
       this.fetchUserPosts(user, userPosts);
     });
     this.setLoaderFalse();
@@ -127,9 +127,9 @@ export class FeedComponent implements OnInit, OnDestroy {
    * @param user - The user whose posts are to be fetched.
    * @param userPosts - The array to store the fetched posts.
    */
-  private fetchUserPosts(user: Users, userPosts: any[]): void {
+  private fetchUserPosts(user: IUsers, userPosts: any[]): void {
     const userPostSubscription = this.userService.getUserPost(user.id).subscribe(
-      (postData: UserPost[]) => {
+      (postData: IUserPost[]) => {
         userPosts.push(postData);
         if (userPosts.length === this.followingStatus.length) {
           this.processUserPosts(userPosts);
@@ -149,7 +149,7 @@ export class FeedComponent implements OnInit, OnDestroy {
    * 
    * @param userPosts - The array of arrays containing user posts.
    */
-  private processUserPosts(userPosts: UserPost[]): void {
+  private processUserPosts(userPosts: IUserPost[]): void {
     this.userPost = userPosts.flat();
     this.likedProduct = new Array(this.userPost.length).fill(false);
     this.mapProfileImages();
@@ -158,7 +158,7 @@ export class FeedComponent implements OnInit, OnDestroy {
 
     // Check if any post is liked by the user based on postId.
     this.userPost.forEach((post, index) => {
-      if (this.likedPostArray.some((likedPost:LikedPost) => likedPost.postId === post.postId)) {
+      if (this.likedPostArray.some((likedPost:ILikedPost) => likedPost.postId === post.postId)) {
         this.likedProduct[index] = true;
       }
     });
@@ -170,7 +170,7 @@ export class FeedComponent implements OnInit, OnDestroy {
    */
   mapProfileImages(): void {
     this.userPost.forEach((post: any) => {
-      const follower = this.followingStatus.find((follower: Users) => follower.id === post.id);
+      const follower = this.followingStatus.find((follower: IUsers) => follower.id === post.id);
       post.profileImg = follower ? follower.profileImg : "assets/images/person.jpg";
     });
   }
@@ -235,15 +235,7 @@ export class FeedComponent implements OnInit, OnDestroy {
 
   post(): void {
     const formattedDateandTime = this.dateUtilsService.getCurrentFormattedDateTime();
-    this.postDetails = {
-      id: "",
-      content: this.form.controls['content'].value,
-      time: formattedDateandTime.formattedTime,
-      name: this.userDetails.name,
-      date: formattedDateandTime.formattedDate,
-      postId: "",
-      comments : []
-    };
+    this.postDetails = this.buildPayloadPostDeatils(formattedDateandTime);
     this.postServices.postContent(this.postDetails, this.userDetails).subscribe((data: any) => {
       this._snackBar.open('Post Added Sucessfully' + ' ', 'Close', {
         duration: 2000
@@ -255,12 +247,21 @@ export class FeedComponent implements OnInit, OnDestroy {
     this.form.reset();
   }
 
-  openComment(user:UserPost){
+  private buildPayloadPostDeatils(formattedDateandTime:any): IUserPost{
+    return new UserPost({
+      content: this.form.controls['content'].value,
+      time: formattedDateandTime.formattedTime,
+      name: this.userDetails.name,
+      date: formattedDateandTime.formattedDate,
+    })
+  }
+
+  openComment(user:IUserPost){
     this.router.navigate(["profile/full/comment"]);
     this.userCommentService.setPostDetails(user);
   }
 
-  openBottomSheet(user:UserPost): void {
+  openBottomSheet(user:IUserPost): void {
     const bottomSheetRef = this._bottomSheet.open(SharePostComponent,
       { data: user } 
     );

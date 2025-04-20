@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { SignUp } from '../model/user-model';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Observable, from } from 'rxjs';
+import { SignUp } from '../model';
+import { serializeForFirestore } from 'src/app/shared/service/firestore-utils';
 
 /**
  * AuthenticationServices provides functionalities related to user authentication, such as user registration.
@@ -13,7 +14,9 @@ import { Observable, from } from 'rxjs';
 
 export class AuthenticationService {
 
-  constructor(private firestore: AngularFirestore) { }
+  constructor(
+    private firestore: AngularFirestore
+  ) { }
 
   /**
    * Registers a new user.
@@ -22,8 +25,9 @@ export class AuthenticationService {
   signup(signUp: SignUp) {
     const id = this.firestore.createId(); // Generate a ID
     signUp.id = id;
+    const serializeFireStoreObj = serializeForFirestore(signUp);
     // Use set to store the data with the  document ID
-    return from(this.firestore.collection('/register').doc(id).set(signUp));
+    return from(this.firestore.collection('/register').doc(id).set(serializeFireStoreObj));
   }
 
 

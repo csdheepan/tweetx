@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { SignUp, UserProfile, Users } from 'src/app/core/model/user-model';
+import { ISignUp, IUserProfile, IUsers } from 'src/app/core/model';
 import { UserService } from 'src/app/core/services/user-service';
 import { ErrorHandlerService } from 'src/app/shared/service/error-handler.service';
 import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
@@ -18,10 +18,10 @@ import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
 export class UserComponent implements OnInit {
 
  loader: boolean = true;
- loggedUser!: SignUp;
- allUserStatus: Users[] = [];
- cloneUserStatus: Users[]=[];
- userProfile: UserProfile[] = [];
+ loggedUser!: ISignUp;
+ allUserStatus: IUsers[] = [];
+ cloneUserStatus: IUsers[]=[];
+ userProfile: IUserProfile[] = [];
  private subscriptions: Subscription[] = [];
 
   constructor(
@@ -45,21 +45,21 @@ export class UserComponent implements OnInit {
   }
 
   // Method to perform follow action for a user
-  followAction(user:Users, index: number): void {
+  followAction(user:IUsers, index: number): void {
     user.status = 1;
     this.updateUserStatus(user, index);
     this.loadUser();
   }
 
    // Method to perform unfollow action for a user
-  unFollowAction(user:Users, index: number): void {
+  unFollowAction(user:IUsers, index: number): void {
     user.status = 0;
     this.updateUserStatus(user, index);
     this.loadUser();
   }
 
   // Update user status and make a service call
-  private updateUserStatus(user:Users, index: number): void {
+  private updateUserStatus(user:IUsers, index: number): void {
     this.allUserStatus[index] = user;
     this.userService.followReqAction(this.allUserStatus, this.loggedUser.id).subscribe((data:any)=>{}
   ,(err:any)=>{
@@ -72,8 +72,8 @@ export class UserComponent implements OnInit {
    * After retrieving user data, it subsequently calls loadUserStatus() to load the statuses of users and map them to profile images.
    */
   private loadUser(): void {
-   const userSubscription = this.userService.getAllUsers().subscribe((users: SignUp[]) => {
-      this.userProfile = users.map(({ id, profileImg,name }: UserProfile) => ({ id, profileImg,name }));
+   const userSubscription = this.userService.getAllUsers().subscribe((users: ISignUp[]) => {
+      this.userProfile = users.map(({ id, profileImg,name }: IUserProfile) => ({ id, profileImg,name }));
       this.loadUserStatus();
     },(err:any)=>{
       this.errorHandlerService.handleErrors(err,"While retrieve all users");
@@ -100,8 +100,8 @@ export class UserComponent implements OnInit {
 
   // Map profile images to user posts
   private mapProfileImages(): void {
-    this.allUserStatus.forEach((post: Users) => {
-      const matchedUser = this.userProfile.find((user:UserProfile) => user.id === post.id);
+    this.allUserStatus.forEach((post: IUsers) => {
+      const matchedUser = this.userProfile.find((user:IUserProfile) => user.id === post.id);
       if (matchedUser) {
         post.profileImg = matchedUser.profileImg;
       }
@@ -126,7 +126,7 @@ export class UserComponent implements OnInit {
  * 
  * @param user The user object containing the details of the specific user.
  */
-navigateViewProfile(user: Users) {
+navigateViewProfile(user: IUsers) {
     this.router.navigate(['profile/full/user-profile', user.id], {
       queryParams: {
         id:user.id,
@@ -139,7 +139,7 @@ navigateViewProfile(user: Users) {
   }  
 
    // Navigate to the message component for sending a message to a specific user
-  openMessage(user:Users){
+  openMessage(user:IUsers){
     this.router.navigate(['profile/full/message'],{
       queryParams: {
         id:user.id,

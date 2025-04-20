@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from '../core/services/authentication-service';
 import { UserService } from '../core/services/user-service';
 import { InMemoryCache } from '../shared/service/memory-cache.service';
-import { Login, SignUp } from '../core/model/user-model';
+import { ILogin, ISignUp, Login, SignUp } from '../core/model';
 import { Subscription, take } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { AngularMaterialModule } from '../angular-material/angular-material.module';
@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
   disableViewButton: boolean = false;
   signupForm: FormGroup = Object.create(null);
   loginForm: FormGroup = Object.create(null);
-  signupDetails!: SignUp;
+  signupDetails!: ISignUp;
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -54,6 +54,7 @@ export class LoginComponent implements OnInit {
   }
 
   initializeForms(): void {
+
     this.signupForm = this.fb.group({
       name: [null, [Validators.required, Validators.maxLength(20), Validators.pattern("^[a-zA-Z ]+$")]],
       email: [null, [Validators.required, Validators.email]],
@@ -89,7 +90,7 @@ export class LoginComponent implements OnInit {
   */
   checkValidation(email: string): void {
     if (!email || !this.signupForm.controls['email'].valid) return;
-    const userSubscription = this.userService.getAllUsers().pipe(take(1)).subscribe((users: SignUp[]) => {
+    const userSubscription = this.userService.getAllUsers().pipe(take(1)).subscribe((users: ISignUp[]) => {
       const emailExists: boolean = users.some((user: any) => user.email === email);
       if (emailExists) this.signupForm.controls['email'].setErrors({ 'emailExists': true });
     });
@@ -118,11 +119,8 @@ export class LoginComponent implements OnInit {
     this.disableViewButton = true;
     this.loginForm.disable();
     setTimeout(() => {
-      const loginDetails: Login = {
-        userName: this.loginForm.controls['userName'].value,
-        passcode: this.loginForm.controls['passcode'].value
-      };
-      const loginSubscription = this.authenticationService.getRegisterUser().subscribe((users: SignUp[]) => {
+      const loginDetails = this.buildLoginPayload();
+      const loginSubscription = this.authenticationService.getRegisterUser().subscribe((users: ISignUp[]) => {
         const user = users.find(user => user.email === loginDetails.userName && user.password === loginDetails.passcode);
         if (user) {
           console.log('Login successful');
@@ -167,14 +165,7 @@ export class LoginComponent implements OnInit {
     this.disableViewButton = true;
     this.signupForm.disable(); //Disable signup form
    setTimeout(() => {
-    const profileImg: string = "assets/images/person.jpg"; //user default profile image.
-    this.signupDetails = {
-      id: "",
-      name: this.signupForm.controls['name'].value,
-      email: this.signupForm.controls['email'].value,
-      password: this.signupForm.controls['password'].value,
-      profileImg: profileImg
-    };
+    this.signupDetails = this.buildSignUpPayload();
     const signupSubscription = this.authenticationService.signup(this.signupDetails).subscribe((data: any) => {
       console.log('Signup successful');
       this.loader = false;
@@ -196,6 +187,21 @@ export class LoginComponent implements OnInit {
     });
     this.subscriptions.push(signupSubscription);
    }, 1000);
+  }
+
+  private buildSignUpPayload(): ISignUp {
+    return new SignUp({
+      name: this.signupForm.controls['name'].value,
+      email: this.signupForm.controls['email'].value,
+      password: this.signupForm.controls['password'].value,
+    });
+  }
+
+  private buildLoginPayload(): ILogin{
+    return new Login({
+      userName: this.loginForm.controls['userName'].value,
+      passcode: this.loginForm.controls['passcode'].value
+    })
   }
 
   ngOnDestroy(): void {

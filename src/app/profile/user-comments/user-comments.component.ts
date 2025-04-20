@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { Comments, ReplyComments, SignUp, UserPost } from 'src/app/core/model/user-model';
 import { PostServices } from 'src/app/core/services/post-service';
 import { DateUtilsService } from 'src/app/shared/service/date-utils.service';
 import { ErrorHandlerService } from 'src/app/shared/service/error-handler.service';
 import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
-import { UserCommentService } from 'src/app/shared/service/user-comment.service';
+import { UserCommentService } from 'src/app/core/services/user-comment.service';
+import { Comments, IComments, IReplyComments, ISignUp, IUserPost, ReplyComments } from 'src/app/core/model';
 
 @Component({
   selector: 'app-user-comments',
@@ -19,9 +19,9 @@ export class UserCommentsComponent {
   postDetails!: any;
   comment = '';
   replyText: string = '';
-  userDetails!: SignUp;
+  userDetails!: ISignUp;
   showNoComment: boolean = false;
-  commentDetails: Comments[] = [];
+  commentDetails: IComments[] = [];
   editingCommentIndex !: number | null;
   replyCommentIndex: number | null = null;
   viewReplyIndex: number | null = null;
@@ -47,7 +47,7 @@ export class UserCommentsComponent {
   }
 
   private subscribeToPostData(): void {
-    this.userCommentService.getPostDetails().subscribe((data:UserPost|null) => {
+    this.userCommentService.getPostDetails().subscribe((data: IUserPost | null) => {
       if (data) {
         this.postDetails = data;
         this.showNoComment = !data.comments || data.comments.length === 0;
@@ -66,16 +66,7 @@ export class UserCommentsComponent {
     if (this.comment.trim() === '') return;
 
     const formattedDateTime = this.dateUtilsService.getCurrentFormattedDateTime();
-
-    const newComment: Comments = {
-      comment: this.comment,
-      time: formattedDateTime.formattedTime,
-      profileImg: this.userDetails.profileImg,
-      senderId: this.userDetails.id,
-      date: formattedDateTime.formattedDate,
-      name: this.userDetails.name,
-      replyComments: []
-    };
+    const newComment = this.buildPayloadComments(formattedDateTime);
 
     this.commentDetails.push(newComment);
     this.postDetails = { ...this.postDetails, comments: this.commentDetails };
@@ -83,7 +74,19 @@ export class UserCommentsComponent {
     this.updateCommentDetails();
   }
 
-  deleteComment(comment: Comments) {
+  private buildPayloadComments(formattedDateTime:any): IComments {
+    return new Comments({
+      comment: this.comment,
+      time: formattedDateTime.formattedTime,
+      profileImg: this.userDetails.profileImg,
+      senderId: this.userDetails.id,
+      date: formattedDateTime.formattedDate,
+      name: this.userDetails.name,
+      replyComments: []
+    })
+  }
+
+  deleteComment(comment: IComments) {
     // Remove the comments from the commentDetails
     const deletedCommentIndex = this.commentDetails.findIndex((c) => c === comment);
     if (deletedCommentIndex !== -1) {
@@ -115,11 +118,11 @@ export class UserCommentsComponent {
     return this.editingCommentIndex === index;
   }
 
-  isCommentOwner(comment: Comments): boolean {
+  isCommentOwner(comment: IComments): boolean {
     return comment.senderId === this.userDetails.id;
   }
 
-  isReplyOwner(commentId:string){
+  isReplyOwner(commentId: string) {
     return commentId === this.userDetails.id;
   }
 
@@ -135,23 +138,27 @@ export class UserCommentsComponent {
   saveReply(): void {
     if (this.replyCommentIndex !== null && this.replyText.trim() !== '') {
       const formattedDateTime = this.dateUtilsService.getCurrentFormattedDateTime();
-      const newReply: ReplyComments = {
-        profileImg: this.userDetails.profileImg,
-        name: this.userDetails.name,
-        comment: this.replyText,
-        date: formattedDateTime.formattedDate,
-        time: formattedDateTime.formattedTime,
-        commentId:this.userDetails.id
-      };
+      const newReply= this.buildPayloadReplyComments(formattedDateTime);
       this.postDetails.comments[this.replyCommentIndex].replyComments.push(newReply);
       this.updateCommentDetails();
       this.replyCommentIndex = null;
     }
   }
 
+  private buildPayloadReplyComments(formattedDateTime:any):IReplyComments{
+    return new ReplyComments({
+          profileImg: this.userDetails.profileImg,
+        name: this.userDetails.name,
+        comment: this.replyText,
+        date: formattedDateTime.formattedDate,
+        time: formattedDateTime.formattedTime,
+        commentId: this.userDetails.id
+    })
+  }
+
   toggleViewReply(index: number): void {
     this.viewReplyIndex = this.viewReplyIndex === index ? null : index;
-    if(this.commentDetails[index].replyComments.length === 0){
+    if (this.commentDetails[index].replyComments.length === 0) {
       this._snackBar.open("No reply was found for the comment" + ' ', 'Close', {
         duration: 2000
       });

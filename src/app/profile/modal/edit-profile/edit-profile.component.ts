@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ViewProfileComponent } from '../../view-profile/view-profile.component';
 import { InMemoryCache } from 'src/app/shared/service/memory-cache.service';
 import { UserService } from 'src/app/core/services/user-service';
-import { SignUp } from 'src/app/core/model/user-model';
+import { ISignUp } from 'src/app/core/model';
 
 @Component({
   selector: 'app-edit-profile',
@@ -31,7 +31,7 @@ export class EditProfileComponent implements OnInit {
     { image: "assets/images/person-15.jpg", title: "Avatar 15" }
   ];
   selectedImageIndex!: number; // Index of the selected image
-  loggedUser!: SignUp;
+  loggedUser!: ISignUp;
   profileImg: string = "assets/images/person.jpg";
 
   constructor(
